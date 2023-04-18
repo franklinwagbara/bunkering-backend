@@ -1,0 +1,916 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Bunkering</name>
+    </assembly>
+    <members>
+        <member name="M:Bunkering.Controllers.API.ApplicationController.Apply(Bunkering.Core.ViewModels.ApplictionViewModel)">
+            <summary>
+            This endpoint is used to initiate an application 
+            </summary>
+            <returns>Returns a success message</returns>
+            <remarks>
+            
+            Sample Request
+            post: api/application/apply
+            
+            </remarks>
+            <param name="model">Model for applying for a bunker application</param>
+            <response code="200">Returns a success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.ApplicationController.AddTanks(System.String)">
+            <summary>
+            This endpoint returns a model of tanks for the application using the application id
+            </summary>
+            <returns>Returns a model of tanks which can be mepty</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/application/add-tank
+            
+            </remarks>
+            <param name="id">The inspector/Reviewer email to fetch inspection for</param>
+            <response code="200">Returns a list of tanks </response>
+            <response code="404">Returns not found tanks </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.ApplicationController.AddTanks(System.Collections.Generic.List{Bunkering.Core.ViewModels.TankViewModel})">
+            <summary>
+            This endpoint returns a model of tanks for the application using the application id
+            </summary>
+            <returns>Returns a model of tanks which can be mepty</returns>
+            <remarks>
+            
+            Sample Request
+            POST: api/application/add-tank
+            
+            </remarks>
+            <param name="id">The inspector/Reviewer email to fetch inspection for</param>
+            <response code="200">Returns a list of tanks </response>
+            <response code="404">Returns not found tanks </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.ApplicationController.Payment(System.String)">
+            <summary>
+            This endpoint adds payment to the application
+            </summary>
+            <returns>Returns a model of fees per facility type</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/application/payment/xxx
+            
+            </remarks>
+            <param name="id">The application id used to generate payment model</param>
+            <response code="200">Returns an object of fees </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.ApplicationController.DocumentUpload(System.String)">
+            <summary>
+            This endpoint is used to fetch documents required for an application
+            </summary>
+            <returns>Returns a model of required documents </returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/application/get-dcouments/xxxx
+            
+            </remarks>
+            <param name="id">The application id used to fetch documenst for the application type</param>
+            <response code="200">Returns an object of fees </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.ApplicationController.AddDocuments(System.String)">
+            <summary>
+            This endpoint is used to add documents required for an application
+            </summary>
+            <returns>Returns a message after upload </returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/application/add-dcouments/xxxx
+            
+            </remarks>
+            <param name="id">The application id used to fetch documenst for the application type</param>
+            <response code="200">Returns an object of fees </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.ApplicationController.CheckLicense(System.Int32,System.String)">
+            <summary>
+            This endpoint is used to verify depot license
+            </summary>
+            <returns>Returns a message after verification </returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/application/verify-license/xxxx?license=xxx
+            
+            </remarks>
+            <param name="id">The application id used to fetch documenst for the application type</param>
+            <response code="200">Returns an object of fees </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.ApplicationController.All">
+            <summary>
+            This endpoint is used to fetch all applications
+            </summary>
+            <returns>Returns a list of applications</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/application/all-applications
+            
+            </remarks>
+            <response code="200">Returns an object of applications </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.ApplicationController.GetLGAbyStateId(System.Int32)">
+            <summary>
+            This endpoint is used to fetch LGAs by StateID
+            </summary>
+            <returns>Returns a list of lgas</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/application/get-lga-by-stateid
+            
+            </remarks>
+            <response code="200">Returns an object of lgas </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.ApplicationController.MyDesk">
+            <summary>
+            This endpoint is used to fetch applications on a staff desk
+            </summary>
+            <returns>Returns a list of applications</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/application/my-desk
+            
+            </remarks>
+            <response code="200">Returns an object of apps </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.ApplicationController.ViewApplication(System.String)">
+            <summary>
+            This endpoint is used to fetch details of an application
+            </summary>
+            <returns>Returns an application info</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/application/view-application
+            
+            </remarks>
+            <response code="200">Returns an application info </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.ApplicationController.Process(System.String,System.String,System.String)">
+            <summary>
+            This endpoint is used to approve or reject an application
+            </summary>
+            <returns>Returns a success message or rotherwise</returns>
+            <remarks>
+            
+            Sample Request
+            POST: api/application/process
+            
+            </remarks>
+            <param name="id">This is the id of the application to be processed</param>
+            <param name="act">This is the action taken on the aplication </param>
+            <param name="comment">This is the message attaced to the processing of the application </param>
+            <response code="200">Returns an application info </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.ApplicationProcessesController.Index">
+            <summary>
+            This endpoint is used to fetch all configured processes
+            </summary>
+            <returns>Returns a success message or otherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/application/get-processes
+            
+            </remarks>
+            <response code="200">Returns an application info </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.ApplicationProcessesController.AddFlow(Bunkering.Core.Data.WorkFlow)">
+            <summary>
+            This endpoint is used to add new flow to the system
+            </summary>
+            <returns>Returns a success message or otherwise</returns>
+            <remarks>
+            
+            Sample Request
+            POST: api/application/add-flow
+            
+            </remarks>
+            <param name="model">This is the model for adding a new flow</param>
+            <response code="200">Returns a success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.ApplicationProcessesController.EditFlow(Bunkering.Core.Data.WorkFlow)">
+            <summary>
+            This endpoint is used to edit an exisiting flow
+            </summary>
+            <returns>Returns a success message or otherwise</returns>
+            <remarks>
+            
+            Sample Request
+            POST: api/application/add-flow
+            
+            </remarks>
+            <param name="model">This is the model for editing a new flow</param>
+            <response code="200">Returns a success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.ApplicationProcessesController.CloneFlow(System.Int32)">
+            <summary>
+            This endpoint is used to edit an exisiting flow
+            </summary>
+            <returns>Returns a success message or otherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/application/clone-flow
+            
+            </remarks>
+            <param name="id">This is the id o fthe processes to be cloned</param>
+            <response code="200">Returns a success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.AppStageDocumentsController.Index">
+            <summary>
+            This endpoint is used to approve or reject an application
+            </summary>
+            <returns>Returns a success message or rotherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/appstagedoc/getall
+            
+            </remarks>
+            <response code="200">Returns an application info </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.AppStageDocumentsController.AddDocument(Bunkering.Core.ViewModels.AppStageDocsViewModel)">
+            <summary>
+            This endpoint is used to add document to facility stage
+            </summary>
+            <returns>Returns a success message or rotherwise</returns>
+            <remarks>
+            
+            Sample Request
+            POST: api/application/add-document
+            
+            </remarks>
+            <param name="model">This is the message attaced to the processing of the application </param>
+            <response code="200">Returns an application info </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.AppStageDocumentsController.UpdateFADDoc(System.Int32)">
+            <summary>
+            This endpoint is used to update a facility type doc to FAD Doc
+            </summary>
+            <returns>Returns a success message or rotherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/appstagedoc/getall
+            
+            </remarks>
+            <param name="id">This is the id of the document to be updated to FDA doc</param>
+            <response code="200">Returns an application info </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.CompanyController.Dashboard">
+            <summary>
+            This endpoint is used to fetch company's dashboard info
+            </summary>
+            <returns>Returns a success message or rotherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/company/dashboard
+            
+            </remarks>
+            <response code="200">Returns a summary of the company's dashboard </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.CompanyController.GetProfile(System.String)">
+            <summary>
+            This endpoint is used to fetch company's profile 
+            </summary>
+            <returns>Returns a success message or otherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/company/dashboard
+            
+            </remarks>
+            <param name="email">This is the email of the company which maybe be null if the user is loged in</param>
+            <response code="200">Returns an object with the company's profile </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.CompanyController.UpdateProfile(Bunkering.Core.Data.CompanyInformation,System.String)">
+            <summary>
+            This endpoint is used to fetch company's dashboard info
+            </summary>
+            <returns>Returns a success message or rotherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/company/dashboard
+            
+            </remarks>
+            <param name="model">This is the model of the company's profile update</param>
+            <param name="oldemail">This is the old emailof the company's profile</param>
+            <response code="200">Returns a summary of the company's dashboard </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.InspectionController.Pending(System.String,System.String)">
+            <summary>
+            This endpoint returns a mode of pending inspection, have application category, user email, and stage for a given inspector/staff 
+            </summary>
+            <returns>Returns a modes of pending inspections</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/Inspection/pending
+            
+            </remarks>
+            <param name="email">The inspector/Reviewer email to fetch inspection for</param>
+            <param name="code">Uniqe key for the request. use any (eyJJc3N1ZXIiOiJBRERPTlNBVVRPR0FTVVRJTElTQVRJT04ifQ, eyJJc3N1ZXIiOiJBVVRPR0FTIn0, eyJhbGciOiJIUzI1NiJ9)</param>
+            <response code="200">Returns a list of all pending inspections for a user </response>
+            <response code="404">Returns not found inspection </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.InspectionController.SaveInspection(Bunkering.Access.DAL.InspectionReportModel)">
+            <summary>
+            This endpoint returns a success message on successful addition of inspection form 
+            </summary>
+            <returns>Returns a message on inspection update</returns>
+            <remarks>
+            
+            Sample Request
+            POST: api/Inspection/post-inspection
+            
+            </remarks>
+            <param name="model">The inspection form to be saved for the applictaion</param>
+            <response code="200">Returns a list of all pending inspections for a user </response>
+            <response code="404">Returns not found inspection </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.SchedulesController.ScheduleInspection(Bunkering.Core.ViewModels.ScheduleViewModel)">
+            <summary>
+            This endpoint is used to schedule an inspection for an application
+            </summary>
+            <returns>Returns a success message or otherwise</returns>
+            <remarks>
+            
+            Sample Request
+            POST: api/application/add-schedule
+            
+            </remarks>
+            <param name="model">This is the schedule object for an application </param>
+            <response code="200">Returns an application info </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.SchedulesController.GetSchedule(System.Int32)">
+            <summary>
+            This endpoint is used to fetch a schedule for an application
+            </summary>
+            <returns>Returns a success message or rotherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/application/get-schedule
+            
+            </remarks>
+            <param name="id">This is the id of the schedule</param>
+            <response code="200">Returns an application info </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.SchedulesController.ApproveSchedule(Bunkering.Core.ViewModels.ScheduleViewModel)">
+            <summary>
+            This endpoint is used to approve or rejct a schedule for an application
+            </summary>
+            <returns>Returns a success message or rotherwise</returns>
+            <remarks>
+            
+            Sample Request
+            POST: api/application/approve-schedule
+            
+            </remarks>
+            <param name="model">This is the object used to approve or reject the schedule</param>
+            <response code="200">Returns an application info </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.SchedulesController.Schedules">
+            <summary>
+            This endpoint is used to fetch all schedules per logged-in user
+            </summary>
+            <returns>Returns a success message or rotherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/application/all-schedules
+            
+            </remarks>
+            <response code="200">Returns a list of schedules </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.StaffController.Dashboard">
+            <summary>
+            This endpoint is used to fetch the satff dashbaord summary
+            </summary>
+            <returns>Returns a success message or otherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/application/get-dashboard
+            
+            </remarks>
+            <response code="200">Returns the staff dashboard </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.StaffController.AllUsers">
+            <summary>
+            This endpoint is used to fetch all staff
+            </summary>
+            <returns>Returns a success message or otherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/staff/all-users
+            
+            </remarks>
+            <response code="200">Returns staff list </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.StaffController.AddUsers(Bunkering.Core.ViewModels.UserViewModel)">
+            <summary>
+            This endpoint is used to add new user
+            </summary>
+            <returns>Returns a success message or otherwise</returns>
+            <remarks>
+            
+            Sample Request
+            POST: api/staff/add-user
+            
+            </remarks>
+            <response code="200">Returns success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.StaffController.Edit(Bunkering.Core.ViewModels.UserViewModel)">
+            <summary>
+            This endpoint is used to edit user
+            </summary>
+            <returns>Returns a success message or otherwise</returns>
+            <remarks>
+            
+            Sample Request
+            POST: api/staff/edit-user
+            
+            </remarks>
+            <response code="200">Returns success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="T:Bunkering.Migrations.initial">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.initial.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.initial.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.initial.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.app">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.app.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.app.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.app.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.appsetting">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appsetting.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appsetting.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appsetting.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.update">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.update.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.update.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.update.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.countrystatelga">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.countrystatelga.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.countrystatelga.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.countrystatelga.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.appstatus">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appstatus.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appstatus.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appstatus.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.tanks">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.tanks.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.tanks.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.tanks.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.auditupdate">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.auditupdate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.auditupdate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.auditupdate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.facilitycompanyid">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.facilitycompanyid.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.facilitycompanyid.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.facilitycompanyid.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.procflow">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.procflow.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.procflow.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.procflow.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.procflowstatus">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.procflowstatus.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.procflowstatus.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.procflowstatus.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.permit">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.permit.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.permit.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.permit.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.appfee">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appfee.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appfee.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appfee.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.appfeeinspfee">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appfeeinspfee.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appfeeinspfee.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appfeeinspfee.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.subdos">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.subdos.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.subdos.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.subdos.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.subdosnew">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.subdosnew.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.subdosnew.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.subdosnew.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.appointmentdetails">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appointmentdetails.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appointmentdetails.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appointmentdetails.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.products">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.products.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.products.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.products.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.flowidnull">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.flowidnull.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.flowidnull.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.flowidnull.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.productid">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.productid.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.productid.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.productid.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.messagetbl">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.messagetbl.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.messagetbl.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.messagetbl.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.messagetblisread">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.messagetblisread.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.messagetblisread.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.messagetblisread.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.paydb">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.paydb.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.paydb.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.paydb.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.schedule">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.schedule.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.schedule.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.schedule.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.fad">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.fad.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.fad.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.fad.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.appfadstaffid">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appfadstaffid.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appfadstaffid.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.appfadstaffid.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.faddoc">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.faddoc.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.faddoc.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.faddoc.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.schType">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.schType.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.schType.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.schType.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.inspections">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.inspections.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.inspections.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.inspections.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.licenseQrCode">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.licenseQrCode.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.licenseQrCode.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.licenseQrCode.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bunkering.Migrations.validres">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.validres.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.validres.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.validres.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

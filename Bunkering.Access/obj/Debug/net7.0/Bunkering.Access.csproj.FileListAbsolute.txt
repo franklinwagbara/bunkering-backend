@@ -1,0 +1,15 @@
+D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Access\obj\Debug\net7.0\Bunkering.Access.csproj.AssemblyReference.cache
+D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Access\obj\Debug\net7.0\Bunkering.Access.GeneratedMSBuildEditorConfig.editorconfig
+D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Access\obj\Debug\net7.0\Bunkering.Access.AssemblyInfoInputs.cache
+D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Access\obj\Debug\net7.0\Bunkering.Access.AssemblyInfo.cs
+D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Access\obj\Debug\net7.0\Bunkering.Access.csproj.CoreCompileInputs.cache
+D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Access\bin\Debug\net7.0\Bunkering.Access.deps.json
+D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Access\bin\Debug\net7.0\Bunkering.Access.dll
+D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Access\bin\Debug\net7.0\Bunkering.Access.pdb
+D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Access\bin\Debug\net7.0\Bunkering.Core.dll
+D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Access\bin\Debug\net7.0\Bunkering.Core.pdb
+D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Access\obj\Debug\net7.0\Bunkering.Access.csproj.CopyComplete
+D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Access\obj\Debug\net7.0\Bunkering.Access.dll
+D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Access\obj\Debug\net7.0\refint\Bunkering.Access.dll
+D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Access\obj\Debug\net7.0\Bunkering.Access.pdb
+D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Access\obj\Debug\net7.0\ref\Bunkering.Access.dll

@@ -1,0 +1,207 @@
+﻿using Azure;
+using Bunkering.Access.IContracts;
+using Bunkering.Core.Data;
+using Bunkering.Core.Utils;
+using Bunkering.Core.ViewModels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Net;
+
+namespace Bunkering.Access.Services
+{
+    public class StaffService
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IHttpContextAccessor _contextAccessor;
+        private string User;
+        ApiResponse _response;
+
+        public StaffService(
+            IUnitOfWork unitOfWork, 
+            UserManager<ApplicationUser> userManager,
+            RoleManager<ApplicationRole> roleManager,
+            IHttpContextAccessor contextAccessor) 
+        {
+            _unitOfWork = unitOfWork;
+            _userManager = userManager;
+            _contextAccessor = contextAccessor;
+            _roleManager = roleManager;
+        }
+
+        public async Task<ApiResponse> Dashboard()
+        {
+            var user = await _userManager.FindByEmailAsync(User);
+            var allApps = await _unitOfWork.Application.GetAll();
+            var apps = await _userManager.IsInRoleAsync(user, "FAD")
+                ? (allApps.Where(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))))
+                : (allApps.Where(x => x.CurrentDeskId.Equals(user.Id)));
+            var permits = await _unitOfWork.Permit.GetAll();
+            var facilities = await _unitOfWork.Facility.GetAll("FacilityType");
+            var payments = await _unitOfWork.Payment.GetAll();
+
+            if (apps.Count() > 0)
+                _response = new ApiResponse
+                {
+                    Message = "Success",
+                    StatusCode = HttpStatusCode.OK,
+                    Success = true,
+                    Data = new
+                    {
+                        DeskCount = apps.Count(),
+                        TotalApps = allApps.Count(),
+                        TMobileFacs = facilities.Count(x => x.FacilityType.Name.ToLower().Equals("mobile")),
+                        TFixedFacs = facilities.Count(x => x.FacilityType.Name.ToLower().Equals("fixed")),
+                        TotalLicenses = permits.Count(),
+                        TLicensedfacs = facilities.Count(x => x.IsLicensed),
+                        TValidLicense = permits.Count(x => x.ExpireDate > DateTime.UtcNow.AddHours(1)),
+                        TAmount = payments.Sum(x => x.Amount),
+                        TProcessing = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))),
+                        TApproved = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Completed))),
+                        TRejected = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Rejected))),
+                        
+                    }
+                };
+            else
+                _response = new ApiResponse
+                {
+                    Message = "No Application was found",
+                    StatusCode = HttpStatusCode.NotFound,
+                    Success = false
+                };
+
+            return _response;
+        }
+
+        public async Task<ApiResponse> AllUsers()
+        {
+            var users = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).Where(x => x.CompanyId == null).ToList();
+            var apps = await _unitOfWork.Application.GetAll();
+            return new ApiResponse
+            {
+                Message = "Users found",
+                StatusCode = HttpStatusCode.OK,
+                Success = true,
+                Data = users.Select(x => new 
+                { 
+                    Name = $"{x.FirstName} {x.LastName}",
+                    x.Email,
+                    Role = x.UserRoles.FirstOrDefault()?.Role.Name,
+                    AppCount = x.UserRoles.FirstOrDefault().Role.Name.Equals("FAD") ? apps.Count(x => x.FADStaffId.Equals(x.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))): apps.Count(x => x.UserId.Equals(x.Id)),
+
+                })
+            };
+        }
+
+        public async Task<ApiResponse> Create(UserViewModel model)
+        {
+            try
+            {
+                var staff = await _userManager.FindByEmailAsync(model.Email);
+                if (staff == null)
+                {
+                    staff = new ApplicationUser
+                    {
+                        ElpsId = model.ElpsId,
+                        Email = model.Email,
+                        UserName = model.Email,
+                        EmailConfirmed = true,
+                        PhoneNumber = model.Phone,
+                        IsActive = true,
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+
+                    };
+                    await _userManager.CreateAsync(staff);
+
+                    var role = await _roleManager.FindByIdAsync(model.RoleId);
+                    if (role != null)
+                        await _userManager.AddToRoleAsync(staff, role.Name);
+
+                    _response = new ApiResponse
+                    {
+                        Message = "User was profiled successfully",
+                        StatusCode = HttpStatusCode.OK,
+                        Success = true
+                    };
+                }
+                else
+                    _response = new ApiResponse
+                    {
+                        Message = "User already exists",
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Success = false
+                    };
+            }
+            catch(Exception ex)
+            {
+                _response = new ApiResponse
+                {
+                    Message = ex.Message,
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Success = false
+                };
+            }
+            return _response;
+        }
+
+        public async Task<ApiResponse> Edit(UserViewModel model)
+        {
+            try
+            {
+                var user = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).FirstOrDefault(x => x.Id.Equals(model.Id));
+                if (user != null)
+                {
+                    var role = await _roleManager.FindByIdAsync(model.RoleId);
+                    var apps = await _unitOfWork.Application.Find(x => x.CurrentDeskId.Equals(user.Id));
+                    if (apps != null && apps.Count() > 0)
+                    {
+                        if (role != null && !await _userManager.IsInRoleAsync(user, role.Name))
+                        {
+                            _response = new ApiResponse
+                            {
+                                Message = "There are pending applications on the staff desk, pls reroute and try again",
+                                StatusCode = HttpStatusCode.BadRequest,
+                                Success = false
+                            };
+                        }
+                    }
+                    else
+                    {
+                        user.PhoneNumber = model.Phone;
+                        user.Email = model.Email;
+                        user.FirstName = model.FirstName;
+                        user.LastName = model.LastName;
+                        user.IsActive = model.IsActive;
+
+                        await _userManager.UpdateAsync(user);
+
+                        if (!await _userManager.IsInRoleAsync(user, role.Name))
+                        {
+                            await _userManager.RemoveFromRoleAsync(user, user.UserRoles.FirstOrDefault().Role.Name);
+                            await _userManager.AddToRoleAsync(user, role.Name);
+                        }
+                        _response = new ApiResponse
+                        {
+                            Message = "Staff profile updated successfully!",
+                            StatusCode = HttpStatusCode.OK,
+                            Success = true
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _response = new ApiResponse
+                {
+                    Message = ex.Message,
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Success = false
+                };
+            }
+            return _response;
+        }
+    }
+}
