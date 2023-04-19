@@ -4185,11 +4185,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Documents\\Projects\\nmdpra-bunkering\\Bunkering\\Bunkering.Access\\Bunkering.Access.csproj",
+      "projectUniqueName": "D:\\Documents\\Projects\\Repo\\Bunkering\\Bunkering.Access\\Bunkering.Access.csproj",
       "projectName": "Bunkering.Access",
-      "projectPath": "D:\\Documents\\Projects\\nmdpra-bunkering\\Bunkering\\Bunkering.Access\\Bunkering.Access.csproj",
+      "projectPath": "D:\\Documents\\Projects\\Repo\\Bunkering\\Bunkering.Access\\Bunkering.Access.csproj",
       "packagesPath": "C:\\Users\\Damilare\\.nuget\\packages\\",
-      "outputPath": "D:\\Documents\\Projects\\nmdpra-bunkering\\Bunkering\\Bunkering.Access\\obj\\",
+      "outputPath": "D:\\Documents\\Projects\\Repo\\Bunkering\\Bunkering.Access\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -4212,8 +4212,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "D:\\Documents\\Projects\\nmdpra-bunkering\\Bunkering\\Bunkering.Core\\Bunkering.Core.csproj": {
-              "projectPath": "D:\\Documents\\Projects\\nmdpra-bunkering\\Bunkering\\Bunkering.Core\\Bunkering.Core.csproj"
+            "D:\\Documents\\Projects\\Repo\\Bunkering\\Bunkering.Core\\Bunkering.Core.csproj": {
+              "projectPath": "D:\\Documents\\Projects\\Repo\\Bunkering\\Bunkering.Core\\Bunkering.Core.csproj"
             }
           }
         }
