@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bunkering", "Bunkering\Bunk
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bunkering.Core", "Bunkering.Core\Bunkering.Core.csproj", "{AF7D3E63-186A-4D9D-B9F6-4D4FC374E1D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bunkering.Access", "Bunkering.Access\Bunkering.Access.csproj", "{196B51D2-E08A-47B8-8D24-AEB5B9AEE489}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bunkering.Access", "Bunkering.Access\Bunkering.Access.csproj", "{196B51D2-E08A-47B8-8D24-AEB5B9AEE489}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Bunkering.Database", "Bunkering.Database\Bunkering.Database.sqlproj", "{170C5C56-016E-4CDB-81B6-626C6A30C3A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,12 @@ Global
 		{196B51D2-E08A-47B8-8D24-AEB5B9AEE489}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{196B51D2-E08A-47B8-8D24-AEB5B9AEE489}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{196B51D2-E08A-47B8-8D24-AEB5B9AEE489}.Release|Any CPU.Build.0 = Release|Any CPU
+		{170C5C56-016E-4CDB-81B6-626C6A30C3A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{170C5C56-016E-4CDB-81B6-626C6A30C3A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{170C5C56-016E-4CDB-81B6-626C6A30C3A8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{170C5C56-016E-4CDB-81B6-626C6A30C3A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{170C5C56-016E-4CDB-81B6-626C6A30C3A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{170C5C56-016E-4CDB-81B6-626C6A30C3A8}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

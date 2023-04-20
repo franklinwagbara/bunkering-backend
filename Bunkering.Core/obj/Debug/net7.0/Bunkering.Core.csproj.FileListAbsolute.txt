@@ -12,3 +12,17 @@ D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Core\obj\Debug\net7.0
 D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Core\obj\Debug\net7.0\Bunkering.Core.pdb
 D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Core\obj\Debug\net7.0\Bunkering.Core.genruntimeconfig.cache
 D:\Documents\Projects\nmdpra-bunkering\Bunkering\Bunkering.Core\obj\Debug\net7.0\ref\Bunkering.Core.dll
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Core\bin\Debug\net7.0\Bunkering.Core.deps.json
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Core\bin\Debug\net7.0\Bunkering.Core.runtimeconfig.json
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Core\bin\Debug\net7.0\Bunkering.Core.dll
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Core\bin\Debug\net7.0\Bunkering.Core.pdb
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Core\obj\Debug\net7.0\Bunkering.Core.csproj.AssemblyReference.cache
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Core\obj\Debug\net7.0\Bunkering.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Core\obj\Debug\net7.0\Bunkering.Core.AssemblyInfoInputs.cache
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Core\obj\Debug\net7.0\Bunkering.Core.AssemblyInfo.cs
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Core\obj\Debug\net7.0\Bunkering.Core.csproj.CoreCompileInputs.cache
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Core\obj\Debug\net7.0\Bunkering.Core.dll
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Core\obj\Debug\net7.0\refint\Bunkering.Core.dll
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Core\obj\Debug\net7.0\Bunkering.Core.pdb
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Core\obj\Debug\net7.0\Bunkering.Core.genruntimeconfig.cache
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Core\obj\Debug\net7.0\ref\Bunkering.Core.dll

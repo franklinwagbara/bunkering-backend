@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace Buner.Controllers.API
 {
     [AllowAnonymous]
-    [Route("api/aus/auth")]
+    [Route("api/bunkering/[controller]")]
     public class AuthController : Controller
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -61,9 +61,9 @@ namespace Buner.Controllers.API
             return Content(frm, "text/html");
         }
 
-        //[HttpGet]
-        //[Route("pay-online")]
-        //public IActionResult PayOnline(string rrr) => Redirect($"{_appConfig.Config().GetValue("elpsurl")}/Payment/Pay?rrr={rrr}");
+        [HttpGet]
+        [Route("pay-online")]
+        public IActionResult PayOnline(string rrr) => Redirect($"{_appConfig.Config().GetValue("elpsurl")}/Payment/Pay?rrr={rrr}");
 
         //[HttpPost]
         //[Route("remita")]
