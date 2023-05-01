@@ -594,3 +594,5 @@ D:\Documents\Projects\Repo\Bunkering\Bunkering\obj\Debug\net7.0\refint\Bunkering
 D:\Documents\Projects\Repo\Bunkering\Bunkering\obj\Debug\net7.0\Bunkering.pdb
 D:\Documents\Projects\Repo\Bunkering\Bunkering\obj\Debug\net7.0\Bunkering.genruntimeconfig.cache
 D:\Documents\Projects\Repo\Bunkering\Bunkering\obj\Debug\net7.0\ref\Bunkering.dll
+D:\Documents\Projects\Repo\Bunkering\Bunkering\bin\Debug\net7.0\Serilog.dll
+D:\Documents\Projects\Repo\Bunkering\Bunkering\bin\Debug\net7.0\Serilog.Sinks.File.dll

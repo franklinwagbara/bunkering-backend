@@ -10,9 +10,11 @@ namespace Bunkering.Access.Services
     {
         public static void Services(this IServiceCollection services)
         {
+            services.AddTransient<AppLogger>();
             services.AddScoped<AppConfiguration>();
             services.AddScoped<ApplicationContext>();
             services.AddScoped<AppProvessesService>();
+            services.AddScoped<AuthService>();
             services.AddTransient<Seeder>();
             services.AddScoped<IElps, ElpsRepostory>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -22,6 +24,7 @@ namespace Bunkering.Access.Services
             services.AddScoped<LicenseService>();
             services.AddScoped<CompanyService>();
             services.AddScoped<AppStageDocService>();
+            services.AddScoped<PaymentService>();
             services.AddScoped<StaffService>();
         }
     }

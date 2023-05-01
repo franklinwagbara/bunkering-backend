@@ -7,7 +7,7 @@ using System.Net;
 namespace Bunkering.Controllers.API
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/bunkering/[controller]")]
     [ApiController]
     public class SchedulesController : ResponseController
     {

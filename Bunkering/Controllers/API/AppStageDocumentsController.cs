@@ -1,11 +1,15 @@
 ﻿using Bunkering.Access.Services;
 using Bunkering.Core.Data;
 using Bunkering.Core.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bunkering.Controllers.API
 {
+    [Authorize]
+    [ApiController]
+    [Route("api/bunkering/[controller]")]
     public class AppStageDocumentsController : ResponseController
     {
         private readonly AppStageDocService _appDocService;

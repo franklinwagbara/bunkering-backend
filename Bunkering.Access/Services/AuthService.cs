@@ -7,6 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Diagnostics;
 using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace Bunkering.Access.Services
 {
@@ -19,13 +23,15 @@ namespace Bunkering.Access.Services
         private readonly AppConfiguration _appConfig;
         private readonly IElps _elps;
         private readonly string User;
+        private readonly IConfiguration _configuration;
 
         public AuthService(
             IHttpContextAccessor httpContextAccessor,
             UserManager<ApplicationUser> user,
             SignInManager<ApplicationUser> signInManager,
             AppConfiguration appConfig,
-            IElps elps)
+            IElps elps.
+            IConfiguration configuration)
         {
             _httpContextAccessor = httpContextAccessor;
             _user = user;
@@ -33,13 +39,14 @@ namespace Bunkering.Access.Services
             _appConfig = appConfig;
             _elps = elps;
             User = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            _configuration = configuration;
         }
 
         public async Task<ApiResponse> UserAuth(LoginViewModel model)
         {
             var user = new ApplicationUser();
             var hash = Utils.GenerateSha512($"{_appConfig.Config().GetValue("publickey").ToUpper()}.{model.Email.ToUpper()}.{_appConfig.Config().GetValue("appid").ToUpper()}");
-            if (Debugger.IsAttached && (!Debugger.IsAttached && model.Code.Equals(hash)))
+            if (Debugger.IsAttached || (!Debugger.IsAttached && model.Code.Equals(hash)))
             {
                 //check if it's company login
                 var company = _elps.GetCompanyDetailByEmail(model.Email);
@@ -148,6 +155,62 @@ namespace Bunkering.Access.Services
                     _response.Message = "An error occured, please contact Support/ICT.";
             }
             return _response;
+        }
+
+        public async Task<ApiResponse> ValidateUser(string id)
+        {
+            if (!string.IsNullOrEmpty(id))
+            {
+                var user = await _user.Users.Include(c => c.Company)
+                    .Include(ur => ur.UserRoles).ThenInclude(r => r.Role)
+                    .FirstOrDefaultAsync(x => x.Id.Equals(id));
+                if (user != null)
+                {
+                    _response = new ApiResponse
+                    {
+                        Message = "User found",
+                        StatusCode = HttpStatusCode.OK,
+                        Success = true,
+                        Data = new
+                        {
+                            UserId = user.Email,
+                            user.ElpsId,
+                            FirstName = user.UserRoles.FirstOrDefault().Role.Name.Equals("Company") ? user.FirstName : user.Company.Name,
+                            user.LastName,
+                            UserRoles = user.UserRoles.FirstOrDefault(x => !x.Role.Name.Equals("Staff"))?.Role.Name,
+                            user.CreatedOn,
+                            user.LastLogin,
+                            user.ProfileComplete,
+                            Status = user.IsActive,
+                            Token = GenerateToken(user)
+                        },
+                    };
+                }
+                else
+                    _response = new ApiResponse { Message = "User not found", StatusCode = HttpStatusCode.NotFound };
+            }
+            else
+                _response = new ApiResponse { Message = "User invalid", StatusCode = HttpStatusCode.BadRequest };
+
+            return _response;
+        }
+
+        private string GenerateToken(ApplicationUser user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenKey = Encoding.UTF8.GetBytes(_configuration["JWT:Key"]);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Name, user.FirstName+" "+ user.LastName),
+                }),
+                Expires = DateTime.UtcNow.AddDays(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
         private async Task<ApplicationUser> RegisterCompany(Dictionary<string, string> dic)

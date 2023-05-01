@@ -8,7 +8,7 @@ namespace Bunkering.Controllers.API
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/bunkering/[controller]")]
     public class ApplicationProcessesController : ResponseController
     {
         private readonly AppProvessesService _appProcService;

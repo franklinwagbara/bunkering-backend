@@ -21,10 +21,12 @@ namespace Bunkering.Access.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly WorkFlowService _flow;
         private readonly IMapper _mapper;
-        ApiResponse response;
+        ApiResponse _response;
         private readonly AppConfiguration _appConfig;
         private readonly string User;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly AppLogger _logger;
+        private readonly string directory = "Application";
 
         public AppService(
             UserManager<ApplicationUser> userManager,
@@ -33,7 +35,8 @@ namespace Bunkering.Access.Services
             IMapper mapper,
             IElps elps,
             AppConfiguration appConfig,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            AppLogger logger)
         {
             _userManager = userManager;
             _unitOfWork = unitOfWork;
@@ -43,44 +46,53 @@ namespace Bunkering.Access.Services
             _appConfig = appConfig;
             _httpContextAccessor = httpContextAccessor;
             User = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            _logger = logger;
         }
 
         private async Task<Facility> CreateFacility(ApplictionViewModel model, ApplicationUser user)
         {
             var facility = await _unitOfWork.Facility.FirstOrDefaultAsync(x => x.Name.ToLower().Equals(model.FacilityName.ToLower()) && x.Address.ToLower().Equals(model.Address.ToLower()) && x.CompanyId.Equals(user.CompanyId));
-            if (facility == null)
+            try
             {
-                facility = new Facility
+                if (facility == null)
                 {
-                    Address = model.Address,
-                    FacilityTypeId = model.FacilityTypeId,
-                    Name = model.FacilityName,
-                    LgaId = model.LgaId,
-                    CompanyId = user.CompanyId.Value
-                };
-                var lga = await _unitOfWork.LGA.Find(x => x.Id == model.LgaId);
+                    facility = new Facility
+                    {
+                        Address = model.Address,
+                        FacilityTypeId = model.FacilityTypeId,
+                        Name = model.FacilityName,
+                        LgaId = model.LgaId,
+                        CompanyId = user.CompanyId.Value
+                    };
+                    var lga = await _unitOfWork.LGA.Find(x => x.Id == model.LgaId);
 
-                var facElps = _elps.CreateElpsFacility(new
-                {
-                    Name = model.FacilityName,
-                    StreetAddress = model.Address,
-                    CompanyId = user.ElpsId,
-                    DateAdded = DateTime.UtcNow.AddHours(1),
-                    City = lga.FirstOrDefault().Name,
-                    model.StateId,
-                    //StateId = (string)null,
-                    LGAId = model.LgaId,
-                    //LGAId = (string)null,
-                    FacilityType = "Bunkering Facility",
-                    FacilityDocuments = (string)null,
-                    Id = (string)null
-                })?.Parse<Dictionary<string, object>>();
+                    var facElps = _elps.CreateElpsFacility(new
+                    {
+                        Name = model.FacilityName,
+                        StreetAddress = model.Address,
+                        CompanyId = user.ElpsId,
+                        DateAdded = DateTime.UtcNow.AddHours(1),
+                        City = lga.FirstOrDefault().Name,
+                        model.StateId,
+                        //StateId = (string)null,
+                        LGAId = model.LgaId,
+                        //LGAId = (string)null,
+                        FacilityType = "Bunkering Facility",
+                        FacilityDocuments = (string)null,
+                        Id = (string)null
+                    })?.Parse<Dictionary<string, object>>();
 
-                if (facElps?.Count > 0)
-                    facility.ElpsId = int.Parse($"{facElps.GetValue("id")}");
+                    if (facElps?.Count > 0)
+                        facility.ElpsId = int.Parse($"{facElps.GetValue("id")}");
 
-                await _unitOfWork.Facility.Add(facility);
-                await _unitOfWork.SaveChangesAsync(user.Id);
+                    await _unitOfWork.Facility.Add(facility);
+                    await _unitOfWork.SaveChangesAsync(user.Id);
+
+                }
+            }
+            catch(Exception ex) 
+            {
+                _logger.LogRequest($"{ex.Message}\n{ex.InnerException}\n{ex.StackTrace}", true, directory);
             }
             return facility;
         }
@@ -94,7 +106,7 @@ namespace Bunkering.Access.Services
                 if (await _unitOfWork.Application.Find(x => x.Facility.Name.Equals(model.FacilityName, StringComparison.OrdinalIgnoreCase)
                          && x.Facility.Address.Equals(model.Address, StringComparison.OrdinalIgnoreCase) && x.UserId.Equals(user.Id)
                          && !x.Status.Equals(Enum.GetName(typeof(AppStatus), 5), StringComparison.OrdinalIgnoreCase)) == null)
-                    response = new ApiResponse
+                    _response = new ApiResponse
                     {
                         Message = "There is an existing application for this facility, kindly go to My Application to complete processing",
                         StatusCode = HttpStatusCode.Found,
@@ -118,7 +130,7 @@ namespace Bunkering.Access.Services
 
                     await _flow.AppWorkFlow(app.Id, Enum.GetName(typeof(AppActions), AppActions.Initiate), "Application Created");
 
-                    response = new ApiResponse
+                    _response = new ApiResponse
                     {
                         Message = "There is an existing application for this facility, kindly go to My Application to complete processing",
                         StatusCode = HttpStatusCode.OK,
@@ -129,14 +141,14 @@ namespace Bunkering.Access.Services
             }
             catch (Exception ex) 
             {
-                response = new ApiResponse
+                _response = new ApiResponse
                 {
                     Success = false,
                     Message = ex.Message,
                     StatusCode = HttpStatusCode.InternalServerError
                 };
             }
-            return response;
+            return _response;
         }
 
         public async Task<ApiResponse> GetTanksByAppId(string id)
@@ -182,7 +194,7 @@ namespace Bunkering.Access.Services
                                 if (tanks.Count() > 0)
                                     tankList = _mapper.Map<List<TankViewModel>>(tanks);
                             }
-                            response = new ApiResponse
+                            _response = new ApiResponse
                             {
                                 Message = "Success",
                                 StatusCode = HttpStatusCode.OK,
@@ -195,7 +207,7 @@ namespace Bunkering.Access.Services
                             };
                         }
                         else
-                            response = new ApiResponse
+                            _response = new ApiResponse
                             {
                                 Success = false,
                                 StatusCode = HttpStatusCode.NotFound,
@@ -204,7 +216,7 @@ namespace Bunkering.Access.Services
                     }
                     catch (Exception ex)
                     {
-                        response = new ApiResponse 
+                        _response = new ApiResponse 
                         { 
                             Message = ex.Message,
                             StatusCode = HttpStatusCode.InternalServerError,
@@ -213,7 +225,7 @@ namespace Bunkering.Access.Services
                     }
                 }
                 else
-                    response = new ApiResponse
+                    _response = new ApiResponse
                     {
                         Success = false,
                         StatusCode = HttpStatusCode.BadRequest,
@@ -221,14 +233,14 @@ namespace Bunkering.Access.Services
                     };
             }
             else
-                response = new ApiResponse
+                _response = new ApiResponse
                 {
                     Success = false,
                     StatusCode = HttpStatusCode.BadRequest,
                     Message = "ApplicationID invalid"
                 };
 
-            return response;
+            return _response;
         }
 
         public async Task<ApiResponse> AddTanks(List<TankViewModel> model)
@@ -266,7 +278,7 @@ namespace Bunkering.Access.Services
                             await _unitOfWork.Tank.AddRange(tankList);
                             await _unitOfWork.SaveChangesAsync(app.UserId);
 
-                            response = new ApiResponse 
+                            _response = new ApiResponse 
                             { 
                                 Success = true,
                                 Message = "Tanks/Vessels added successfully",
@@ -276,7 +288,7 @@ namespace Bunkering.Access.Services
                         }
                     }
                     else
-                        response = new ApiResponse
+                        _response = new ApiResponse
                         {
                             Success = false,
                             StatusCode = HttpStatusCode.BadRequest,
@@ -285,14 +297,14 @@ namespace Bunkering.Access.Services
                 }
                 catch (Exception ex)
                 {
-                    response = new ApiResponse
+                    _response = new ApiResponse
                     {
                         Message = ex.Message,
                         StatusCode = HttpStatusCode.InternalServerError,
                     };
                 }
             }
-            return response;
+            return _response;
         }
 
         public async Task<ApiResponse> Payment(string id)
@@ -339,7 +351,7 @@ namespace Bunkering.Access.Services
                         }
                         await _unitOfWork.SaveChangesAsync(user.Id);
 
-                        response = new ApiResponse
+                        _response = new ApiResponse
                         {
                             Message = "Payment generated for application successfully",
                             StatusCode = HttpStatusCode.OK,
@@ -359,7 +371,7 @@ namespace Bunkering.Access.Services
                     }
                     catch(Exception ex)
                     {
-                        response = new ApiResponse
+                        _response = new ApiResponse
                         {
                             Message = ex.Message,
                             StatusCode = HttpStatusCode.InternalServerError,
@@ -368,7 +380,7 @@ namespace Bunkering.Access.Services
                     }
                 }
                 else
-                    response = new ApiResponse
+                    _response = new ApiResponse
                     {
                         Success = false,
                         StatusCode = HttpStatusCode.BadRequest,
@@ -376,13 +388,13 @@ namespace Bunkering.Access.Services
                     };
             }
             else
-                response = new ApiResponse
+                _response = new ApiResponse
                 {
                     Success = false,
                     StatusCode = HttpStatusCode.NotFound,
                     Message = "ApplicationID caanot be null"
                 };
-            return response;
+            return _response;
         }
 
         public async Task<ApiResponse> DocumentUpload(string id)
@@ -478,7 +490,7 @@ namespace Bunkering.Access.Services
                                 }
                             });
                         }
-                        response = new ApiResponse
+                        _response = new ApiResponse
                         {
                             Message = "Facility Type Documents fetched",
                             StatusCode = HttpStatusCode.OK,
@@ -492,7 +504,7 @@ namespace Bunkering.Access.Services
                         };
                     }
                     else
-                        response = new ApiResponse
+                        _response = new ApiResponse
                         {
                             Message = "ApplicationID invalid",
                             StatusCode = HttpStatusCode.BadRequest,
@@ -500,7 +512,7 @@ namespace Bunkering.Access.Services
                         };
                 }
                 else
-                    response = new ApiResponse
+                    _response = new ApiResponse
                     {
                         Message = "ApplicationID invalid",
                         StatusCode = HttpStatusCode.NotFound,
@@ -508,14 +520,14 @@ namespace Bunkering.Access.Services
                     };
             }
             else
-                response = new ApiResponse
+                _response = new ApiResponse
                 {
                     Message = "ApplicationID invacannot be emptylid",
                     StatusCode = HttpStatusCode.NotFound,
                     Success = false
                 };
 
-            return response;
+            return _response;
         }
 
         public async Task<ApiResponse> AddDocuments(string id)
@@ -584,7 +596,7 @@ namespace Bunkering.Access.Services
                             ? await _flow.AppWorkFlow(appId, Enum.GetName(typeof(AppActions), AppActions.Resubmit), "Application re-submitted")
                             : await _flow.AppWorkFlow(appId, Enum.GetName(typeof(AppActions), AppActions.Submit), "Application Submitted");
                         if (submit.Item1)
-                            response = new ApiResponse
+                            _response = new ApiResponse
                             {
                                 Message =submit.Item2,
                                 StatusCode = HttpStatusCode.OK,
@@ -593,7 +605,7 @@ namespace Bunkering.Access.Services
 
                     }
                     else
-                        response = new ApiResponse
+                        _response = new ApiResponse
                         {
                             Message = "ApplicationID invalid",
                             StatusCode = HttpStatusCode.BadRequest,
@@ -601,7 +613,7 @@ namespace Bunkering.Access.Services
                         };
                 }
                 else
-                    response = new ApiResponse
+                    _response = new ApiResponse
                     {
                         Message = "Application not found",
                         StatusCode = HttpStatusCode.NotFound,
@@ -609,13 +621,13 @@ namespace Bunkering.Access.Services
                     };
             }
             else
-                response = new ApiResponse
+                _response = new ApiResponse
                 {
                     Message = "ApplicationID caanot be empty",
                     StatusCode = HttpStatusCode.NotFound,
                     Success = false
                 };
-            return response;
+            return _response;
         }
 
         public async Task<ApiResponse> CheckLicense(int id, string license)
@@ -651,7 +663,7 @@ namespace Bunkering.Access.Services
                         Date_Issued = Convert.ToDateTime(dicResponse.GetValue("Date_Issued")).ToString("MMM dd, yyyy HH:mm:ss"),
                         Date_Expire = expiry.ToString("MMM dd, yyyy HH:mm:ss"),
                     };
-                    response = new ApiResponse 
+                    _response = new ApiResponse 
                     {
                         Data = data,
                         Message = "License verified successfully",
@@ -662,21 +674,21 @@ namespace Bunkering.Access.Services
             }
             catch (Exception ex)
             {
-                response = new ApiResponse
+                _response = new ApiResponse
                 {
                     Message = ex.Message,
                     StatusCode = HttpStatusCode.InternalServerError,
                     Success = false
                 };
             }
-            return response;
+            return _response;
         }
 
         public async Task<ApiResponse> AllApps() 
         { 
             var apps = await _unitOfWork.Application.GetAll("User.Company,ApplicationType,Facility.FacilityType,Facility.LGA.State");
             if(apps.Count() > 0)
-                response = new ApiResponse 
+                _response = new ApiResponse 
                 { 
                     Message = "Applications fetched successfully",
                     StatusCode = HttpStatusCode.OK,
@@ -694,13 +706,13 @@ namespace Bunkering.Access.Services
                     })
                 };
             else
-                response = new ApiResponse
+                _response = new ApiResponse
                 {
                     Message = "No Application was found",
                     StatusCode = HttpStatusCode.NotFound,
                     Success = false
                 };
-            return response;
+            return _response;
         }
 
         public async Task<ApiResponse> GetLGAbyStateId(int id)
@@ -709,7 +721,7 @@ namespace Bunkering.Access.Services
             if (lga != null)
             {
                 var data = lga.Select(x => new { Text = x.Name, Value = x.Id.ToString() }).ToList();
-                response = new ApiResponse
+                _response = new ApiResponse
                 {
                     Message = "LGA list return",
                     StatusCode = HttpStatusCode.OK,
@@ -718,13 +730,13 @@ namespace Bunkering.Access.Services
                 };
             }
             else
-                response = new ApiResponse
+                _response = new ApiResponse
                 {
                     Message = "No LGA found for the state",
                     StatusCode = HttpStatusCode.NotFound,
                     Success = false
                 };
-            return response;
+            return _response;
         }
 
         public async Task<ApiResponse> MyDesk()
@@ -761,98 +773,107 @@ namespace Bunkering.Access.Services
                 appId = int.Parse(id.DecryptString());
                 if(appId > 0)
                 {
-                    var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "User.Company,Appointment,SubmittedDocuments,ApplicationType,Payments,Facility.FacilityType,Facility.LGA.State,WorkFlow,Histories");
-                    if (app != null)
+                    try
                     {
-                        var users = _userManager.Users.Include(c => c.Company).Include(ur => ur.UserRoles).ThenInclude(r => r.Role).ToList();
-                        var histories = app.Histories.ToList();
-                        histories.ForEach(h =>
+                        var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "User.Company,Appointment,SubmittedDocuments,ApplicationType,Payments,Facility.FacilityType,Facility.LGA.State,WorkFlow,Histories");
+                        if (app != null)
                         {
-
-                            var t = users.FirstOrDefault(x => x.Id.Equals(h.TriggeredBy));
-                            var r = users.FirstOrDefault(x => x.Id.Equals(h.TargetedTo));
-                            h.TriggeredBy = t.Email;
-                            h.TriggeredByRole = t.UserRoles.FirstOrDefault().Role.Name;
-                            h.TargetedTo = r.Email;
-                            h.TargetRole = r.UserRoles.FirstOrDefault().Role.Name;
-                        });
-                        var schedules = app.Appointment.ToList();
-                        schedules.ForEach(a =>
-                        {
-                            var s = users.FirstOrDefault(x => x.Id.Equals(a.ScheduledBy));
-                            var ap = users.FirstOrDefault(x => x.Id.Equals(a.ApprovedBy));
-                            a.ScheduledBy = s.Email;
-                            a.ApprovedBy = ap.Email;
-                        });
-                        var paymentStatus = app.Payments.FirstOrDefault().Status.Equals("PaymentCompleted")
-                        ? "Payment confirmed" : app.Payments.FirstOrDefault().Status.Equals("PaymentRejected") ? "Payment rejected" : "Payment pending";
-
-                        response = new ApiResponse
-                        {
-                            Message = "Application detail found",
-                            StatusCode = HttpStatusCode.OK,
-                            Success = true,
-                            Data = new
+                            var users = _userManager.Users.Include(c => c.Company).Include(ur => ur.UserRoles).ThenInclude(r => r.Role).ToList();
+                            var histories = app.Histories.ToList();
+                            histories.ForEach(h =>
                             {
-                                app.Status,
-                                app.Reference,
-                                CompanyName = app.User.Company.Name,
-                                app.User.Email,
-                                FacilityAddress = app.Facility.Address,
-                                State = app.Facility.LGA.State.Name,
-                                LGA = app.Facility.LGA.Name,
-                                FacilityType = app.Facility.FacilityType.Name,
-                                AppType = app.ApplicationType.Name,
-                                CreatedDate = app.CreatedDate .ToString("MMM dd, yyyy HH:mm:ss"),
-                                SubmittedDate = app.SubmittedDate.Value.ToString("MMM dd, yyyy HH:mm:ss"),
-                                PaymnetStatus = paymentStatus,
-                                TotalAmount = string.Format("{0:N}", app.Payments.Sum(x => x.Amount)),
-                                PaymentDescription = app.Payments.FirstOrDefault().Description,
-                                PaymnetDate = app.Payments.FirstOrDefault()?.TransactionDate.ToString("MMM dd, yyyy HH:mm:ss"),
-                                CurrentDesk = _userManager.Users.FirstOrDefault(x => x.Id.Equals(app.CurrentDeskId))?.Email,
-                                AppHistories = histories,
-                                Schedules = schedules.Select(s => new
+
+                                var t = users.FirstOrDefault(x => x.Id.Equals(h.TriggeredBy));
+                                var r = users.FirstOrDefault(x => x.Id.Equals(h.TargetedTo));
+                                h.TriggeredBy = t.Email;
+                                h.TriggeredByRole = t.UserRoles.FirstOrDefault().Role.Name;
+                                h.TargetedTo = r.Email;
+                                h.TargetRole = r.UserRoles.FirstOrDefault().Role.Name;
+                            });
+                            var schedules = app.Appointment.ToList();
+                            schedules.ForEach(a =>
+                            {
+                                var s = users.FirstOrDefault(x => x.Id.Equals(a.ScheduledBy));
+                                var ap = users.FirstOrDefault(x => x.Id.Equals(a.ApprovedBy));
+                                a.ScheduledBy = s.Email;
+                                a.ApprovedBy = ap.Email;
+                            });
+                            var paymentStatus = app.Payments.FirstOrDefault().Status.Equals("PaymentCompleted")
+                            ? "Payment confirmed" : app.Payments.FirstOrDefault().Status.Equals("PaymentRejected") ? "Payment rejected" : "Payment pending";
+
+                            _response = new ApiResponse
+                            {
+                                Message = "Application detail found",
+                                StatusCode = HttpStatusCode.OK,
+                                Success = true,
+                                Data = new
                                 {
-                                    s.ApprovedBy,
-                                    s.ScheduledBy,
-                                    s.IsApproved,
-                                    s.ApprovalMessage,
-                                    InspectionDate = s.AppointmentDate.ToString("MMM dd, yyyy HH:mm:ss"),
-                                    s.ClientMessage,
-                                    s.ContactName,
-                                    s.IsAccepted,
-                                    s.ScheduleMessage,
-                                    s.ScheduleType,
-                                    ExpiryDate = s.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
-                                }),
-                                Documents = app.SubmittedDocuments
-                            }
+                                    app.Status,
+                                    app.Reference,
+                                    CompanyName = app.User.Company.Name,
+                                    app.User.Email,
+                                    FacilityAddress = app.Facility.Address,
+                                    State = app.Facility.LGA.State.Name,
+                                    LGA = app.Facility.LGA.Name,
+                                    FacilityType = app.Facility.FacilityType.Name,
+                                    AppType = app.ApplicationType.Name,
+                                    CreatedDate = app.CreatedDate.ToString("MMM dd, yyyy HH:mm:ss"),
+                                    SubmittedDate = app.SubmittedDate.Value.ToString("MMM dd, yyyy HH:mm:ss"),
+                                    PaymnetStatus = paymentStatus,
+                                    TotalAmount = string.Format("{0:N}", app.Payments.Sum(x => x.Amount)),
+                                    PaymentDescription = app.Payments.FirstOrDefault().Description,
+                                    PaymnetDate = app.Payments.FirstOrDefault()?.TransactionDate.ToString("MMM dd, yyyy HH:mm:ss"),
+                                    CurrentDesk = _userManager.Users.FirstOrDefault(x => x.Id.Equals(app.CurrentDeskId))?.Email,
+                                    AppHistories = histories,
+                                    Schedules = schedules.Select(s => new
+                                    {
+                                        s.ApprovedBy,
+                                        s.ScheduledBy,
+                                        s.IsApproved,
+                                        s.ApprovalMessage,
+                                        InspectionDate = s.AppointmentDate.ToString("MMM dd, yyyy HH:mm:ss"),
+                                        s.ClientMessage,
+                                        s.ContactName,
+                                        s.IsAccepted,
+                                        s.ScheduleMessage,
+                                        s.ScheduleType,
+                                        ExpiryDate = s.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
+                                    }),
+                                    Documents = app.SubmittedDocuments
+                                }
+                            };
+                        }
+                        else
+                            _response = new ApiResponse
+                            {
+                                Message = "No Application was found",
+                                StatusCode = HttpStatusCode.NotFound,
+                            };
+                    }
+                    catch(Exception ex) 
+                    {
+                        _response = new ApiResponse
+                        {
+                            Message = ex.Message,
+                            StatusCode = HttpStatusCode.InternalServerError,
                         };
                     }
-                     else
-                        response = new ApiResponse
-                        {
-                            Message = "No Application was found",
-                            StatusCode = HttpStatusCode.NotFound,
-                            Success = false
-                        };
                 }
                 else
-                    response = new ApiResponse
+                    _response = new ApiResponse
                     {
                         Message = "ApplicationID invalid",
                         StatusCode = HttpStatusCode.NotFound,
-                        Success = false
                     };
             }
             else
-                response = new ApiResponse
+                _response = new ApiResponse
                 {
                     Message = "ApplicationID caanot be empty",
                     StatusCode = HttpStatusCode.BadRequest,
-                    Success = false
                 };
-            return response;
+
+            return _response;
         }
 
         public async Task<ApiResponse> Process(string id, string act, string comment)
@@ -862,54 +883,64 @@ namespace Bunkering.Access.Services
                 appId = int.Parse(id.DecryptString());
                 if (appId > 0)
                 {
-                    var user = await _userManager.FindByIdAsync(User);
-                    var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(appId));
-                    response = new ApiResponse();
-                    if (app != null && user != null)
+                    try
                     {
-                        var flow = await _userManager.IsInRoleAsync(user, "FAD")
-                            ? await _flow.AppWorkFlow(appId, act, comment, app.FADStaffId)
-                            : await _flow.AppWorkFlow(appId, act, comment);
-                        if (!flow.Item1)
+                        var user = await _userManager.FindByIdAsync(User);
+                        var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(appId));
+                        _response = new ApiResponse();
+                        if (app != null && user != null)
                         {
-                            if (await _userManager.IsInRoleAsync(user, "Reviewer") && act.ToLower().Equals("approve"))
+                            var flow = await _userManager.IsInRoleAsync(user, "FAD")
+                                ? await _flow.AppWorkFlow(appId, act, comment, app.FADStaffId)
+                                : await _flow.AppWorkFlow(appId, act, comment);
+                            if (!flow.Item1)
                             {
-                                response.Message = "Application cannot be pushed, awaiting FAD payment approval.";
-                                response.StatusCode = HttpStatusCode.Unauthorized;
+                                if (await _userManager.IsInRoleAsync(user, "Reviewer") && act.ToLower().Equals("approve"))
+                                {
+                                    _response.Message = "Application cannot be pushed, awaiting FAD payment approval.";
+                                    _response.StatusCode = HttpStatusCode.Unauthorized;
+                                }
                             }
-                        }
-                        else
-                        {
-                            if (await _userManager.IsInRoleAsync(user, "FAD") && act.ToLower().Equals("approve"))
-                                response.Message = "Payment was confirmed successfully. Application moved to the reviewer for further processing.";
                             else
                             {
-                                if (act.Equals(Enum.GetName(typeof(AppActions), AppActions.Approve)))
-                                    response.Message = "Application processed successfully and moved to the next processing staff";
+                                if (await _userManager.IsInRoleAsync(user, "FAD") && act.ToLower().Equals("approve"))
+                                    _response.Message = "Payment was confirmed successfully. Application moved to the reviewer for further processing.";
                                 else
-                                    response.Message = "Application has been returned for review";
-                                response.StatusCode = HttpStatusCode.OK;
-                                response.Success = true;
+                                {
+                                    if (act.Equals(Enum.GetName(typeof(AppActions), AppActions.Approve)))
+                                        _response.Message = "Application processed successfully and moved to the next processing staff";
+                                    else
+                                        _response.Message = "Application has been returned for review";
+                                    _response.StatusCode = HttpStatusCode.OK;
+                                    _response.Success = true;
+                                }
                             }
                         }
                     }
+                    catch(Exception ex)
+                    {
+                        _response = new ApiResponse
+                        {
+                            Message = ex.Message,
+                            StatusCode = HttpStatusCode.InternalServerError,
+                        };
+                    }
                 }
                 else
-                    response = new ApiResponse
+                    _response = new ApiResponse
                     {
                         Message = "ApplicationID invalid",
                         StatusCode = HttpStatusCode.NotFound,
-                        Success = false
                     };
             }
             else
-                response = new ApiResponse
+                _response = new ApiResponse
                 {
                     Message = "ApplicationID cannot be empty",
                     StatusCode = HttpStatusCode.BadRequest,
-                    Success = false
                 };
-            return response;
+
+            return _response;
         }
     }
 }

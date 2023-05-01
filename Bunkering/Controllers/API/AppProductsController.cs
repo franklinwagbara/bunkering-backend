@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Bunkering.Controllers.API
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/bunkering/[controller]")]
     [ApiController]
     public class AppProductsController : ResponseController
     {

@@ -15,7 +15,7 @@ namespace Bunkering.Controllers.API
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/bunkering/[controller]")]
     public class ApplicationController : ResponseController
     {
         private readonly AppService _appService;

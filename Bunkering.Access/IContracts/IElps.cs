@@ -1,4 +1,5 @@
 ﻿using Bunkering.Core.Data;
+using Bunkering.Core.Utils;
 
 namespace Bunkering.Access.IContracts
 {
@@ -23,7 +24,7 @@ namespace Bunkering.Access.IContracts
         Dictionary<string, object> ConfirmEtxraRemitaStatus(int id);
         Dictionary<string, object> ByPassPayment(int id);
         //string PostReferenceToIGR(string baseUrl, string reqeustUri, object payload);
-        Task<RemitaResponse> GeneratePaymentReference(string baseUrl, Application application, Payment payment, decimal totalAmount, decimal serviceCharge);
+        Task<RemitaResponse> GeneratePaymentReference(string baseUrl, Application application, decimal totalAmount, decimal serviceCharge);
         Task<Payment> GenerateExtraPaymentReference(string baseUrl, Application application, Payment payment, decimal totalAmount, decimal serviceCharge);
         List<Staff> GetAllStaff();
         Staff GetStaff(string email);

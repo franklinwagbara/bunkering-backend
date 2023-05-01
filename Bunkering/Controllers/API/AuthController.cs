@@ -1,6 +1,7 @@
 ﻿
 using Bunkering.Access;
 using Bunkering.Access.Services;
+using Bunkering.Controllers;
 using Bunkering.Core.Data;
 using Bunkering.Core.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +16,7 @@ namespace Buner.Controllers.API
 {
     [AllowAnonymous]
     [Route("api/bunkering/[controller]")]
-    public class AuthController : Controller
+    public class AuthController : ResponseController
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AppSettings _appSettings;
@@ -44,12 +45,18 @@ namespace Buner.Controllers.API
         [Route("login-redirect")]
         public async Task<IActionResult> LoginRedirect([FromBody]LoginViewModel model)
         {
-            var login = await _authService.UserAuth(model);
-            if (login.Success)
-                return Redirect($"{Request.Scheme}://{Request.Host}/home?id={login.Data}");
-
+            if(ModelState.IsValid)
+            {
+                var login = await _authService.UserAuth(model);
+                if (login != null && login.Success)
+                    return Redirect($"{Request.Scheme}://{Request.Host}/home?id={login.Data}");
+            }
             return Redirect($"{Request.Scheme}://{Request.Host}/home");
         }
+
+        [HttpGet]
+        [Route("validate-user")]
+        public async Task<IActionResult> ValidateUser(string id) => Response(await _authService.ValidateUser(id));
 
         [HttpGet]
         [Route("log-out")]
@@ -60,18 +67,5 @@ namespace Buner.Controllers.API
             var frm = "<form action='" + elpsLogOffUrl + "' id='frmTest' method='post'>" + "<input type='hidden' name='returnUrl' value='" + returnUrl + "' />" + "<input type='hidden' name='appId' value='" + _appConfig.Config().GetValue("publickey") + "' />" + "</form>" + "<script>document.getElementById('frmTest').submit();</script>";
             return Content(frm, "text/html");
         }
-
-        [HttpGet]
-        [Route("pay-online")]
-        public IActionResult PayOnline(string rrr) => Redirect($"{_appConfig.Config().GetValue("elpsurl")}/Payment/Pay?rrr={rrr}");
-
-        //[HttpPost]
-        //[Route("remita")]
-        //public async Task<IActionResult> Remita(int id, RemitaResponse model)
-        //{
-        //    var payment  = await _payment.ConfirmPayment(id);
-        //    return Redirect($"{_appSettings.LoginUrl}/company/paymentsum/{id}");
-        //}
-
     }
 }

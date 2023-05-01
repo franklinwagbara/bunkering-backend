@@ -1,0 +1,10 @@
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Database\bin\Debug\Bunkering.Database.dacpac
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Database\bin\Debug\Bunkering.Database.dll
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Database\bin\Debug\Bunkering.Database.pdb
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Database\obj\Debug\Bunkering.Database.sqlproj.AssemblyReference.cache
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Database\obj\Debug\Model.xml
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Database\obj\Debug\refactor.xml
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Database\obj\Debug\postdeploy.sql
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Database\obj\Debug\predeploy.sql
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Database\obj\Debug\Bunkering.Database.dll
+D:\Documents\Projects\Repo\Bunkering\Bunkering.Database\obj\Debug\Bunkering.Database.pdb

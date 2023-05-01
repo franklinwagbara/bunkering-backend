@@ -4,6 +4,7 @@ using Bunkering.Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Bunkering.Core.ViewModels;
 using Bunkering.Access.IContracts;
+using Bunkering.Core.Utils;
 
 namespace Bunkering.Access.DAL
 {
@@ -485,7 +486,7 @@ namespace Bunkering.Access.DAL
             return null;
         }
 
-        public async Task<RemitaResponse> GeneratePaymentReference(string baseUrl, Application application, Payment payment, decimal totalAmount, decimal serviceCharge)
+        public async Task<RemitaResponse> GeneratePaymentReference(string baseUrl, Application application, decimal totalAmount, decimal serviceCharge)
         {
             try
             {
@@ -499,9 +500,6 @@ namespace Bunkering.Access.DAL
                 
                 //Charge for IGR payments
 
-                var partnerCharge = (double)totalAmount * 0.1;
-                var tsa = (double)totalAmount  - partnerCharge;
-                
                 var type = application.Facility.FacilityType;
                 var remitaObject = new
                 {
@@ -513,67 +511,63 @@ namespace Bunkering.Access.DAL
                     serviceCharge =  Decimal.ToInt32(serviceCharge).ToString(),
                     amountDue = Decimal.ToInt32(totalAmount - serviceCharge).ToString(),
                     orderId = application.Reference,
-                    returnSuccessUrl = $"{baseUrl}/Payment/Remita",
-                    returnFailureUrl = $"{baseUrl}/Payment/Remita",
-                    returnBankPaymentUrl = $"{baseUrl}/Payment/Remita",
-                    lineItems = new object[]
+                    returnSuccessUrl = $"{baseUrl}/api/bunkering/Payment/Remita?id={application.Id}",
+                    returnFailureUrl = $"{baseUrl}/api/bunkering/Payment/Remita?id={application.Id}",
+                    returnBankPaymentUrl = $"{baseUrl}/api/bunkering/Payment/Remita?id={application.Id}",
+                    lineItems = new List<RPartner>
                     {
-                        new
+                        new RPartner
                         {
                             lineItemsId = "1",
-                             beneficiaryName = "Beneficiary IGR",
-                            //beneficiaryName = "Alozie Michael",
-                            beneficiaryAccount = _appConfig.Config().GetValue("account"),
-                            bankCode = _appConfig.Config().GetValue("bankcode"),
-                            beneficiaryAmount = tsa.ToString("#"),
+                            beneficiaryName = _appConfig.Config().GetValue("beneficiaryAuthority"),
+                            bankCode = _appConfig.Config().GetValue("AuthorityBankCode"),
+                            beneficiaryAccount = _appConfig.Config().GetValue("AuthorityAccount"),
+                            beneficiaryAmount = $"{(double)totalAmount * 0.5}",
+                            deductFeeFrom = "0"
+                        },
+                        new RPartner
+                        {
+                            lineItemsId = "2",
+                            beneficiaryName = _appConfig.Config().GetValue("beneficiaryBO"),
+                            bankCode = _appConfig.Config().GetValue("BOBankCode"),
+                            beneficiaryAccount = _appConfig.Config().GetValue("BOAccount"),
+                            beneficiaryAmount = $"{(double)totalAmount * 0.5}",
                             deductFeeFrom = "1"
+                        }
+                    },
+                    customFields = new List<CustomField>
+                    {
+                        new CustomField
+                        {
+                            Name = "STATE",
+                            Value = $"{application.Facility.LGA.State.Name} State",
+                            Type = "All"
+                        },
+                        new CustomField
+                        {
+                            Name = "COMPANY BRANCH",
+                            Value = application.Facility.Name,
+                            Type = "All"
+                        },
+                        new CustomField
+                        {
+                            Name = "FACILITY ADDRESS",
+                            Value = application.Facility.Address,
+                            Type = "All"
                         },
                         //new
                         //{
-                        //    lineItemsId = "2",
-                        //    beneficiaryName = "Beneficiary Target",
-                        //    beneficiaryAccount = _appConfig.GetTargetAccount(),
-                        //    bankCode = _appConfig.GetTargetBankCode(),
-                        //    beneficiaryAmount = partnerCharge.ToString("#"),
-                        //    deductFeeFrom = "0"
+                        //    name = "Field/Zonal Office",
+                        //    value = /*(from s in _context.States join f in _context.FieldLocations on s.FieldLocationId equals f.Id where s.Code.Equals(application.Facility.StateCode) select f.Description).FirstOrDefault()*/"",
+                        //    type = "ALL"
                         //}
                     },
-                    customFields = new object[]
-                    {
-                        new
-                        {
-                            name = "STATE",
-                            value = $"{application.Facility.LGA.State.Name} State",
-                            type = "ALL"
-                        },
-                        new
-                        {
-                            name = "COMPANY BRANCH",
-                            value = application.Facility.Name,
-                            type = "ALL"
-                        },
-                        new
-                        {
-                            name = "FACILITY ADDRESS",
-                            value = application.Facility.Address,
-                            type = "ALL"
-                        },
-                        new
-                        {
-                            name = "Field/Zonal Office",
-                            value = /*(from s in _context.States join f in _context.FieldLocations on s.FieldLocationId equals f.Id where s.Code.Equals(application.Facility.StateCode) select f.Description).FirstOrDefault()*/"",
-                            type = "ALL"
-                        }
-                    },
                     documentTypes = docs.Select(x => x.DocumentTypeId).ToList(),
-                    applicationItems = new object[]
+                    applicationItems = new List<ApplicationItem>
                     {
-                        new
-                        {
-                            name = "LSSL",
-                            description = $"Payment for {application.ApplicationType.Name}",
-                            group = $"Lube Storage and Sales License for {type}"
-                        }
+                        new ApplicationItem { Group = "Bunkering", Name = application.Facility.FacilityType.Name, Description = $"{application.Facility.FacilityType.Name} Facility payment" },
+                        new ApplicationItem { Group = "Facility Details", Name = $"{application.Facility.Name}-{application.Facility.ElpsId}", Description = application.Facility.Address },
+                        new ApplicationItem { Group = "Payment", Name = "Payment Description: ", Description = application.Payments.FirstOrDefault().Description }
                     }
                 };
 
