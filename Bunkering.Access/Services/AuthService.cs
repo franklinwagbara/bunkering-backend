@@ -30,7 +30,7 @@ namespace Bunkering.Access.Services
             UserManager<ApplicationUser> user,
             SignInManager<ApplicationUser> signInManager,
             AppConfiguration appConfig,
-            IElps elps.
+            IElps elps,
             IConfiguration configuration)
         {
             _httpContextAccessor = httpContextAccessor;

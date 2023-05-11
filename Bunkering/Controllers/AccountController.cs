@@ -40,8 +40,6 @@ namespace Bunkering.Controllers
         {
             return View();
         }
-
-        //[HttpPost]
         
     }
 }

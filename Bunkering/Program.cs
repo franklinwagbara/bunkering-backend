@@ -1,6 +1,4 @@
 using Bunkering.Access;
-using Bunkering.Access.DAL;
-using Bunkering.Access.IContracts;
 using Bunkering.Access.Services;
 using Bunkering.Core.Data;
 using Bunkering.Core.Utils;
