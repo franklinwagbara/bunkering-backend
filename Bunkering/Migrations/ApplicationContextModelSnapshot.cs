@@ -251,6 +251,14 @@ namespace Bunkering.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedOn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ElpsId")
                         .HasColumnType("int");
 
@@ -268,6 +276,9 @@ namespace Bunkering.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastJobDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastLogin")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")

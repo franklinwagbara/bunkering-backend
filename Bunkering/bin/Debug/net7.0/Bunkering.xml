@@ -992,5 +992,17 @@
         <member name="M:Bunkering.Migrations.validres.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:Bunkering.Migrations.Createdon">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.Createdon.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.Createdon.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bunkering.Migrations.Createdon.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

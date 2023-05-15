@@ -3912,19 +3912,26 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\anyan\\.nuget\\packages\\": {}
+    "C:\\Users\\Damilare\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\anyan\\Documents\\Visual Studio 2022\\Projects\\Bunkering\\Bunkering.Core\\Bunkering.Core.csproj",
+      "projectUniqueName": "D:\\Documents\\Projects\\Repo\\Bunkering\\Bunkering.Core\\Bunkering.Core.csproj",
       "projectName": "Bunkering.Core",
-      "projectPath": "C:\\Users\\anyan\\Documents\\Visual Studio 2022\\Projects\\Bunkering\\Bunkering.Core\\Bunkering.Core.csproj",
-      "packagesPath": "C:\\Users\\anyan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\anyan\\Documents\\Visual Studio 2022\\Projects\\Bunkering\\Bunkering.Core\\obj\\",
+      "projectPath": "D:\\Documents\\Projects\\Repo\\Bunkering\\Bunkering.Core\\Bunkering.Core.csproj",
+      "packagesPath": "C:\\Users\\Damilare\\.nuget\\packages\\",
+      "outputPath": "D:\\Documents\\Projects\\Repo\\Bunkering\\Bunkering.Core\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\anyan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Damilare\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -3932,6 +3939,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -3997,7 +4005,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }
