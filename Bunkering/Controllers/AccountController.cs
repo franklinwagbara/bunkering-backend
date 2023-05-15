@@ -13,8 +13,6 @@ using Microsoft.AspNetCore.Authorization;
 namespace Bunkering.Controllers
 {
     //[Authorize]
-    [ApiController]
-    [Route("api/bunkering/[controller]")]
     public class AccountController : Controller
     {
         private readonly AppConfiguration _appConfig;
