@@ -26,6 +26,7 @@ namespace Bunkering.Access.Services
             services.AddScoped<AppStageDocService>();
             services.AddScoped<PaymentService>();
             services.AddScoped<StaffService>();
+            services.AddScoped<LibraryService>();
         }
     }
 }

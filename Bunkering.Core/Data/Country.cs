@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bunkering.Core.Data
 {
-    public class Country
+    public class Country 
     {
         public int Id { get; set; }
         public string Code { get; set; }
