@@ -21,9 +21,14 @@
     [AccessFailedCount]    INT                NOT NULL,
     [ProfileComplete]      BIT                DEFAULT (CONVERT([bit],(0))) NOT NULL,
     [LastJobDate]          DATETIME2 (7)      NULL,
+    [CreatedBy]            NVARCHAR (MAX)     DEFAULT (N'') NOT NULL,
+    [CreatedOn]            NVARCHAR (MAX)     DEFAULT (N'') NOT NULL,
+    [LastLogin]            DATETIME2 (7)      NULL,
     CONSTRAINT [PK_AspNetUsers] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_AspNetUsers_Companies_CompanyId] FOREIGN KEY ([CompanyId]) REFERENCES [dbo].[Companies] ([Id])
 );
+
+
 
 
 GO
