@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Bunkering.Access.Services
 {
@@ -20,32 +21,32 @@ namespace Bunkering.Access.Services
         private readonly UserManager<ApplicationUser> _user;
         private readonly SignInManager<ApplicationUser> _signInManager;
         ApiResponse _response;
-        private readonly AppConfiguration _appConfig;
         private readonly IElps _elps;
         private readonly string User;
         private readonly IConfiguration _configuration;
+        private readonly AppSetting _appSetting;
 
         public AuthService(
             IHttpContextAccessor httpContextAccessor,
             UserManager<ApplicationUser> user,
             SignInManager<ApplicationUser> signInManager,
-            AppConfiguration appConfig,
             IElps elps,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IOptions<AppSetting> appSetting)
         {
             _httpContextAccessor = httpContextAccessor;
             _user = user;
             _signInManager = signInManager;
-            _appConfig = appConfig;
             _elps = elps;
             User = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
             _configuration = configuration;
+            _appSetting = appSetting.Value;
         }
 
         public async Task<ApiResponse> UserAuth(LoginViewModel model)
         {
             var user = new ApplicationUser();
-            var hash = Utils.GenerateSha512($"{_appConfig.Config().GetValue("publickey").ToUpper()}.{model.Email.ToUpper()}.{_appConfig.Config().GetValue("appid").ToUpper()}");
+            var hash = Utils.GenerateSha512($"{_appSetting.AppEmail}.{model.Email.ToUpper()}.{_appSetting.AppId.ToUpper()}");
             if (Debugger.IsAttached || (!Debugger.IsAttached && model.Code.Equals(hash)))
             {
                 //check if it's company login
@@ -131,28 +132,33 @@ namespace Bunkering.Access.Services
                         //         IsPersistent = true,
                         //         ExpiresUtc = DateTime.Now.AddMinutes(60)
                         //     });
-
+                        _response = new ApiResponse
+                        {
+                            Message = "Company's profile is complete",
+                            StatusCode = HttpStatusCode.OK,
+                            Success = true,
+                            Data = user.Id
+                        };
                         if (!user.ProfileComplete && _user.IsInRoleAsync(user, "Company").Result)
-                            _response = new ApiResponse
-                            {
-                                Message = "Company's profile is not complete",
-                                StatusCode = HttpStatusCode.BadRequest,
-                                Success = false
-                            };
+                            _response.Message = "Company's profile is not complete";
                         if (user.ProfileComplete && _user.IsInRoleAsync(user, "Company").Result)
-                            _response = new ApiResponse
-                            {
-                                Message = "Company's profile is complete",
-                                StatusCode = HttpStatusCode.OK,
-                                Success = true,
-                                Data = user.Id
-                            };
+                            _response.Message = "Company's profile is complete";
                     }
                 }
                 else if (user is { IsActive: false })
-                    _response.Message = "Access to this portal is denied, please contact ICT/Support.";
+                    _response = new ApiResponse
+                    {
+                        Message = "Access to this portal is denied, please contact ICT/Support.",
+                        StatusCode = HttpStatusCode.Forbidden,
+                        Success = false,
+                    };
                 else
-                    _response.Message = "An error occured, please contact Support/ICT.";
+                    _response = new ApiResponse
+                    {
+                        Message = "An error occured, please contact Support/ICT.",
+                        StatusCode = HttpStatusCode.InternalServerError,
+                        Success = false,
+                    };
             }
             return _response;
         }

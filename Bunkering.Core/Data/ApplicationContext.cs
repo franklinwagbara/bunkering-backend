@@ -15,7 +15,6 @@ namespace Bunkering.Core.Data
         public DbSet<ApplicationHistory> ApplicationHistories { get; set; }
         public DbSet<AppFee> AppFees { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
-        public DbSet<AppSettings> AppSettings { get; set; }
         public DbSet<ApplicationType> ApplicationTypes { get; set; }
         public DbSet<Audit> AuditLogs { get; set; }
         public DbSet<Company> Companies { get; set; }

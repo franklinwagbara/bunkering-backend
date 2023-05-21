@@ -5,6 +5,7 @@ using Bunkering.Core.Utils;
 using Bunkering.Core.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.IO;
 using System.Net;
 using System.Security.Claims;
@@ -19,23 +20,23 @@ namespace Bunkering.Access.Services
         private int appId;
         ApiResponse _response;
         private readonly AppLogger _logger;
-        private readonly AppConfiguration _appConfig;
         private readonly string directory = "Payment";
         private readonly IElps _elps;
+        private readonly AppSetting _appSetting;
 
         public PaymentService(
             IUnitOfWork unitOfWork,
             IHttpContextAccessor contextAccessor,
             AppLogger logger,
-            AppConfiguration appConfig,
-            IElps elps)
+            IElps elps,
+            IOptions<AppSetting> appSetting)
         {
             _unitOfWork = unitOfWork;
             _contextAccessor = contextAccessor;
             User = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
             _logger = logger;
-            _appConfig = appConfig;
             _elps = elps;
+            _appSetting = appSetting.Value;
         }
 
         public async Task<ApiResponse> CreatePayment(string id)
@@ -84,7 +85,7 @@ namespace Bunkering.Access.Services
                                         await _unitOfWork.SaveChangesAsync(app.UserId);
                                         _logger.LogRequest($"{"Payment with ref: "}{" "}{" for "}{app.Reference}{" was created successfully by"}{User} {" - "}{DateTime.Now}", false, directory);
 
-                                        var request = await _elps.GeneratePaymentReference(_appConfig.Config().GetValue("remitaBase"), app, total, 0);
+                                        var request = await _elps.GeneratePaymentReference($"{_contextAccessor.HttpContext.Request.Scheme}://{_contextAccessor.HttpContext.Request.Host}", app, total, 0);
                                         _logger.LogRequest("Creation of payment split for application with reference:" + app.Reference + "(" + app.User.Company.Name + ") by " + User, false, directory);
 
                                         if (request == null)
@@ -167,7 +168,7 @@ namespace Bunkering.Access.Services
                         if (!payment.Status.Equals(Enum.GetName(typeof(AppStatus), 2)) && !string.IsNullOrEmpty(payment.RRR))
                         {
                             //confirm payme nt status on remita via ELPS
-                            var http = await Utils.Send(_appConfig.Config().GetValue("elpsurl"), new HttpRequestMessage(HttpMethod.Get, $"/Payment/checkifpaid?id=r{payment.RRR}"));
+                            var http = await Utils.Send(_appSetting.ElpsUrl, new HttpRequestMessage(HttpMethod.Get, $"/Payment/checkifpaid?id=r{payment.RRR}"));
 
                             if (http.IsSuccessStatusCode)
                             {

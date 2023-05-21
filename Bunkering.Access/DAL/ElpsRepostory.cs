@@ -5,23 +5,24 @@ using Microsoft.EntityFrameworkCore;
 using Bunkering.Core.ViewModels;
 using Bunkering.Access.IContracts;
 using Bunkering.Core.Utils;
+using Microsoft.Extensions.Options;
 
 namespace Bunkering.Access.DAL
 {
     public class ElpsRepostory : IElps
     {
         private readonly ApplicationContext _context;
-        public AppConfiguration _appConfig;
         public IUnitOfWork _unitOfWork;
+        private readonly AppSetting _appSetting;
 
         public ElpsRepostory(
             ApplicationContext context,
-            AppConfiguration appConfig,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IOptions<AppSetting> appSetting)
         {
             _context = context;
-            _appConfig = appConfig;
             _unitOfWork = unitOfWork;
+            _appSetting = appSetting.Value;
         }
 
         public Dictionary<string, string> GetCompanyDetailByEmail(string email)
@@ -85,7 +86,7 @@ namespace Bunkering.Access.DAL
         {
             try
             {
-                var content = CallElps($"/api/Address/{_appConfig.Config().GetValue("appemail")}/{HttpHash()}", HttpMethod.Put, model);
+                var content = CallElps($"/api/Address/{_appSetting.AppEmail}/{HttpHash()}", HttpMethod.Put, model);
                 if (!string.IsNullOrEmpty(content))
                     return true;
             }
@@ -190,9 +191,9 @@ namespace Bunkering.Access.DAL
             try
             {
                 string requestUri = string.IsNullOrEmpty(type) ? 
-                    $"/api/Documents/Types/{_appConfig.Config().GetValue("appemail")}/{HttpHash()}"
-                    : $"/api/Documents/Facility/{_appConfig.Config().GetValue("appemail")}/{HttpHash()}/{type}";
-                var resp = Utils.Send(_appConfig.Config().GetValue("elpsurl"), new HttpRequestMessage(HttpMethod.Get, requestUri))
+                    $"/api/Documents/Types/{_appSetting.AppEmail}/{HttpHash()}"
+                    : $"/api/Documents/Facility/{_appSetting.AppEmail}/{HttpHash()}/{type}";
+                var resp = Utils.Send(_appSetting.ElpsUrl, new HttpRequestMessage(HttpMethod.Get, requestUri))
                     .Result;
                 if (resp.IsSuccessStatusCode)
                 {
@@ -267,15 +268,15 @@ namespace Bunkering.Access.DAL
             var resp  = new HttpResponseMessage();
             if (body != null)
                 resp = Utils.Send(
-                    _appConfig.Config().GetValue("elpsurl"),
-                    new HttpRequestMessage(method, $"{requestUri}{_appConfig.Config().GetValue("appemail")}/{HttpHash()}")
+                    _appSetting.ElpsUrl,
+                    new HttpRequestMessage(method, $"{requestUri}{_appSetting.AppEmail}/{HttpHash()}")
                     {
                         Content = new StringContent(body.Stringify(), Encoding.UTF8, "application/json")
                     }).Result;
             else
                 resp = Utils.Send(
-                    _appConfig.Config().GetValue("elpsurl"),
-                    new HttpRequestMessage(method, $"{requestUri}{_appConfig.Config().GetValue("appemail")}/{HttpHash()}"){}).Result;
+                    _appSetting.ElpsUrl,
+                    new HttpRequestMessage(method, $"{requestUri}{_appSetting.AppEmail}/{HttpHash()}"){}).Result;
             
             if (resp.IsSuccessStatusCode)
             {
@@ -299,7 +300,7 @@ namespace Bunkering.Access.DAL
             return null;
         }
 
-        private string HttpHash() => $"{_appConfig.Config().GetValue("appemail")}{_appConfig.Config().GetValue("appid")}".GenerateSha512();
+        private string HttpHash() => $"{_appSetting.AppEmail}{_appSetting.AppId}".GenerateSha512();
         //public List<MailTemplate> GetMailMessages() => _context.MailTemplates.ToList();
         
         public int PushPermitToElps(PermitAPIModel item)
@@ -428,7 +429,7 @@ namespace Bunkering.Access.DAL
                 var payment = _context.Payments.Include("ExtraPayment").FirstOrDefault(x => x.ApplicationId == id && x.ExtraPaymentId != null);
                 if (payment != null)
                 {
-                    var resp = Utils.Send(_appConfig.Config().GetValue("elpsurl"),
+                    var resp = Utils.Send(_appSetting.ElpsUrl,
                         new HttpRequestMessage(HttpMethod.Get, $"/Payment/checkifpaid?id=r{payment.RRR}"){}).Result;
                     if (resp.IsSuccessStatusCode)
                     {
@@ -461,7 +462,7 @@ namespace Bunkering.Access.DAL
                 var payment = _context.Payments.FirstOrDefault(x => x.ApplicationId == id);
                 if (payment != null)
                 {
-                    var resp = Utils.Send(_appConfig.Config().GetValue("elpsurl"),
+                    var resp = Utils.Send(_appSetting.ElpsUrl,
                         new HttpRequestMessage(HttpMethod.Get, $"/Payment/checkifpaid?id=r{payment.RRR}"){}).Result;
                     if (resp.IsSuccessStatusCode)
                     {
@@ -503,7 +504,7 @@ namespace Bunkering.Access.DAL
                 var type = application.Facility.FacilityType;
                 var remitaObject = new
                 {
-                    serviceTypeId = _appConfig.Config().GetValue("servicetypeid"),
+                    serviceTypeId = _appSetting.ServiceTypeId,
                     categoryName = "Bunkering",
                     totalAmount = Decimal.ToInt32(totalAmount).ToString(),
                     payerName = TruncateText(application.User.Company.Name, 25),
@@ -519,18 +520,18 @@ namespace Bunkering.Access.DAL
                         new RPartner
                         {
                             lineItemsId = "1",
-                            beneficiaryName = _appConfig.Config().GetValue("beneficiaryAuthority"),
-                            bankCode = _appConfig.Config().GetValue("AuthorityBankCode"),
-                            beneficiaryAccount = _appConfig.Config().GetValue("AuthorityAccount"),
+                            beneficiaryName = _appSetting.NMDPRABName,
+                            bankCode = _appSetting.NMDPRABankCode,
+                            beneficiaryAccount = _appSetting.NMDPRAAccount,
                             beneficiaryAmount = $"{(double)totalAmount * 0.5}",
                             deductFeeFrom = "0"
                         },
                         new RPartner
                         {
                             lineItemsId = "2",
-                            beneficiaryName = _appConfig.Config().GetValue("beneficiaryBO"),
-                            bankCode = _appConfig.Config().GetValue("BOBankCode"),
-                            beneficiaryAccount = _appConfig.Config().GetValue("BOAccount"),
+                            beneficiaryName = _appSetting.BOBName,
+                            bankCode = _appSetting.BOBankCode,
+                            beneficiaryAccount = _appSetting.BOAccount,
                             beneficiaryAmount = $"{(double)totalAmount * 0.5}",
                             deductFeeFrom = "1"
                         }

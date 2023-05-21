@@ -6,6 +6,7 @@ using Bunkering.Core.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using System.Net;
 using System.Security.Claims;
@@ -22,10 +23,10 @@ namespace Bunkering.Access.Services
         private readonly WorkFlowService _flow;
         private readonly IMapper _mapper;
         ApiResponse _response;
-        private readonly AppConfiguration _appConfig;
         private readonly string User;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AppLogger _logger;
+        private readonly AppSetting _setting;
         private readonly string directory = "Application";
 
         public AppService(
@@ -34,19 +35,19 @@ namespace Bunkering.Access.Services
             WorkFlowService flow,
             IMapper mapper,
             IElps elps,
-            AppConfiguration appConfig,
             IHttpContextAccessor httpContextAccessor,
-            AppLogger logger)
+            AppLogger logger,
+            IOptions<AppSetting> setting)
         {
             _userManager = userManager;
             _unitOfWork = unitOfWork;
             _flow = flow;
             _mapper = mapper;
             _elps = elps;
-            _appConfig = appConfig;
             _httpContextAccessor = httpContextAccessor;
             User = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
             _logger = logger;
+            _setting = setting.Value;
         }
 
         private async Task<Facility> CreateFacility(ApplictionViewModel model, ApplicationUser user)
@@ -632,8 +633,8 @@ namespace Bunkering.Access.Services
 
         public async Task<ApiResponse> CheckLicense(int id, string license)
         {
-            string baseUrl = _appConfig.Config().GetValue("depotUrl");
-            var reqUri = _appConfig.Config().GetValue("depotUri");
+            string baseUrl = _setting.DepotUrl;
+            var reqUri = _setting.DepotUri;
             var factype = await _unitOfWork.FacilityType.Find(x => x.Id.Equals(id));
 
             try

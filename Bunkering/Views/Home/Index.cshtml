@@ -1,9 +1,9 @@
 ﻿@using Bunkering.Access
-@inject AppConfiguration _appConfig
+@inject AppSetting _appConfig
 @{
     ViewData["Title"] = "Login - ";
-    var elpsBaseUrl = _appConfig.Config().GetValue("elpsurl");
-    var pk = _appConfig.Config().GetValue("publickey");
+    var elpsBaseUrl = _appConfig.ElpsUrl;
+    var pk = _appConfig.PublicKey;
     var guidelineUrl = ViewData["guidelineUrl"];
     string login = elpsBaseUrl + "/Account/Login?appid=" + pk;
     string register = elpsBaseUrl + "/Account/Register?appid=" + pk;

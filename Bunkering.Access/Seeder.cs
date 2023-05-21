@@ -77,6 +77,8 @@ namespace Bunkering.Access
                         PhoneNumber = staff.PhoneNo,
                         IsActive = true,
                         ElpsId = staff.Id,
+                        CreatedBy = "system",
+                        CreatedOn = DateTime.UtcNow.AddHours(1),
                     };
                     var result = await _userMnager.CreateAsync(user);
 

@@ -20,7 +20,7 @@ namespace Bunkering.Core.Data
         public bool ProfileComplete { get; set; }
         public DateTime? LastJobDate { get; set; }
         public string CreatedBy { get; set; }
-        public string CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
         public DateTime? LastLogin { get; set; }
         public ICollection<ApplicationUserRole> UserRoles { get; set; }
     }

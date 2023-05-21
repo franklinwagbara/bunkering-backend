@@ -3,13 +3,15 @@
     [DocumentTypeId]    INT            NOT NULL,
     [ApplicationTypeId] INT            NOT NULL,
     [FacilityTypeId]    INT            NOT NULL,
+    [IsFADDoc]          BIT            NOT NULL,
     [Name]              NVARCHAR (MAX) NOT NULL,
     [DocType]           NVARCHAR (MAX) NOT NULL,
-    [IsFADDoc]          BIT            DEFAULT (CONVERT([bit],(0))) NOT NULL,
     CONSTRAINT [PK_FacilityTypeDocuments] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_FacilityTypeDocuments_ApplicationTypes_ApplicationTypeId] FOREIGN KEY ([ApplicationTypeId]) REFERENCES [dbo].[ApplicationTypes] ([Id]) ON DELETE CASCADE,
     CONSTRAINT [FK_FacilityTypeDocuments_FacilityTypes_FacilityTypeId] FOREIGN KEY ([FacilityTypeId]) REFERENCES [dbo].[FacilityTypes] ([Id]) ON DELETE CASCADE
 );
+
+
 
 
 GO

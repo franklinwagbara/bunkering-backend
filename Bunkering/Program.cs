@@ -2,6 +2,7 @@ using Bunkering.Access;
 using Bunkering.Access.Services;
 using Bunkering.Core.Data;
 using Bunkering.Core.Utils;
+using Bunkering.Core.ViewModels;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,7 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options => option
     .AddEntityFrameworkStores<ApplicationContext>();
 
 builder.Services.Services();
+builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSetting"));
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("EmailSetting"));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

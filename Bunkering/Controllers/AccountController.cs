@@ -15,20 +15,17 @@ namespace Bunkering.Controllers
     //[Authorize]
     public class AccountController : Controller
     {
-        private readonly AppConfiguration _appConfig;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IElps _elps;
 
         public AccountController(
-            AppConfiguration appConfig,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> singInManager,
             IUnitOfWork unitOfWork,
             IElps elps)
         {
-            _appConfig = appConfig;
             _userManager = userManager;
             _signInManager = singInManager;
             _unitOfWork = unitOfWork;

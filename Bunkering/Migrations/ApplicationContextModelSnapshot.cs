@@ -63,27 +63,6 @@ namespace Bunkering.Migrations
                     b.ToTable("AppFees");
                 });
 
-            modelBuilder.Entity("Bunkering.Core.Data.AppSettings", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AppSettings");
-                });
-
             modelBuilder.Entity("Bunkering.Core.Data.Application", b =>
                 {
                     b.Property<int>("Id")
@@ -255,9 +234,8 @@ namespace Bunkering.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CreatedOn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ElpsId")
                         .HasColumnType("int");

@@ -5,6 +5,11 @@
     [FirstName]            NVARCHAR (MAX)     NULL,
     [LastName]             NVARCHAR (MAX)     NULL,
     [IsActive]             BIT                NOT NULL,
+    [ProfileComplete]      BIT                NOT NULL,
+    [LastJobDate]          DATETIME2 (7)      NULL,
+    [CreatedBy]            NVARCHAR (MAX)     NOT NULL,
+    [CreatedOn]            DATETIME2 (7)      NOT NULL,
+    [LastLogin]            DATETIME2 (7)      NULL,
     [UserName]             NVARCHAR (256)     NULL,
     [NormalizedUserName]   NVARCHAR (256)     NULL,
     [Email]                NVARCHAR (256)     NULL,
@@ -19,14 +24,11 @@
     [LockoutEnd]           DATETIMEOFFSET (7) NULL,
     [LockoutEnabled]       BIT                NOT NULL,
     [AccessFailedCount]    INT                NOT NULL,
-    [ProfileComplete]      BIT                DEFAULT (CONVERT([bit],(0))) NOT NULL,
-    [LastJobDate]          DATETIME2 (7)      NULL,
-    [CreatedBy]            NVARCHAR (MAX)     DEFAULT (N'') NOT NULL,
-    [CreatedOn]            NVARCHAR (MAX)     DEFAULT (N'') NOT NULL,
-    [LastLogin]            DATETIME2 (7)      NULL,
     CONSTRAINT [PK_AspNetUsers] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_AspNetUsers_Companies_CompanyId] FOREIGN KEY ([CompanyId]) REFERENCES [dbo].[Companies] ([Id])
 );
+
+
 
 
 

@@ -11,7 +11,6 @@ namespace Bunkering.Access.Services
         public static void Services(this IServiceCollection services)
         {
             services.AddTransient<AppLogger>();
-            services.AddScoped<AppConfiguration>();
             services.AddScoped<ApplicationContext>();
             services.AddScoped<AppProvessesService>();
             services.AddScoped<AuthService>();

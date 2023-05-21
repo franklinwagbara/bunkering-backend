@@ -10,6 +10,7 @@ using System.Data;
 using System.Text;
 using Bunkering.Access.IContracts;
 using Bunkering.Access;
+using Bunkering.Core.ViewModels;
 
 namespace Bunkering.Access.Services
 {
@@ -19,8 +20,8 @@ namespace Bunkering.Access.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _env;
         private readonly MailSettings _mailSetting;
-        private readonly AppConfiguration _appConfig;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly AppSetting _appSetting;
         //private readonly string directory = "WorkFlow";
         //private readonly GeneralLogger _generalLogger;
 
@@ -29,15 +30,15 @@ namespace Bunkering.Access.Services
             UserManager<ApplicationUser> userManager,
             IHostingEnvironment env,
             IOptions<MailSettings> mailSettings,
-            AppConfiguration appConfig,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<AppSetting> appSetting)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _env = env;
             _mailSetting = mailSettings.Value;
-            _appConfig = appConfig;
             _httpContextAccessor = httpContextAccessor;
+            _appSetting = appSetting.Value;
         }
 
         public async Task<(bool, string)> AppWorkFlow(int appid, string action, string comment, string currUserId = null, string delUserId = null)
@@ -235,7 +236,7 @@ namespace Bunkering.Access.Services
                     QRCode = Convert.ToBase64String(qrcode, 0, qrcode.Length)
                 };
 
-                var req = await Utils.Send(_appConfig.Config().GetValue("elpsurl"), new HttpRequestMessage(HttpMethod.Post, $"api/Permits/{app.User.ElpsId}/{_appConfig.Config().GetValue("appemail")}/{Utils.GenerateSha512($"{_appConfig.Config().GetValue("appemail")}{_appConfig.Config().GetValue("appid")}")}")
+                var req = await Utils.Send(_appSetting.ElpsUrl, new HttpRequestMessage(HttpMethod.Post, $"api/Permits/{app.User.ElpsId}/{_appSetting.AppEmail}/{Utils.GenerateSha512($"{_appSetting.AppEmail}{_appSetting.AppId}")}")
                 {
                     Content = new StringContent(new 
                     { 
