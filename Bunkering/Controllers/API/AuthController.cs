@@ -38,31 +38,9 @@ namespace Buner.Controllers.API
             _authService = authService;
         }
 
-        [HttpPost]
-        [Route("login-redirect")]
-        public async Task<IActionResult> LoginRedirect([FromBody]LoginViewModel model)
-        {
-            if(ModelState.IsValid)
-            {
-                var login = await _authService.UserAuth(model);
-                if (login != null && login.Success)
-                    return Redirect($"{_appSetting.LoginUrl}/home?id={login.Data}");
-            }
-            return Redirect($"{_appSetting.LoginUrl}/home");
-        }
-
         [HttpGet]
         [Route("validate-user")]
         public async Task<IActionResult> ValidateUser(string id) => Response(await _authService.ValidateUser(id));
 
-        [HttpGet]
-        [Route("log-out")]
-        public async Task<IActionResult> Logout() 
-        {
-            var elpsLogOffUrl = $"{_appSetting.ElpsUrl}/Account/RemoteLogOff";
-            var returnUrl = $"{Request.Scheme}://{Request.Host}";
-            var frm = "<form action='" + elpsLogOffUrl + "' id='frmTest' method='post'>" + "<input type='hidden' name='returnUrl' value='" + returnUrl + "' />" + "<input type='hidden' name='appId' value='" + _appSetting.PublicKey + "' />" + "</form>" + "<script>document.getElementById('frmTest').submit();</script>";
-            return Content(frm, "text/html");
-        }
     }
 }
