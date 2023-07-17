@@ -12,12 +12,10 @@
     [ModifiedDate]      DATETIME2 (7)  NULL,
     [Status]            NVARCHAR (MAX) NOT NULL,
     [FlowId]            INT            NULL,
-    CONSTRAINT [PK_Applications] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Applications_ApplicationTypes_ApplicationTypeId] FOREIGN KEY ([ApplicationTypeId]) REFERENCES [dbo].[ApplicationTypes] ([Id]) ON DELETE CASCADE,
-    CONSTRAINT [FK_Applications_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE CASCADE,
-    CONSTRAINT [FK_Applications_Facilities_FacilityId] FOREIGN KEY ([FacilityId]) REFERENCES [dbo].[Facilities] ([Id]) ON DELETE CASCADE,
-    CONSTRAINT [FK_Applications_WorkFlows_FlowId] FOREIGN KEY ([FlowId]) REFERENCES [dbo].[WorkFlows] ([Id])
+    CONSTRAINT [PK_Applications] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

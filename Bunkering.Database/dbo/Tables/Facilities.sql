@@ -7,11 +7,10 @@
     [LgaId]          INT            NOT NULL,
     [Address]        NVARCHAR (MAX) NOT NULL,
     [IsLicensed]     BIT            NOT NULL,
-    CONSTRAINT [PK_Facilities] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Facilities_Companies_CompanyId] FOREIGN KEY ([CompanyId]) REFERENCES [dbo].[Companies] ([Id]) ON DELETE CASCADE,
-    CONSTRAINT [FK_Facilities_FacilityTypes_FacilityTypeId] FOREIGN KEY ([FacilityTypeId]) REFERENCES [dbo].[FacilityTypes] ([Id]) ON DELETE CASCADE,
-    CONSTRAINT [FK_Facilities_LGAs_LgaId] FOREIGN KEY ([LgaId]) REFERENCES [dbo].[LGAs] ([Id]) ON DELETE CASCADE
+    CONSTRAINT [PK_Facilities] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

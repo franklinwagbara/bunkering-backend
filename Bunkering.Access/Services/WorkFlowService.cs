@@ -154,7 +154,7 @@ namespace Bunkering.Access.Services
                 Date = DateTime.Now.AddHours(1),
                 ApplicationId = appid,
                 TargetedTo = nextUser.Id,
-                TargetRole = nextUser.UserRoles.Where(x => !x.Role.Id.Equals("Staff")).FirstOrDefault().Role.Name,
+                TargetRole = nextUser.UserRoles.Where(x => !x.Role.Id.Equals("Staff")).FirstOrDefault().Role.Id,
                 TriggeredBy = user.Id,
                 TriggeredByRole = user.UserRoles.Where(x => !x.Role.Name.Equals("Staff")).FirstOrDefault().Role.Id,
                 Comment = comment

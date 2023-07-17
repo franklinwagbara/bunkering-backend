@@ -23,7 +23,7 @@ namespace Bunkering.Access.Services
         private readonly WorkFlowService _flow;
         private readonly IMapper _mapper;
         ApiResponse _response;
-        private readonly string User;
+        private string User;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AppLogger _logger;
         private readonly AppSetting _setting;
