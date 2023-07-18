@@ -45,7 +45,7 @@ namespace Bunkering.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> LoginRedirect([FromBody] LoginViewModel model)
+		public async Task<IActionResult> LoginRedirect(LoginViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
