@@ -86,6 +86,7 @@ namespace Bunkering.Access.Services
                             user.LastName = staff.LastName;
                             user.IsActive = true;
                             user.ProfileComplete = true;
+
                             if (!user.Email.Equals(model.Email))
                             {
                                 user.Email = model.Email;
@@ -104,7 +105,9 @@ namespace Bunkering.Access.Services
                                 Email = staff.Email.ToLower(),
                                 UserName = staff.Email.ToLower(),
                                 IsActive = true,
-                            };
+                                CreatedOn = DateTime.UtcNow.AddHours(1),
+                                CreatedBy = "system"
+                        };
                             var result = await _user.CreateAsync(user);
 
                             if (result.Succeeded)
@@ -181,7 +184,7 @@ namespace Bunkering.Access.Services
                         {
                             UserId = user.Email,
                             user.ElpsId,
-                            FirstName = user.UserRoles.FirstOrDefault().Role.Name.Equals("Company") ? user.FirstName : user.Company.Name,
+                            FirstName = !user.UserRoles.FirstOrDefault().Role.Name.Equals("Company") ? user.FirstName : user.Company.Name,
                             user.LastName,
                             UserRoles = user.UserRoles.FirstOrDefault(x => !x.Role.Name.Equals("Staff"))?.Role.Name,
                             user.CreatedOn,
@@ -244,7 +247,9 @@ namespace Bunkering.Access.Services
                 FirstName = dic.GetValue("contact_firstname"),
                 LastName = dic.GetValue("contact_lastname"),
                 Company = company,
-                IsActive = true
+                IsActive = true,
+                CreatedOn = DateTime.UtcNow.AddHours(1),
+                CreatedBy = "system"
             };
             await _user.CreateAsync(user);
             await _user.AddToRoleAsync(user, "Company");

@@ -14,56 +14,56 @@ using Microsoft.Extensions.Options;
 
 namespace Bunkering.Controllers
 {
-    //[Authorize]
-    public class AccountController : Controller
-    {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IElps _elps;
-        private readonly AuthService _authService;
-        private readonly AppSetting _appSetting;
+	//[Authorize]
+	public class AccountController : Controller
+	{
+		private readonly UserManager<ApplicationUser> _userManager;
+		private readonly SignInManager<ApplicationUser> _signInManager;
+		private readonly IUnitOfWork _unitOfWork;
+		private readonly IElps _elps;
+		private readonly AuthService _authService;
+		private readonly AppSetting _appSetting;
 
-        public AccountController(
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> singInManager,
-            IUnitOfWork unitOfWork,
-            IElps elps,
-            AuthService authService,
-            IOptions<AppSetting> appSetting)
-        {
-            _userManager = userManager;
-            _signInManager = singInManager;
-            _unitOfWork = unitOfWork;
-            _elps = elps;
-            _authService = authService;
-            _appSetting = appSetting.Value;
-        }
-        public IActionResult Index()
-        {
-            return View();
-        }
+		public AccountController(
+			UserManager<ApplicationUser> userManager,
+			SignInManager<ApplicationUser> singInManager,
+			IUnitOfWork unitOfWork,
+			IElps elps,
+			AuthService authService,
+			IOptions<AppSetting> appSetting)
+		{
+			_userManager = userManager;
+			_signInManager = singInManager;
+			_unitOfWork = unitOfWork;
+			_elps = elps;
+			_authService = authService;
+			_appSetting = appSetting.Value;
+		}
+		public IActionResult Index()
+		{
+			return View();
+		}
 
-        [HttpPost]
-        public async Task<IActionResult> LoginRedirect(LoginViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var login = await _authService.UserAuth(model);
-                if (login != null && login.Success)
-                    return Redirect($"{_appSetting.LoginUrl}/home?id={login.Data}");
-            }
-            return Redirect($"{_appSetting.LoginUrl}/home");
-        }
+		[HttpPost]
+		public async Task<IActionResult> LoginRedirect(LoginViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				var login = await _authService.UserAuth(model);
+				if (login != null && login.Success)
+					return Redirect($"{_appSetting.LoginUrl}/home?id={login.Data}");
+			}
+			return Redirect($"{_appSetting.LoginUrl}/home");
+		}
 
-        [HttpGet]
-        public async Task<IActionResult> Logout()
-        {
-            var elpsLogOffUrl = $"{_appSetting.ElpsUrl}/Account/RemoteLogOff";
-            var returnUrl = $"{Request.Scheme}://{Request.Host}";
-            var frm = "<form action='" + elpsLogOffUrl + "' id='frmTest' method='post'>" + "<input type='hidden' name='returnUrl' value='" + returnUrl + "' />" + "<input type='hidden' name='appId' value='" + _appSetting.PublicKey + "' />" + "</form>" + "<script>document.getElementById('frmTest').submit();</script>";
-            return Content(frm, "text/html");
-        }
+		[HttpGet]
+		public async Task<IActionResult> Logout()
+		{
+			var elpsLogOffUrl = $"{_appSetting.ElpsUrl}/Account/RemoteLogOff";
+			var returnUrl = $"{Request.Scheme}://{Request.Host}";
+			var frm = "<form action='" + elpsLogOffUrl + "' id='frmTest' method='post'>" + "<input type='hidden' name='returnUrl' value='" + returnUrl + "' />" + "<input type='hidden' name='appId' value='" + _appSetting.PublicKey + "' />" + "</form>" + "<script>document.getElementById('frmTest').submit();</script>";
+			return Content(frm, "text/html");
+		}
 
-    }
+	}
 }

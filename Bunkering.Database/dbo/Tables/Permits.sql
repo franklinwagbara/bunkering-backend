@@ -7,9 +7,10 @@
     [PermitNo]      NVARCHAR (MAX) NOT NULL,
     [Signature]     NVARCHAR (MAX) NOT NULL,
     [QRCode]        NVARCHAR (MAX) NOT NULL,
-    CONSTRAINT [PK_Permits] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_Permits_Applications_ApplicationId] FOREIGN KEY ([ApplicationId]) REFERENCES [dbo].[Applications] ([Id]) ON DELETE CASCADE
+    CONSTRAINT [PK_Permits] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

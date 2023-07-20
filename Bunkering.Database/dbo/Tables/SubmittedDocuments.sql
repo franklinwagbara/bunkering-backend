@@ -6,9 +6,10 @@
     [DocSource]     NVARCHAR (MAX) NOT NULL,
     [DocType]       NVARCHAR (MAX) NOT NULL,
     [DocName]       NVARCHAR (MAX) NOT NULL,
-    CONSTRAINT [PK_SubmittedDocuments] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_SubmittedDocuments_Applications_ApplicationId] FOREIGN KEY ([ApplicationId]) REFERENCES [dbo].[Applications] ([Id]) ON DELETE CASCADE
+    CONSTRAINT [PK_SubmittedDocuments] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 GO

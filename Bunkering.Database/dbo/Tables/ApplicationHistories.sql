@@ -8,9 +8,10 @@
     [TargetRole]      NVARCHAR (MAX) NOT NULL,
     [Date]            DATETIME2 (7)  NOT NULL,
     [Comment]         NVARCHAR (MAX) NULL,
-    CONSTRAINT [PK_ApplicationHistories] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_ApplicationHistories_Applications_ApplicationId] FOREIGN KEY ([ApplicationId]) REFERENCES [dbo].[Applications] ([Id]) ON DELETE CASCADE
+    CONSTRAINT [PK_ApplicationHistories] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 GO
