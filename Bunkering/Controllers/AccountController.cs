@@ -40,11 +40,17 @@ namespace Bunkering.Controllers
 			_authService = authService;
 			_appSetting = appSetting.Value;
 		}
-		//public IActionResult Index()
-		//{
-		//	return View();
-		//}
-		[Route("login-redirect")]
+        //public IActionResult Index()
+        //{
+        //	return View();
+        //}
+
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 405)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        [Produces("application/json")]
+        [Route("login-redirect")]
 		[HttpPost]
 		public async Task<IActionResult> LoginRedirect(LoginViewModel model)
 		{
