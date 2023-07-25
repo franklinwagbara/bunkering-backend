@@ -15,7 +15,8 @@ using Microsoft.Extensions.Options;
 namespace Bunkering.Controllers
 {
 	//[Authorize]
-	public class AccountController : Controller
+	[Route("api/account")]
+	public class AccountController : ResponseController
 	{
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly SignInManager<ApplicationUser> _signInManager;
@@ -39,11 +40,11 @@ namespace Bunkering.Controllers
 			_authService = authService;
 			_appSetting = appSetting.Value;
 		}
-		public IActionResult Index()
-		{
-			return View();
-		}
-
+		//public IActionResult Index()
+		//{
+		//	return View();
+		//}
+		[Route("login-redirect")]
 		[HttpPost]
 		public async Task<IActionResult> LoginRedirect(LoginViewModel model)
 		{
@@ -56,7 +57,8 @@ namespace Bunkering.Controllers
 			return Redirect($"{_appSetting.LoginUrl}/home");
 		}
 
-		[HttpGet]
+        [Route("logout")]
+        [HttpGet]
 		public async Task<IActionResult> Logout()
 		{
 			var elpsLogOffUrl = $"{_appSetting.ElpsUrl}/Account/RemoteLogOff";
