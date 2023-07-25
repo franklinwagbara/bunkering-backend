@@ -47,8 +47,8 @@ namespace Bunkering.Access.Services
         {
             var user = new ApplicationUser();
             var hash = Utils.GenerateSha512($"{_appSetting.AppEmail}.{model.Email.ToUpper()}.{_appSetting.AppId.ToUpper()}");
-            if (Debugger.IsAttached || (!Debugger.IsAttached && model.Code.Equals(hash)))
-            {
+            //if (Debugger.IsAttached || (!Debugger.IsAttached && model.Code.Equals(hash)))
+            //{
                 //check if it's company login
                 var company = _elps.GetCompanyDetailByEmail(model.Email);
 
@@ -162,7 +162,7 @@ namespace Bunkering.Access.Services
                         StatusCode = HttpStatusCode.InternalServerError,
                         Success = false,
                     };
-            }
+            //}
             return _response;
         }
 
