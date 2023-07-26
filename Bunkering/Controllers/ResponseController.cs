@@ -11,38 +11,18 @@ namespace Bunkering.Controllers
         protected new IActionResult Response(ApiResponse response)
         {
             if (response.StatusCode == HttpStatusCode.OK)
-                return Ok(new
-                {
-                    success = true,
-                    data = response
-                });
+                return Ok(response);
 
             if (response.StatusCode == HttpStatusCode.BadRequest)
-                return BadRequest(new
-                {
-                    success = false,
-                    data = response
-                });
+                return BadRequest(response);
 
             if (response.StatusCode == HttpStatusCode.NotFound)
-                return NotFound(new
-                {
-                    success = false,
-                    data = response
-                });
+                return NotFound(response);
 
             if (response.StatusCode == HttpStatusCode.Conflict)
-                return Conflict(new
-                {
-                    success = false,
-                    data = response
-                });
+                return Conflict(response);
 
-            return NotFound(new
-            {
-                success = false,
-                data = response
-            });
+            return NotFound(response);
         }
     }
 }
