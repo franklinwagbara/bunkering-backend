@@ -3,7 +3,6 @@ using Bunkering.Access.IContracts;
 using Bunkering.Core.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
-using ELPS.Domain.Entities;
 
 namespace Bunkering.Access.Services
 {
@@ -13,7 +12,6 @@ namespace Bunkering.Access.Services
         {
             services.AddTransient<AppLogger>();
             services.AddScoped<ApplicationContext>();
-            services.AddScoped<ELPSContext>();
             services.AddScoped<AppProvessesService>();
             services.AddScoped<AuthService>();
             services.AddTransient<Seeder>();
