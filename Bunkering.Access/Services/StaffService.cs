@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Security.Claims;
 
 namespace Bunkering.Access.Services
 {
@@ -29,6 +30,7 @@ namespace Bunkering.Access.Services
             _userManager = userManager;
             _contextAccessor = contextAccessor;
             _roleManager = roleManager;
+            User = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
         }
 
         public async Task<ApiResponse> Dashboard()
@@ -42,7 +44,7 @@ namespace Bunkering.Access.Services
             var facilities = await _unitOfWork.Facility.GetAll("FacilityType");
             var payments = await _unitOfWork.Payment.GetAll();
 
-            if (apps.Count() > 0)
+            if (user != null)
                 _response = new ApiResponse
                 {
                     Message = "Success",

@@ -25,7 +25,7 @@ namespace Bunkering.Access.Services
         { 
             _unitOfWork = unitOfWork;
             _contextAccessor = contextAccessor;
-            User = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            User = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
             _elps = elps;
             _userManager = userManager;
         }
