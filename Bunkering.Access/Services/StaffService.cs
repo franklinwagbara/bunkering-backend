@@ -81,7 +81,7 @@ namespace Bunkering.Access.Services
 
 		public async Task<ApiResponse> AllUsers()
 		{
-			var users = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).Where(x => x.CompanyId == null).ToList();
+			var users = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).Where(x => x.CompanyId == null && !x.IsDeleted).ToList();
 			var apps = await _unitOfWork.Application.GetAll();
 			return new ApiResponse
 			{
@@ -221,5 +221,11 @@ namespace Bunkering.Access.Services
 			};
 			return result;
 		}
+
+
+
+
+
+
 	}
 }

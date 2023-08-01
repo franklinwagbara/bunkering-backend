@@ -491,7 +491,7 @@
         </member>
         <member name="M:Bunkering.Controllers.API.LibraryController.GetAppStatus">
             <summary>
-            This endpoint is used to get all Countries
+            This endpoint is used to get all AppStatus
             </summary>
             <returns>Returns a success message</returns>
             <remarks>
@@ -507,7 +507,7 @@
         </member>
         <member name="M:Bunkering.Controllers.API.LibraryController.getAppActions">
             <summary>
-            This endpoint is used to get all Countries
+            This endpoint is used to get all App Actions
             </summary>
             <returns>Returns a success message</returns>
             <remarks>
@@ -523,7 +523,7 @@
         </member>
         <member name="M:Bunkering.Controllers.API.LibraryController.ApplicationType">
             <summary>
-            This endpoint is used to get all Countries
+            This endpoint is used to get Application Types
             </summary>
             <returns>Returns a success message</returns>
             <remarks>
@@ -539,7 +539,71 @@
         </member>
         <member name="M:Bunkering.Controllers.API.LibraryController.FacilityTypes">
             <summary>
-            This endpoint is used to get all Countries
+            This endpoint is used to get Facility Types
+            </summary>
+            <returns>Returns a success message</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/location/local Government 
+            
+            </remarks>
+            <response code="200">Returns a success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.LibraryController.GetRoles">
+            <summary>
+            This endpoint is used to get All Roles
+            </summary>
+            <returns>Returns a success message</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/location/local Government 
+            
+            </remarks>
+            <response code="200">Returns a success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.LibraryController.GetAllFADDoc">
+            <summary>
+            This endpoint is used to get All FacilityType Documents
+            </summary>
+            <returns>Returns a success message</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/location/local Government 
+            
+            </remarks>
+            <response code="200">Returns a success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.LibraryController.createFADDoc(Bunkering.Core.ViewModels.AppStageDocsViewModel)">
+            <summary>
+            This endpoint is used to create FacilityType Documents
+            </summary>
+            <returns>Returns a success message</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/location/local Government 
+            
+            </remarks>
+            <response code="200">Returns a success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.LibraryController.UpdateFADDoc(System.Int32)">
+            <summary>
+            This endpoint is used to edit FacilityType Documents
             </summary>
             <returns>Returns a success message</returns>
             <remarks>

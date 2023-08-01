@@ -3,6 +3,8 @@ using Bunkering.Access.DAL;
 using Bunkering.Access.IContracts;
 using Bunkering.Core.Data;
 using Bunkering.Core.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +17,14 @@ namespace Bunkering.Access.Services
 	public class LibraryService
 	{
 		private readonly IUnitOfWork unitOfWork_;
+		private readonly RoleManager<ApplicationRole> _roleManager;
 
 		ApiResponse response;
 
-		public LibraryService(IUnitOfWork unitOfWork)
+		public LibraryService(IUnitOfWork unitOfWork, RoleManager<ApplicationRole> roleManager)
 		{
 			unitOfWork_ = unitOfWork;
+			_roleManager = roleManager;
 		}
 
 		//method to get all states
@@ -305,6 +309,18 @@ namespace Bunkering.Access.Services
 			{
 				Data = facilityTypes,
 				Message = "All Facility-Types",
+				StatusCode = HttpStatusCode.OK,
+				Success = true,
+			};
+		}
+
+		public async Task<ApiResponse> GetRoles()
+		{
+			var roles = await _roleManager.Roles.ToListAsync();
+			return new ApiResponse
+			{
+				Data = roles,
+				Message = "Roles",
 				StatusCode = HttpStatusCode.OK,
 				Success = true,
 			};
