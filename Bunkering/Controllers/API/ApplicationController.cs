@@ -210,6 +210,7 @@ namespace Bunkering.Controllers.API
 		[HttpGet]
 		public async Task<IActionResult> All() => Response(await _appService.AllApps());
 
+
 		/// <summary>
 		/// This endpoint is used to fetch LGAs by StateID
 		/// </summary>
