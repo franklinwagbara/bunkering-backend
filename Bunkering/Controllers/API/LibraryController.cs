@@ -348,7 +348,7 @@ namespace Bunkering.Controllers.API
 		[Route("Edit-FacilityType-Doc")]
 		[HttpPut]
 
-		public async Task<IActionResult> UpdateFADDoc(AppStageDocsViewModel viewModel) => Response(await _appStageDocService.UpdateFADDoc(viewModel));
+		public async Task<IActionResult> UpdateFADDoc(int id) => Response(await _appStageDocService.UpdateFADDoc(id));
 
 
 	}
