@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bunkering.Controllers.API
 {
-	//[Authorize]
+	[Authorize]
 	[ApiController]
 	[Route("api/bunkering/[controller]")]
 	public class ApplicationController : ResponseController
@@ -209,6 +209,7 @@ namespace Bunkering.Controllers.API
 		[Route("all-applications")]
 		[HttpGet]
 		public async Task<IActionResult> All() => Response(await _appService.AllApps());
+
 
 		/// <summary>
 		/// This endpoint is used to fetch LGAs by StateID
