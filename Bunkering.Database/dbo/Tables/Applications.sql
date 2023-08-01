@@ -12,8 +12,11 @@
     [ModifiedDate]      DATETIME2 (7)  NULL,
     [Status]            NVARCHAR (MAX) NOT NULL,
     [FlowId]            INT            NULL,
+    [IsDeleted]         BIT            CONSTRAINT [DF_Applications_IsDeleted] DEFAULT ((0)) NOT NULL,
     CONSTRAINT [PK_Applications] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

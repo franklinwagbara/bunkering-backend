@@ -1,16 +1,10 @@
-﻿using Bunkering.Access.DAL;
-using Bunkering.Access.IContracts;
-using Bunkering.Access.Services;
-using Bunkering.Core.Data;
-using Bunkering.Core.Utils;
+﻿using Bunkering.Access.Services;
 using Bunkering.Core.ViewModels;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bunkering.Controllers.API
 {
-	[Authorize]
+	//[Authorize]
 	[Route("api/bunkering/[controller]")]
 	[ApiController]
 	public class StaffController : ResponseController
@@ -94,6 +88,9 @@ namespace Bunkering.Controllers.API
 		/// <response code="401">Unauthorized user </response>
 		/// <response code="400">Internal server error - bad request </response>
 		/// 
+
+
+
 
 		[Route("add-user")]
 		[HttpPost]
