@@ -588,6 +588,23 @@
             <response code="401">Unauthorized user </response>
             <response code="400">Internal server error - bad request </response>
         </member>
+        <member name="M:Bunkering.Controllers.API.StaffController.GetAllStaff">
+            <summary>
+            This endpoint is used to add new user
+            </summary>
+            <returns>Returns a success message or otherwise</returns>
+            <remarks>
+            
+            Sample Request
+            POST: api/staff/add-user
+            
+            </remarks>
+            <response code="200">Returns success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+            
+        </member>
         <member name="M:Bunkering.Controllers.API.StaffController.AddUsers(Bunkering.Core.ViewModels.UserViewModel)">
             <summary>
             This endpoint is used to add new user
@@ -603,6 +620,7 @@
             <response code="404">Returns not found </response>
             <response code="401">Unauthorized user </response>
             <response code="400">Internal server error - bad request </response>
+            
         </member>
         <member name="M:Bunkering.Controllers.API.StaffController.Edit(Bunkering.Core.ViewModels.UserViewModel)">
             <summary>

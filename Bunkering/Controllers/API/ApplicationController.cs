@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bunkering.Controllers.API
 {
-	[Authorize]
+	//[Authorize]
 	[ApiController]
 	[Route("api/bunkering/[controller]")]
 	public class ApplicationController : ResponseController
