@@ -374,5 +374,28 @@ namespace Bunkering.Controllers.API
 		[HttpDelete]
 
 		public async Task<IActionResult> DeleteFADDoc(int id) => Response(await _appStageDocService.DeleteFADDoc(id));
+
+		/// <summary>
+		/// This endpoint is used to get products
+		/// </summary>
+		/// <returns>Returns a success message</returns>
+		/// <remarks>
+		/// 
+		/// Sample Request
+		/// GET: api/location/local Government 
+		/// 
+		/// </remarks>
+		/// <response code="200">Returns a success message </response>
+		/// <response code="404">Returns not found </response>
+		/// <response code="401">Unauthorized user </response>
+		/// <response code="400">Internal server error - bad request </response>
+		[ProducesResponseType(typeof(ApiResponse), 200)]
+		[ProducesResponseType(typeof(ApiResponse), 404)]
+		[ProducesResponseType(typeof(ApiResponse), 405)]
+		[ProducesResponseType(typeof(ApiResponse), 500)]
+		[Route("GetProducts")]
+		[HttpGet]
+
+		public async Task<IActionResult> GetProducts() => Response(await libraryService.GetProducts());
 	}
 }
