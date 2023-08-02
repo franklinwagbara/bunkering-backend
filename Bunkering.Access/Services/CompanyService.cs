@@ -24,12 +24,14 @@ namespace Bunkering.Access.Services
             IUnitOfWork unitOfWork,
             IHttpContextAccessor contextAccessor,
             IElps elps,
+            UserManager<ApplicationUser> userManager,
             WorkFlowService flow)
         {
             _unitOfWork = unitOfWork;
             _contextAccessor = contextAccessor;
             User = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
             _elps = elps;
+            _userManager = userManager;
             _flow = flow;
         }
 
@@ -38,19 +40,26 @@ namespace Bunkering.Access.Services
         {
             //ViewData["Message"] = TempData["Message"];
             var company = await _userManager.FindByEmailAsync(User);
+            if(company != null)
+                _response = new ApiResponse
+                {
+                    Message = "Company not found",
+                    StatusCode = HttpStatusCode.OK,
+                    Success = false
+                };
+
             if (!company.ProfileComplete)
                 _response = new ApiResponse
                 {
                     Message = "Company profile update not completed",
-                    StatusCode = HttpStatusCode.BadRequest,
+                    StatusCode = HttpStatusCode.OK,
                     Success = false
                 };
             else
             {
                 var messages = (await _unitOfWork.Message.Find(x => x.UserId.Equals(company.Id))).ToList();
-                var apps = (await _unitOfWork.Application.GetAll("User.Company")).ToList();
+                var apps = (await _unitOfWork.Application.Find(x => x.UserId.Equals(company.Id), "User.Company")).ToList();
                 var users = await _userManager.FindByEmailAsync(User);
-
 
                 _response = new ApiResponse
                 {
@@ -60,7 +69,7 @@ namespace Bunkering.Access.Services
                     Data = new
                     {
                         Messages = messages,
-                        Apps = apps.Select(x => new
+                        Apps = apps.Count > 0 ? apps.Select(x => new
                         {
                             CompanyEmail = x.User.Email,
                             CompanyName = x.User.Company.Name,
@@ -70,7 +79,7 @@ namespace Bunkering.Access.Services
                             x.Reference,
                             x.Status,
                             CreatedDate = x.CreatedDate.ToString("MMMM dd, yyyy HH:mm:ss")
-                        })
+                        }) : null
                     }
                 };
             }

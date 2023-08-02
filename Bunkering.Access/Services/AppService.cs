@@ -584,7 +584,7 @@ namespace Bunkering.Access.Services
 
 							if (docs.Count > 0)
 							{
-								var appdocs = await _unitOfWork.SubmittedDocument.Find(x => x.ApplicationId.Equals(app.Id));
+								var appdocs = (await _unitOfWork.SubmittedDocument.Find(x => x.ApplicationId.Equals(app.Id))).ToList();
 								if (appdocs.Count() > 0)
 									await _unitOfWork.SubmittedDocument.RemoveRange(appdocs);
 
@@ -655,7 +655,7 @@ namespace Bunkering.Access.Services
 				else
 					dicResponse = lno.Response.Parse<Dictionary<string, object>>();
 
-				var expiry = Convert.ToDateTime($"{dicResponse.GetValue("Date_Expire")}");
+				var expiry = Convert.ToDateTime($"{dicResponse.GetValue("Date_Expired")}");
 				if (expiry > DateTime.UtcNow.AddHours(1))
 				{
 					var data = new
@@ -672,7 +672,14 @@ namespace Bunkering.Access.Services
 						Success = true
 					};
 				}
-			}
+				else
+                    _response = new ApiResponse
+                    {
+                        Message = "License not valid",
+                        StatusCode = HttpStatusCode.OK,
+                        Success = false
+                    };
+            }
 			catch (Exception ex)
 			{
 				_response = new ApiResponse
