@@ -106,7 +106,7 @@
             <response code="401">Unauthorized user </response>
             <response code="400">Internal server error - bad request </response>
         </member>
-        <member name="M:Bunkering.Controllers.API.ApplicationController.CheckLicense(System.Int32,System.String)">
+        <member name="M:Bunkering.Controllers.API.ApplicationController.CheckLicense(System.String)">
             <summary>
             This endpoint is used to verify depot license
             </summary>

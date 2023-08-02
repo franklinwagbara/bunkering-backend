@@ -8,3 +8,13 @@ C:\Users\anyan\Documents\Visual Studio 2022\Projects\BunkeringBackEnd\BunkeringB
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BunkeringBackEnd\BunkeringBEnd\Bunkering.Database\obj\Debug\predeploy.sql
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BunkeringBackEnd\BunkeringBEnd\Bunkering.Database\obj\Debug\Bunkering.Database.dll
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BunkeringBackEnd\BunkeringBEnd\Bunkering.Database\obj\Debug\Bunkering.Database.pdb
+C:\Users\pc\Documents\GitHub\BunkeringBEnd\Bunkering.Database\bin\Debug\Bunkering.Database.dacpac
+C:\Users\pc\Documents\GitHub\BunkeringBEnd\Bunkering.Database\bin\Debug\Bunkering.Database.dll
+C:\Users\pc\Documents\GitHub\BunkeringBEnd\Bunkering.Database\bin\Debug\Bunkering.Database.pdb
+C:\Users\pc\Documents\GitHub\BunkeringBEnd\Bunkering.Database\obj\Debug\Bunkering.Database.sqlproj.AssemblyReference.cache
+C:\Users\pc\Documents\GitHub\BunkeringBEnd\Bunkering.Database\obj\Debug\Model.xml
+C:\Users\pc\Documents\GitHub\BunkeringBEnd\Bunkering.Database\obj\Debug\refactor.xml
+C:\Users\pc\Documents\GitHub\BunkeringBEnd\Bunkering.Database\obj\Debug\postdeploy.sql
+C:\Users\pc\Documents\GitHub\BunkeringBEnd\Bunkering.Database\obj\Debug\predeploy.sql
+C:\Users\pc\Documents\GitHub\BunkeringBEnd\Bunkering.Database\obj\Debug\Bunkering.Database.dll
+C:\Users\pc\Documents\GitHub\BunkeringBEnd\Bunkering.Database\obj\Debug\Bunkering.Database.pdb
