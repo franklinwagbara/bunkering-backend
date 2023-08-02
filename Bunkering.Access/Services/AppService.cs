@@ -641,7 +641,7 @@ namespace Bunkering.Access.Services
 			{
 				//check license on local system
 				var lno = await _unitOfWork.ValidatiionResponse.FirstOrDefaultAsync(x => x.LicenseNo.ToLower().Equals(license.ToLower()));
-				var dicResponse = new Dictionary<string, object>();
+				var dicResponse = new LicenseValidationViewModel();
 				if (lno == null)
 				{
 					var resp = await Utils.Send(baseUrl, new HttpRequestMessage(HttpMethod.Get, reqUri));
@@ -649,37 +649,36 @@ namespace Bunkering.Access.Services
 					{
 						var content = await resp.Content.ReadAsStringAsync();
 						if (!string.IsNullOrEmpty(content))
-							dicResponse = content.Parse<Dictionary<string, object>>();
+							dicResponse = content.Parse<LicenseValidationViewModel>();
 					}
 				}
 				else
-					dicResponse = lno.Response.Parse<Dictionary<string, object>>();
+					dicResponse = lno.Response.Parse<LicenseValidationViewModel>();
 
-				var expiry = Convert.ToDateTime($"{dicResponse.GetValue("Date_Expired")}");
-				if (expiry > DateTime.UtcNow.AddHours(1))
+				if (dicResponse.Date_Expired > DateTime.UtcNow.AddHours(1))
 				{
-					var data = new
-					{
-						Company_Name = dicResponse.GetValue("Company_Name"),
-						Date_Issued = Convert.ToDateTime(dicResponse.GetValue("Date_Issued")).ToString("MMM dd, yyyy HH:mm:ss"),
-						Date_Expire = expiry.ToString("MMM dd, yyyy HH:mm:ss"),
-					};
+					//var data = new
+					//{
+					//	Company_Name = dicResponse.GetValue("Company_Name"),
+					//	Date_Issued = Convert.ToDateTime(dicResponse.GetValue("Date_Issued")).ToString("MMM dd, yyyy HH:mm:ss"),
+					//	Date_Expire = expiry.ToString("MMM dd, yyyy HH:mm:ss"),
+					//};
 					_response = new ApiResponse
 					{
-						Data = data,
+						Data = dicResponse,
 						Message = "License verified successfully",
 						StatusCode = HttpStatusCode.OK,
 						Success = true
 					};
 				}
 				else
-                    _response = new ApiResponse
-                    {
-                        Message = "License not valid",
-                        StatusCode = HttpStatusCode.OK,
-                        Success = false
-                    };
-            }
+					_response = new ApiResponse
+					{
+						Message = "License not valid",
+						StatusCode = HttpStatusCode.OK,
+						Success = false
+					};
+			}
 			catch (Exception ex)
 			{
 				_response = new ApiResponse
