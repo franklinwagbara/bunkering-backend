@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>C:\Users\pc\Documents\GitHub\BunkeringBEnd\Bunkering\Bunkering.xml</DocumentationFile>
+    <DocumentationFile>C:\Users\anyan\Documents\Visual Studio 2022\Projects\BunkeringBackEnd\BunkeringBEnd\Bunkering\Bunkering.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

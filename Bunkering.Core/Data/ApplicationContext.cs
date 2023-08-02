@@ -67,14 +67,20 @@ namespace Bunkering.Core.Data
 
 		private void OnBeforeSaveChanges(string userId)
 		{
-			if (userId != null)
+			if (!string.IsNullOrEmpty(userId))
 			{
 				ChangeTracker.DetectChanges();
 				var auditEntries = new List<AuditEntry>();
-				foreach (var entry in ChangeTracker.Entries())
+
+                var entities = ChangeTracker.Entries() 
+					.Where(x => x.State != EntityState.Added
+                    && x.State != EntityState.Unchanged
+                    && x.State != EntityState.Detached).ToList();
+
+                foreach (var entry in entities)
 				{
-					if (entry.Entity is Audit || entry.State.Equals(EntityState.Detached) || entry.State.Equals(EntityState.Unchanged))
-						continue;
+					//if (entry.Entity is Audit || entry.State.Equals(EntityState.Detached) || entry.State.Equals(EntityState.Unchanged))
+					//	continue;
 					var auditEntry = new AuditEntry(entry);
 					auditEntry.TableName = entry.Entity.GetType().Name;
 					auditEntry.UserId = userId;

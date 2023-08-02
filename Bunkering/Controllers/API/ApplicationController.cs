@@ -175,7 +175,7 @@ namespace Bunkering.Controllers.API
 		/// GET: api/application/verify-license/xxxx?license=xxx
 		/// 
 		/// </remarks>
-		/// <param name="id">The application id used to fetch documenst for the application type</param>
+		/// <param name="license">The license field name is used to validate a depot license</param>
 		/// <response code="200">Returns an object of fees </response>
 		/// <response code="404">Returns not found </response>
 		/// <response code="401">Unauthorized user </response>

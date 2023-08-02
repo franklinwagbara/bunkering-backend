@@ -117,7 +117,7 @@
             GET: api/application/verify-license/xxxx?license=xxx
             
             </remarks>
-            <param name="id">The application id used to fetch documenst for the application type</param>
+            <param name="license">The license field name is used to validate a depot license</param>
             <response code="200">Returns an object of fees </response>
             <response code="404">Returns not found </response>
             <response code="401">Unauthorized user </response>
@@ -347,7 +347,7 @@
             <remarks>
             
             Sample Request
-            GET: api/company/dashboard
+            GET: api/company/get-profile
             
             </remarks>
             <param name="email">This is the email of the company which maybe be null if the user is loged in</param>
@@ -604,6 +604,22 @@
         <member name="M:Bunkering.Controllers.API.LibraryController.UpdateFADDoc(System.Int32)">
             <summary>
             This endpoint is used to edit FacilityType Documents
+            </summary>
+            <returns>Returns a success message</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/location/local Government 
+            
+            </remarks>
+            <response code="200">Returns a success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.LibraryController.DeleteFADDoc(System.Int32)">
+            <summary>
+            This endpoint is used to delete FacilityType Documents
             </summary>
             <returns>Returns a success message</returns>
             <remarks>
