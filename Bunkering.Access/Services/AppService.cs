@@ -631,11 +631,11 @@ namespace Bunkering.Access.Services
 			return _response;
 		}
 
-		public async Task<ApiResponse> CheckLicense(int id, string license)
+		public async Task<ApiResponse> CheckLicense(string license)
 		{
 			string baseUrl = _setting.DepotUrl;
 			var reqUri = _setting.DepotUri;
-			var factype = await _unitOfWork.FacilityType.Find(x => x.Id.Equals(id));
+			//var factype = await _unitOfWork.FacilityType.Find(x => x.Id.Equals(id));
 
 			try
 			{

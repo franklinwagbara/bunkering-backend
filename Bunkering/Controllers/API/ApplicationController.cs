@@ -175,7 +175,7 @@ namespace Bunkering.Controllers.API
 		/// GET: api/application/verify-license/xxxx?license=xxx
 		/// 
 		/// </remarks>
-		/// <param name="id">The application id used to fetch documenst for the application type</param>
+		/// <param name="license">The license field name is used to validate a depot license</param>
 		/// <response code="200">Returns an object of fees </response>
 		/// <response code="404">Returns not found </response>
 		/// <response code="401">Unauthorized user </response>
@@ -186,7 +186,7 @@ namespace Bunkering.Controllers.API
 		[ProducesResponseType(typeof(ApiResponse), 500)]
 		[Route("verify-license")]
 		[HttpGet]
-		public async Task<IActionResult> CheckLicense(int id, string license) => Response(await _appService.CheckLicense(id, license));
+		public async Task<IActionResult> CheckLicense(string license) => Response(await _appService.CheckLicense(license));
 
 		/// <summary>
 		/// This endpoint is used to fetch all applications
