@@ -6,8 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Bunkering.Core.Data
 {
 	public class ApplicationContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, IdentityUserClaim<string>,
-		ApplicationUserRole, IdentityUserLogin<string>,
-		IdentityRoleClaim<string>, IdentityUserToken<string>>
+		ApplicationUserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
 	{
 		public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
 

@@ -186,7 +186,7 @@ namespace Bunkering.Controllers.API
 		[ProducesResponseType(typeof(ApiResponse), 500)]
 		[Route("verify-license")]
 		[HttpGet]
-		public async Task<IActionResult> CheckLicense(int id, string license) => Response(await _appService.CheckLicense(id, license));
+		public async Task<IActionResult> CheckLicense(string license) => Response(await _appService.CheckLicense(license));
 
 		/// <summary>
 		/// This endpoint is used to fetch all applications
