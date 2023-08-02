@@ -55,7 +55,7 @@
             <response code="401">Unauthorized user </response>
             <response code="400">Internal server error - bad request </response>
         </member>
-        <member name="M:Bunkering.Controllers.API.ApplicationController.Payment(System.String)">
+        <member name="M:Bunkering.Controllers.API.ApplicationController.Payment(System.Int32)">
             <summary>
             This endpoint adds payment to the application
             </summary>
@@ -72,7 +72,7 @@
             <response code="401">Unauthorized user </response>
             <response code="400">Internal server error - bad request </response>
         </member>
-        <member name="M:Bunkering.Controllers.API.ApplicationController.DocumentUpload(System.String)">
+        <member name="M:Bunkering.Controllers.API.ApplicationController.DocumentUpload(System.Int32)">
             <summary>
             This endpoint is used to fetch documents required for an application
             </summary>
@@ -89,7 +89,7 @@
             <response code="401">Unauthorized user </response>
             <response code="400">Internal server error - bad request </response>
         </member>
-        <member name="M:Bunkering.Controllers.API.ApplicationController.AddDocuments(System.String)">
+        <member name="M:Bunkering.Controllers.API.ApplicationController.AddDocuments(System.Int32)">
             <summary>
             This endpoint is used to add documents required for an application
             </summary>
@@ -171,7 +171,7 @@
             <response code="401">Unauthorized user </response>
             <response code="400">Internal server error - bad request </response>
         </member>
-        <member name="M:Bunkering.Controllers.API.ApplicationController.ViewApplication(System.String)">
+        <member name="M:Bunkering.Controllers.API.ApplicationController.ViewApplication(System.Int32)">
             <summary>
             This endpoint is used to fetch details of an application
             </summary>
@@ -187,7 +187,7 @@
             <response code="401">Unauthorized user </response>
             <response code="400">Internal server error - bad request </response>
         </member>
-        <member name="M:Bunkering.Controllers.API.ApplicationController.Process(System.String,System.String,System.String)">
+        <member name="M:Bunkering.Controllers.API.ApplicationController.Process(System.Int32,System.String,System.String)">
             <summary>
             This endpoint is used to approve or reject an application
             </summary>
@@ -620,6 +620,22 @@
         <member name="M:Bunkering.Controllers.API.LibraryController.DeleteFADDoc(System.Int32)">
             <summary>
             This endpoint is used to delete FacilityType Documents
+            </summary>
+            <returns>Returns a success message</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/location/local Government 
+            
+            </remarks>
+            <response code="200">Returns a success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.LibraryController.GetProducts">
+            <summary>
+            This endpoint is used to get products
             </summary>
             <returns>Returns a success message</returns>
             <remarks>
