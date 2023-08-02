@@ -81,8 +81,9 @@ namespace Bunkering.Access.Services
 				{
 					var user = await _userManager.FindByEmailAsync(User);
 
-					await _unitOfWork.FacilityTypeDocuments.AddRange(docs);
+                    docs = await _unitOfWork.FacilityTypeDocuments.AddRange(docs);
 					await _unitOfWork.SaveChangesAsync(user.Id);
+					//_unitOfWork.Save();
 
 					_response = new ApiResponse
 					{
@@ -95,8 +96,8 @@ namespace Bunkering.Access.Services
 					_response = new ApiResponse
 					{
 						Message = "No Facility Type Dccumnets to add",
-						StatusCode = HttpStatusCode.NotFound,
-						Success = true
+						StatusCode = HttpStatusCode.OK,
+						Success = false
 					};
 			}
 			catch (Exception ex)

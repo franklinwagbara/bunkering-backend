@@ -281,7 +281,6 @@ C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Deb
 C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Debug\net7.0\Bunkering.AssemblyInfoInputs.cache
 C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Debug\net7.0\Bunkering.AssemblyInfo.cs
 C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Debug\net7.0\Bunkering.csproj.CoreCompileInputs.cache
-C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Debug\net7.0\Bunkering.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Debug\net7.0\Bunkering.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Debug\net7.0\Bunkering.RazorAssemblyInfo.cache
 C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Debug\net7.0\Bunkering.RazorAssemblyInfo.cs
@@ -554,3 +553,4 @@ C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Deb
 C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Debug\net7.0\Bunkering.csproj.CopyComplete
 C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Debug\net7.0\Bunkering.genruntimeconfig.cache
 C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Debug\net7.0\ref\Bunkering.dll
+C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Debug\net7.0\Bunkering.MvcApplicationPartsAssemblyInfo.cs

@@ -584,7 +584,7 @@ namespace Bunkering.Access.Services
 
 							if (docs.Count > 0)
 							{
-								var appdocs = await _unitOfWork.SubmittedDocument.Find(x => x.ApplicationId.Equals(app.Id));
+								var appdocs = (await _unitOfWork.SubmittedDocument.Find(x => x.ApplicationId.Equals(app.Id))).ToList();
 								if (appdocs.Count() > 0)
 									await _unitOfWork.SubmittedDocument.RemoveRange(appdocs);
 

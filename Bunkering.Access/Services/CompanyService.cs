@@ -24,12 +24,14 @@ namespace Bunkering.Access.Services
             IUnitOfWork unitOfWork,
             IHttpContextAccessor contextAccessor,
             IElps elps,
+            UserManager<ApplicationUser> userManager,
             WorkFlowService flow)
         {
             _unitOfWork = unitOfWork;
             _contextAccessor = contextAccessor;
             User = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
             _elps = elps;
+            _userManager = userManager;
             _flow = flow;
         }
 
