@@ -117,6 +117,7 @@ namespace Bunkering.Access.Services
 					{
 						Message = "There is an existing application for this facility, kindly go to My Application to complete processing",
 						StatusCode = HttpStatusCode.Found,
+						Success = false
 					};
 				else
 				{
@@ -135,7 +136,7 @@ namespace Bunkering.Access.Services
 					await _unitOfWork.Application.Add(app);
 					await _unitOfWork.SaveChangesAsync(app.UserId);
 					//save app tanks
-					var tank = AppTanks(model.AppTanks, facility.Id, user.Id);
+					var tank = await AppTanks(model.AppTanks, facility.Id, user.Id);
 
 					await _flow.AppWorkFlow(app.Id, Enum.GetName(typeof(AppActions), AppActions.Initiate), "Application Created");
 
@@ -744,11 +745,11 @@ namespace Bunkering.Access.Services
 		public async Task<ApiResponse> MyDesk()
 		{
 			var user = await _userManager.FindByEmailAsync(User);
-			var apps = await _unitOfWork.Application.Find(x => x.CurrentDeskId.Equals(user.Id), "Facility.FacilityType,Facility.LGA.State,ApplicationType,WorkFlow");
+			var apps = await _unitOfWork.Application.Find(x => x.CurrentDeskId.Equals(user.Id), "User.Company,Facility.FacilityType,Facility.LGA.State,ApplicationType,WorkFlow");
 			if (await _userManager.IsInRoleAsync(user, "FAD"))
-				apps = await _unitOfWork.Application.Find(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing)), "Facility.FacilityType,Facility.LGA.State,ApplicationType,WorkFlow");
+				apps = await _unitOfWork.Application.Find(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing)), "User.Company,Facility.FacilityType,Facility.LGA.State,ApplicationType,WorkFlow");
 			else if (await _userManager.IsInRoleAsync(user, "Company"))
-				apps = await _unitOfWork.Application.Find(x => x.UserId.Equals(user.Id), "Facility.FacilityType,Facility.LGA.State,ApplicationType,WorkFlow");
+				apps = await _unitOfWork.Application.Find(x => x.UserId.Equals(user.Id), "User.Company,Facility.FacilityType,Facility.LGA.State,ApplicationType,WorkFlow");
 			return new ApiResponse
 			{
 				Message = "Applications fetched successfully",
