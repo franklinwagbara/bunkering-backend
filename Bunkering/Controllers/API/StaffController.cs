@@ -88,13 +88,10 @@ namespace Bunkering.Controllers.API
 		/// <response code="401">Unauthorized user </response>
 		/// <response code="400">Internal server error - bad request </response>
 		/// 
-
-
-
-
 		[Route("add-user")]
 		[HttpPost]
 		public async Task<IActionResult> AddUsers(UserViewModel model) => Response(await _staffService.Create(model));
+
 
 		/// <summary>
 		/// This endpoint is used to edit user
@@ -113,5 +110,25 @@ namespace Bunkering.Controllers.API
 		[Route("edit-user")]
 		[HttpPost]
 		public async Task<IActionResult> Edit(UserViewModel model) => Response(await _staffService.Edit(model));
+
+
+		/// <summary>
+		/// This endpoint is used to Deactivate a user
+		/// </summary>
+		/// <returns>Returns a success message or otherwise</returns>
+		/// <remarks>
+		/// 
+		/// Sample Request
+		/// POST: api/staff/deactivate-user
+		/// 
+		/// </remarks>
+		/// <response code="200">Returns success message </response>
+		/// <response code="404">Returns not found </response>
+		/// <response code="401">Unauthorized user </response>
+		/// <response code="400">Internal server error - bad request </response>
+		[Route("Delete-User")]
+		[HttpDelete]
+
+		public async Task<IActionResult> DeleteStaff(string id) => Response(await _staffService.DeleteUser(id));
 	}
 }
