@@ -11,5 +11,6 @@ namespace Bunkering.Core.Data
 		public string TargetRole { get; set; }
 		public string Rate { get; set; }
 		public string Status { get; set; }
+		public bool IsArchived { get; set; }
 	}
 }
