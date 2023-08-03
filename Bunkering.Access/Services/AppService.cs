@@ -374,7 +374,7 @@ namespace Bunkering.Access.Services
 						Success = true,
 						Data = new
 						{
-							FacilityType = fee.FacilityType.Name,
+							FacilityType = app.Facility.FacilityType.Name,
 							APplicationType = app.ApplicationType.Name,
 							fee.AdministrativeFee,
 							fee.AccreditationFee,
