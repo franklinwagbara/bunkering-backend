@@ -333,7 +333,7 @@ namespace Bunkering.Access.Services
 				try
 				{
 					var user = await _userManager.FindByEmailAsync(User);
-					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(appId), "ApplicationType,Facility.FacilityType,Payments");
+					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "ApplicationType,Facility.FacilityType,Payments");
 					var fee = await _unitOfWork.AppFee.FirstOrDefaultAsync(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId) && x.FacilityTypeId.Equals(app.Facility.FacilityTypeId));
 					var total = fee.AdministrativeFee + fee.VesselLicenseFee + fee.ApplicationFee + fee.InspectionFee + fee.AccreditationFee;
 					var payment = await _unitOfWork.Payment.FirstOrDefaultAsync(x => x.ApplicationId.Equals(id));
