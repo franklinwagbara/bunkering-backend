@@ -59,7 +59,7 @@ namespace Bunkering.Access.Services
 
                 if (currentUser != null)
                 {
-                    wkflow = await GetWorkFlow(action, currentuserRoles, app.Facility.FacilityTypeId);
+                    wkflow = await GetWorkFlow(action, currentuserRoles, app.Facility.FacilityTypeId, app.ApplicationTypeId);
                     if(wkflow != null) //get next processing staff
                     {
                         if (action.ToLower().Equals("reject") && currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("fad"))
@@ -141,10 +141,11 @@ namespace Bunkering.Access.Services
             return (res, nextprocessingofficer.Id);
         }
 
-        public async Task<WorkFlow> GetWorkFlow(string action, string currentuserrole, int factypeid) => await _unitOfWork.Workflow.FirstOrDefaultAsync(x
+        public async Task<WorkFlow> GetWorkFlow(string action, string currentuserrole, int factypeid, int apptypeid)
+            => await _unitOfWork.Workflow.FirstOrDefaultAsync(x
                     => x.Action.ToLower().Trim().Equals(action.ToLower().Trim())
                     && currentuserrole.Equals(x.TriggeredByRole)
-                    && x.FacilityTypeId == factypeid);
+                    && x.FacilityTypeId == factypeid && x.ApplicationTypeId == apptypeid);
 
         public async Task<bool> SaveHistory(string action, int appid, WorkFlow flow, ApplicationUser user, ApplicationUser nextUser, string comment)
         {
