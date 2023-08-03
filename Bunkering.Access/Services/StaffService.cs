@@ -222,6 +222,36 @@ namespace Bunkering.Access.Services
 			return result;
 		}
 
+		public async Task<ApiResponse> DeleteStaff(int id)
+		{
+			var deactive = await _userManager.Users.FirstOrDefaultAsync(s => s.Id.Equals(id));
+			if (deactive != null)
+			{
+				if (!deactive.IsDeleted)
+				{
+					deactive.IsDeleted = true;
+					await _userManager.UpdateAsync(deactive);
+
+					return new ApiResponse
+					{
+						Data = deactive,
+						Message = "User has been deleted",
+						StatusCode = HttpStatusCode.OK,
+						Success = true
+					};
+				}
+				return new ApiResponse
+				{
+					Data = deactive,
+					Message = "User is already deleted",
+					StatusCode = HttpStatusCode.OK,
+					Success = true
+				};
+			}
+
+
+		}
+
 
 
 
