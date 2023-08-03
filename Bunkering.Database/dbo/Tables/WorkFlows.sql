@@ -7,8 +7,11 @@
     [TriggeredByRole]   NVARCHAR (MAX) NOT NULL,
     [Status]            NVARCHAR (MAX) NOT NULL,
     [ApplicationTypeId] INT            NULL,
+    [IsArchived]        BIT            CONSTRAINT [DF_WorkFlows_IsArchived] DEFAULT ((0)) NOT NULL,
     CONSTRAINT [PK_WorkFlows] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 
