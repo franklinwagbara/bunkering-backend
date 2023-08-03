@@ -43,6 +43,7 @@ namespace Bunkering.Access.Services
 				var flows = new List<WorkflowviewModel>();
 				var roles = await _role.Roles.ToListAsync();
 				var apptyeps = await _unitOfWork.ApplicationType.GetAll();
+				var facTypes = await _unitOfWork.FacilityType.GetAll();
 				processes.ForEach(r =>
 				{
 					var trole = roles.FirstOrDefault(x => x.Id.Equals(r.TriggeredByRole));
@@ -51,7 +52,8 @@ namespace Bunkering.Access.Services
 
 					flow.TriggeredByRole = trole.Name;
 					flow.TargetRole = rrole.Name;
-					flow.ApplicationType = r.ApplicationTypeId != null ? apptyeps.FirstOrDefault(x => x.Id.Equals(r.ApplicationTypeId)).Name : "N?A";
+					flow.ApplicationType = r.ApplicationTypeId != null ? apptyeps.FirstOrDefault(x => x.Id.Equals(r.ApplicationTypeId))?.Name : "N/A";
+					flow.FacilityType = facTypes.FirstOrDefault(x => x.Id.Equals(r.FacilityTypeId))?.Name;
 					flows.Add(flow);
 				});
 
