@@ -221,7 +221,7 @@ namespace Bunkering.Access.Services
 			};
 			return result;
 		}
-
+		//test
 		public async Task<ApiResponse> DeleteUser(string id)
 		{
 			var deactive = await _userManager.Users.FirstOrDefaultAsync(s => s.Id.Equals(id));
