@@ -222,7 +222,7 @@ namespace Bunkering.Access.Services
 			return result;
 		}
 
-		public async Task<ApiResponse> DeleteStaff(int id)
+		public async Task<ApiResponse> DeleteUser(string id)
 		{
 			var deactive = await _userManager.Users.FirstOrDefaultAsync(s => s.Id.Equals(id));
 			if (deactive != null)
@@ -232,7 +232,7 @@ namespace Bunkering.Access.Services
 					deactive.IsDeleted = true;
 					await _userManager.UpdateAsync(deactive);
 
-					return new ApiResponse
+					_response = new ApiResponse
 					{
 						Data = deactive,
 						Message = "User has been deleted",
@@ -240,7 +240,7 @@ namespace Bunkering.Access.Services
 						Success = true
 					};
 				}
-				return new ApiResponse
+				_response = new ApiResponse
 				{
 					Data = deactive,
 					Message = "User is already deleted",
@@ -249,13 +249,8 @@ namespace Bunkering.Access.Services
 				};
 			}
 
-
+			return _response;
 		}
-
-
-
-
-
 
 	}
 }

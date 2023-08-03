@@ -798,6 +798,22 @@
             <response code="401">Unauthorized user </response>
             <response code="400">Internal server error - bad request </response>
         </member>
+        <member name="M:Bunkering.Controllers.API.StaffController.DeleteStaff(System.String)">
+            <summary>
+            This endpoint is used to Deactivate a user
+            </summary>
+            <returns>Returns a success message or otherwise</returns>
+            <remarks>
+            
+            Sample Request
+            POST: api/staff/deactivate-user
+            
+            </remarks>
+            <response code="200">Returns success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
         <member name="T:Bunkering.Migrations.initial">
             <inheritdoc />
         </member>
