@@ -131,7 +131,10 @@ namespace Bunkering.Access.Services
                         Company = company,
                         RegisteredAddress = companyAdd,
                         Nations = nations
-                    }
+                    },
+                    Success = true,
+                    Message = "Company profile found",
+                    StatusCode = HttpStatusCode.OK
                 };
             }
             catch(Exception ex)

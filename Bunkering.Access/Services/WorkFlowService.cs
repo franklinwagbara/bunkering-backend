@@ -49,88 +49,92 @@ namespace Bunkering.Access.Services
             try
             {
                 var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == appid, "User,Facility.FacilityType,Payments");
-                currUserId = string.IsNullOrEmpty(currUserId) ? app.CurrentDeskId : currUserId;
-                var currentUser = _userManager.Users
-                    .Include(x => x.Company)
-                    .Include(ur => ur.UserRoles)
-                    .ThenInclude(r => r.Role)
-                    .FirstOrDefault(x => x.Id.Equals(currUserId));
-                var currentuserRoles = currentUser.UserRoles.Where(x => !x.Role.Name.Equals("Staff")).FirstOrDefault().Role.Id;
-
-                if (currentUser != null)
+                if(app != null)
                 {
-                    wkflow = await GetWorkFlow(action, currentuserRoles, app.Facility.FacilityTypeId);
-                    if(wkflow != null) //get next processing staff
-                    {
-                        if (action.ToLower().Equals("reject") && currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("fad"))
-                            nextprocessingofficer = app.User;
-                        else if (action.ToLower().Equals("approve") && currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("fad"))
-                            nextprocessingofficer = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).FirstOrDefault(x => x.Id.Equals(app.CurrentDeskId));
-                        else
-                            nextprocessingofficer = await GetNextStaff(appid, action, wkflow, currentUser, delUserId);
-                    }
-                    if (nextprocessingofficer != null)
-                    {
-                        //update application
-                        app.CurrentDeskId = nextprocessingofficer.Id;
-                        app.Status = wkflow.Status;
-                        app.FlowId = wkflow.Id;
-                        app.ModifiedDate = DateTime.Now.AddHours(1);
 
-                        if (action.Equals(Enum.GetName(typeof(AppActions), AppActions.Submit)))
+                    currUserId = string.IsNullOrEmpty(currUserId) ? app.CurrentDeskId : currUserId;
+                    var currentUser = _userManager.Users
+                        .Include(x => x.Company)
+                        .Include(ur => ur.UserRoles)
+                        .ThenInclude(r => r.Role)
+                        .FirstOrDefault(x => x.Id.Equals(currUserId));
+                    var currentuserRoles = currentUser.UserRoles.Where(x => !x.Role.Name.Equals("Staff")).FirstOrDefault().Role.Id;
+
+                    if (currentUser != null)
+                    {
+                        wkflow = await GetWorkFlow(action, currentuserRoles, app.Facility.FacilityTypeId, app.ApplicationTypeId);
+                        if (wkflow != null) //get next processing staff
                         {
-                            app.SubmittedDate = DateTime.Now.AddHours(1);
-                            var fadusers = await _userManager.GetUsersInRoleAsync("FAD");
-                            if(fadusers.Count > 0)
+                            if (action.ToLower().Equals("reject") && currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("fad"))
+                                nextprocessingofficer = app.User;
+                            else if (action.ToLower().Equals("approve") && currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("fad"))
+                                nextprocessingofficer = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).FirstOrDefault(x => x.Id.Equals(app.CurrentDeskId));
+                            else
+                                nextprocessingofficer = await GetNextStaff(appid, action, wkflow, currentUser, delUserId);
+                        }
+                        if (nextprocessingofficer != null)
+                        {
+                            //update application
+                            app.CurrentDeskId = nextprocessingofficer.Id;
+                            app.Status = wkflow.Status;
+                            app.FlowId = wkflow.Id;
+                            app.ModifiedDate = DateTime.Now.AddHours(1);
+
+                            if (action.Equals(Enum.GetName(typeof(AppActions), AppActions.Submit)))
                             {
-                                var fadStaff = fadusers.Where(x => x.IsActive).OrderBy(x => x.LastJobDate).FirstOrDefault();
-                                if (fadStaff != null)
+                                app.SubmittedDate = DateTime.Now.AddHours(1);
+                                var fadusers = await _userManager.GetUsersInRoleAsync("FAD");
+                                if (fadusers.Count > 0)
                                 {
-                                    app.FADStaffId = fadStaff.Id;
-                                    fadStaff.LastJobDate = DateTime.UtcNow.AddHours(1);
-                                    await _userManager.UpdateAsync(fadStaff);
+                                    var fadStaff = fadusers.Where(x => x.IsActive).OrderBy(x => x.LastJobDate).FirstOrDefault();
+                                    if (fadStaff != null)
+                                    {
+                                        app.FADStaffId = fadStaff.Id;
+                                        fadStaff.LastJobDate = DateTime.UtcNow.AddHours(1);
+                                        await _userManager.UpdateAsync(fadStaff);
+                                    }
                                 }
                             }
-                        }
-                        //else if(action.ToLower().Equals("resubmit") && !app.FADApproved)
-                        //{
-                        //    var prevFadSTaff = await _unitOfWork.ApplicationHistory.Find(x => x.Action.ToLower().Equals())
-                        //}
+                            //else if(action.ToLower().Equals("resubmit") && !app.FADApproved)
+                            //{
+                            //    var prevFadSTaff = await _unitOfWork.ApplicationHistory.Find(x => x.Action.ToLower().Equals())
+                            //}
 
-                        //on approval by FAD or Bunkering Reviewer
-                        if (action.Equals(Enum.GetName(typeof(AppActions), AppActions.Approve)))
-                        {
-                            if (currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("fad"))
+                            //on approval by FAD or Bunkering Reviewer
+                            if (action.Equals(Enum.GetName(typeof(AppActions), AppActions.Approve)))
                             {
-                                var payment = await _unitOfWork.Payment.FirstOrDefaultAsync(x => x.ApplicationId == appid);
-                                if (payment != null)
+                                if (currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("fad"))
                                 {
-                                    payment.Status = Enum.GetName(typeof(AppStatus), AppStatus.PaymentCompleted);
-                                    payment.TransactionDate = DateTime.UtcNow.AddHours(1);
+                                    var payment = await _unitOfWork.Payment.FirstOrDefaultAsync(x => x.ApplicationId == appid);
+                                    if (payment != null)
+                                    {
+                                        payment.Status = Enum.GetName(typeof(AppStatus), AppStatus.PaymentCompleted);
+                                        payment.TransactionDate = DateTime.UtcNow.AddHours(1);
+                                    }
+                                    app.FADApproved = true;
                                 }
-                                app.FADApproved = true;
+                                if (currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("reviewer") && !app.FADApproved)
+                                    return (false, string.Empty);
                             }
-                            if(currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("reviewer") && !app.FADApproved)
-                                return (false, string.Empty);
-                        }
 
-                        //await _unitOfWork.Application.Update(app);
-                        await _unitOfWork.SaveChangesAsync(currentUser.Id);
-                        nextprocessingofficer.LastJobDate = DateTime.UtcNow.AddHours(1);
-                        await _userManager.UpdateAsync(nextprocessingofficer);
-                        //save action to history
-                        await SaveHistory(action, appid, wkflow, currentUser, nextprocessingofficer, comment);
-                        res = true;
+                            //await _unitOfWork.Application.Update(app);
+                            await _unitOfWork.SaveChangesAsync(currentUser.Id);
+                            nextprocessingofficer.LastJobDate = DateTime.UtcNow.AddHours(1);
+                            await _userManager.UpdateAsync(nextprocessingofficer);
+                            //save action to history
+                            await SaveHistory(action, appid, wkflow, currentUser, nextprocessingofficer, comment);
+                            res = true;
 
-                        //Generate permit number on final approval
-                        if (wkflow.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Completed)))
-                        {
-                            var permit = await GeneratePermit(appid, currentUser.Id);
-                            if (permit.Item1)
-                                comment = $"Application with reference {app.Reference} has been approved and permit {permit.Item2} has been generated successfully";
+                            //Generate permit number on final approval
+                            if (wkflow.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Completed)))
+                            {
+                                var permit = await GeneratePermit(appid, currentUser.Id);
+                                if (permit.Item1)
+                                    comment = $"Application with reference {app.Reference} has been approved and permit {permit.Item2} has been generated successfully";
+                            }
+                            //send and save notification
+                            await SendNotification(app, action, nextprocessingofficer, comment);
                         }
-                        //send and save notification
-                        await SendNotification(app, action, nextprocessingofficer, comment);
                     }
                 }
             }
@@ -141,10 +145,11 @@ namespace Bunkering.Access.Services
             return (res, nextprocessingofficer.Id);
         }
 
-        public async Task<WorkFlow> GetWorkFlow(string action, string currentuserrole, int factypeid) => await _unitOfWork.Workflow.FirstOrDefaultAsync(x
+        public async Task<WorkFlow> GetWorkFlow(string action, string currentuserrole, int factypeid, int apptypeid)
+            => await _unitOfWork.Workflow.FirstOrDefaultAsync(x
                     => x.Action.ToLower().Trim().Equals(action.ToLower().Trim())
                     && currentuserrole.Equals(x.TriggeredByRole)
-                    && x.FacilityTypeId == factypeid);
+                    && x.FacilityTypeId == factypeid && x.ApplicationTypeId == apptypeid);
 
         public async Task<bool> SaveHistory(string action, int appid, WorkFlow flow, ApplicationUser user, ApplicationUser nextUser, string comment)
         {

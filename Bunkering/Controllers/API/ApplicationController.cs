@@ -71,7 +71,7 @@ namespace Bunkering.Controllers.API
 		[Produces("application/json")]
 		[Route("get-tanks-by-appid")]
 		[HttpGet]
-		public async Task<IActionResult> AddTanks(string id) => Response(await _appService.GetTanksByAppId(id));
+		public async Task<IActionResult> AddTanks(int id) => Response(await _appService.GetTanksByAppId(id));
 
 		/// <summary>
 		/// This endpoint returns a model of tanks for the application using the application id
