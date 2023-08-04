@@ -492,9 +492,14 @@ namespace Bunkering.Access.Services
 						Data = new
 						{
 							Docs = docList,
-							CompanyElpsId = app.User.ElpsId,
-							FacilityElpsId = app.Facility.ElpsId
-						}
+							ApiData = new
+							{
+                                CompanyElpsId = app.User.ElpsId,
+                                FacilityElpsId = app.Facility.ElpsId,
+                                ApiEmail = _setting.AppEmail,
+								ApiHash = $"{_setting.AppEmail}{_setting.AppId}".GenerateSha512()
+                            }
+                        }
 					};
 				}
 				else
