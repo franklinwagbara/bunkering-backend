@@ -61,7 +61,7 @@ namespace Bunkering.Access.Services
 						TotalLicenses = permits.Count(),
 						TLicensedfacs = facilities.Count(x => x.IsLicensed),
 						TValidLicense = permits.Count(x => x.ExpireDate > DateTime.UtcNow.AddHours(1)),
-						TAmount = payments.Sum(x => x.Amount),
+						TAmount = payments.Where(x => x.Status.ToLower().Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentCompleted))).Sum(x => x.Amount),
 						TProcessing = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))),
 						TApproved = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Completed))),
 						TRejected = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Rejected))),

@@ -492,7 +492,7 @@ namespace Bunkering.Access.Services
 						Success = true,
 						Data = new
 						{
-							Docs = docList.Stringify(),
+							Docs = docList,
 							CompanyElpsId = app.User.ElpsId,
 							FacilityElpsId = app.Facility.ElpsId
 						}
@@ -513,14 +513,6 @@ namespace Bunkering.Access.Services
 					StatusCode = HttpStatusCode.NotFound,
 					Success = false
 				};
-			//}
-			//else
-			//	_response = new ApiResponse
-			//	{
-			//		Message = "ApplicationID invacannot be emptylid",
-			//		StatusCode = HttpStatusCode.NotFound,
-			//		Success = false
-			//	};
 
 			return _response;
 		}
