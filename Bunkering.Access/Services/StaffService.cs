@@ -39,6 +39,7 @@ namespace Bunkering.Access.Services
 		{
 			var user = await _userManager.FindByEmailAsync(User);
 			var allApps = await _unitOfWork.Application.GetAll();
+
 			var apps = await _userManager.IsInRoleAsync(user, "FAD")
 				? (allApps.Where(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))))
 				: (allApps.Where(x => x.CurrentDeskId.Equals(user.Id)));

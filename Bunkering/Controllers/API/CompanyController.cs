@@ -12,11 +12,13 @@ namespace Bunkering.Controllers.API
 	public class CompanyController : ResponseController
 	{
 		private readonly CompanyService _companySrevice;
+		private readonly MessageService _messageService;
 
 		public CompanyController(
-			CompanyService companyService)
+			CompanyService companyService,MessageService messageService)
 		{
 			_companySrevice = companyService;
+			_messageService=messageService;
 		}
 
 		/// <summary>
@@ -88,5 +90,110 @@ namespace Bunkering.Controllers.API
 		[HttpPost]
 		public async Task<IActionResult> UpdateProfile(CompanyInformation model, string oldemail) => Response(await _companySrevice.UpdateProfile(model, oldemail));
 
-	}
+
+
+
+
+        /// <summary>
+        /// This endpoint is used to send message info
+        /// </summary>
+        /// <returns>Returns a success message or rotherwise</returns>
+        /// <remarks>
+        /// 
+        /// Sample Request
+        /// GET: api/company/CreateMessage
+        /// 
+        /// </remarks>
+        /// <param name="model">This is the model of the send message</param>
+        /// <response code="200">Returns a summary of the message </response>
+        /// <response code="404">Returns not found </response>
+        /// <response code="401">Unauthorized user </response>
+        /// <response code="400">Internal server error - bad request </response>
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 405)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        [Route("CreateMessage")]
+        [HttpPost]
+        public async Task<IActionResult> CreateMessage(MessageModel model) => Response(await _messageService.CreateMessageAsync(model));
+
+
+        /// <summary>
+        /// This endpoint is used to get all message 
+        /// </summary>
+        /// <returns>Returns a success message or rotherwise</returns>
+        /// <remarks>
+        /// 
+        /// Sample Request
+        /// GET: api/company/GetAllMessage
+        /// 
+        /// </remarks>
+        /// <param name="model">This is the model of the get all message</param>
+        /// <response code="200">Returns a summary of the message </response>
+        /// <response code="404">Returns not found </response>
+        /// <response code="401">Unauthorized user </response>
+        /// <response code="400">Internal server error - bad request </response>
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 405)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        [Route("GetAllMessage")]
+        [HttpGet]
+        public async Task<IActionResult> GetMessages() => Response(await _messageService.GetAllMessages());
+
+
+
+
+        /// <summary>
+        /// This endpoint is used to get single message 
+        /// </summary>
+        /// <returns>Returns a success message or rotherwise</returns>
+        /// <remarks>
+        /// 
+        /// Sample Request
+        /// GET: api/company/GetMessage
+        /// 
+        /// </remarks>
+        /// <param name="model">This is the model of the get single message</param>
+        /// <response code="200">Returns a summary of the message </response>
+        /// <response code="404">Returns not found </response>
+        /// <response code="401">Unauthorized user </response>
+        /// <response code="400">Internal server error - bad request </response>
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 405)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        [Route("GetMessageById")]
+        [HttpGet]
+        public async Task<IActionResult> GetMessageById(int id) => Response(await _messageService.GetMessageById(id));
+
+
+
+
+        /// <summary>
+        /// This endpoint is used to delete message 
+        /// </summary>
+        /// <returns>Returns a success message or rotherwise</returns>
+        /// <remarks>
+        /// 
+        /// Sample Request
+        /// GET: api/company/DeleteMessage
+        /// 
+        /// </remarks>
+        /// <param name="model">This is the model of the delete message</param>
+        /// <response code="200">Returns a summary of the message </response>
+        /// <response code="404">Returns not found </response>
+        /// <response code="401">Unauthorized user </response>
+        /// <response code="400">Internal server error - bad request </response>
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 405)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        [Route("DeleteMessage")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteMessage(int id) => Response(await _messageService.DeleteMessage(id));
+
+
+
+    }
 }
