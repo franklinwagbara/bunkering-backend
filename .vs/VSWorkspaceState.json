@@ -1,11 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Bunkering",
     "\\Bunkering.Access",
-    "\\Bunkering\\Controllers",
-    "\\Bunkering\\Controllers\\API"
+    "\\Bunkering.Access\\Services"
   ],
-  "SelectedNode": "\\Bunkering\\Controllers\\API\\CompanyController.cs",
+  "SelectedNode": "\\Bunkering.Access\\Services\\CompanyService.cs",
   "PreviewInSolutionExplorer": false
 }

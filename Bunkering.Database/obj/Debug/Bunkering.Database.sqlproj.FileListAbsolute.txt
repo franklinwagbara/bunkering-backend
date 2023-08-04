@@ -1,13 +1,3 @@
-C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering.Database\bin\Debug\Bunkering.Database.dacpac
-C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering.Database\bin\Debug\Bunkering.Database.dll
-C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering.Database\bin\Debug\Bunkering.Database.pdb
-C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering.Database\obj\Debug\Bunkering.Database.sqlproj.AssemblyReference.cache
-C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering.Database\obj\Debug\Model.xml
-C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering.Database\obj\Debug\refactor.xml
-C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering.Database\obj\Debug\postdeploy.sql
-C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering.Database\obj\Debug\predeploy.sql
-C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering.Database\obj\Debug\Bunkering.Database.dll
-C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering.Database\obj\Debug\Bunkering.Database.pdb
 C:\Users\pc\Documents\GitHub\BunkeringBEnd\Bunkering.Database\bin\Debug\Bunkering.Database.dacpac
 C:\Users\pc\Documents\GitHub\BunkeringBEnd\Bunkering.Database\bin\Debug\Bunkering.Database.dll
 C:\Users\pc\Documents\GitHub\BunkeringBEnd\Bunkering.Database\bin\Debug\Bunkering.Database.pdb
