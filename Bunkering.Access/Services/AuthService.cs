@@ -213,7 +213,8 @@ namespace Bunkering.Access.Services
 				Subject = new ClaimsIdentity(new Claim[]
 				{
 					new Claim(ClaimTypes.Email, user.Email),
-					new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
+                    new Claim(ClaimTypes.PrimarySid, user.Id),
+                    new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
 				}),
 				Expires = DateTime.UtcNow.AddDays(1),
 				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)

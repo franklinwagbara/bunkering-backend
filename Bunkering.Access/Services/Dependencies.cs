@@ -19,6 +19,7 @@ namespace Bunkering.Access.Services
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<WorkFlowService>();
             services.AddScoped<AppService>();
+            services.AddScoped<MessageService>();
             services.AddScoped<ScheduleService>();
             services.AddScoped<LicenseService>();
             services.AddScoped<CompanyService>();
