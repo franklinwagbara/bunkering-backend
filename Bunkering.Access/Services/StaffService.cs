@@ -19,36 +19,32 @@ namespace Bunkering.Access.Services
 		private readonly IHttpContextAccessor _contextAccessor;
 		private readonly IElps _elps;
 		private string User;
-        private readonly MessageService _messageService;
-
-        ApiResponse _response;
+		ApiResponse _response;
 
 		public StaffService(
 			IUnitOfWork unitOfWork,
 			UserManager<ApplicationUser> userManager,
 			RoleManager<ApplicationRole> roleManager,
-			IHttpContextAccessor contextAccessor, IElps elps, MessageService messageService)
+			IHttpContextAccessor contextAccessor, IElps elps)
 		{
 			_unitOfWork = unitOfWork;
 			_userManager = userManager;
 			_contextAccessor = contextAccessor;
 			_roleManager = roleManager;
 			_elps = elps;
-			_messageService = messageService;
 			User = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
 		}
 
 		public async Task<ApiResponse> Dashboard()
 		{
 			var user = await _userManager.FindByEmailAsync(User);
-			var allApps = await _unitOfWork.Application.GetAll();
-			var message = _messageService.GetAllMessages();
+			var allApps = await _unitOfWork.Application.GetAll("Payments");
 			var apps = await _userManager.IsInRoleAsync(user, "FAD")
 				? (allApps.Where(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))))
 				: (allApps.Where(x => x.CurrentDeskId.Equals(user.Id)));
 			var permits = await _unitOfWork.Permit.GetAll();
 			var facilities = await _unitOfWork.Facility.GetAll("FacilityType");
-			var payments = await _unitOfWork.Payment.GetAll();
+			var payments = await _unitOfWork.Payment.GetAll("Application");
 
 			if (user != null)
 				_response = new ApiResponse
@@ -65,11 +61,11 @@ namespace Bunkering.Access.Services
 						TotalLicenses = permits.Count(),
 						TLicensedfacs = facilities.Count(x => x.IsLicensed),
 						TValidLicense = permits.Count(x => x.ExpireDate > DateTime.UtcNow.AddHours(1)),
-						TAmount = payments.Sum(x => x.Amount),
+						TAmount = payments.Where(x => x.Status.ToLower().Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentCompleted))).Sum(x => x.Amount),
 						TProcessing = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))),
 						TApproved = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Completed))),
 						TRejected = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Rejected))),
-						Message = message,
+
 					}
 				};
 			else
@@ -225,11 +221,36 @@ namespace Bunkering.Access.Services
 			};
 			return result;
 		}
+		//test
+		public async Task<ApiResponse> DeleteUser(string id)
+		{
+			var deactive = await _userManager.Users.FirstOrDefaultAsync(s => s.Id.Equals(id));
+			if (deactive != null)
+			{
+				if (!deactive.IsDeleted)
+				{
+					deactive.IsDeleted = true;
+					await _userManager.UpdateAsync(deactive);
 
+					_response = new ApiResponse
+					{
+						Data = deactive,
+						Message = "User has been deleted",
+						StatusCode = HttpStatusCode.OK,
+						Success = true
+					};
+				}
+				_response = new ApiResponse
+				{
+					Data = deactive,
+					Message = "User is already deleted",
+					StatusCode = HttpStatusCode.OK,
+					Success = true
+				};
+			}
 
-
-
-
+			return _response;
+		}
 
 	}
 }

@@ -2,7 +2,7 @@
 {
     public class TankViewModel
     {
-        public string ApplicationId { get; set; }
+        public int ApplicationId { get; set; }
         public int TankId { get; set; }
         public int FacilityId { get; set; }
         public string Name { get; set; }

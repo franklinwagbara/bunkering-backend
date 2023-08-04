@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 
 namespace Bunkering.Core.ViewModels
 {
-    public class MappingProfile : Profile
-    {
-        public MappingProfile()
-        {
-            CreateMap<ApplictionViewModel, Application>().ReverseMap();
-            CreateMap<TankViewModel, Tank>().ReverseMap();
-        }
-    }
+	public class MappingProfile : Profile
+	{
+		public MappingProfile()
+		{
+			CreateMap<ApplictionViewModel, Application>().ReverseMap();
+			CreateMap<TankViewModel, Tank>().ReverseMap();
+			CreateMap<WorkflowviewModel, WorkFlow>().ReverseMap();
+		}
+	}
 }

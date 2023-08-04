@@ -71,7 +71,7 @@ namespace Bunkering.Controllers.API
 		[Produces("application/json")]
 		[Route("get-tanks-by-appid")]
 		[HttpGet]
-		public async Task<IActionResult> AddTanks(string id) => Response(await _appService.GetTanksByAppId(id));
+		public async Task<IActionResult> AddTanks(int id) => Response(await _appService.GetTanksByAppId(id));
 
 		/// <summary>
 		/// This endpoint returns a model of tanks for the application using the application id
@@ -117,7 +117,7 @@ namespace Bunkering.Controllers.API
 		[ProducesResponseType(typeof(ApiResponse), 500)]
 		[Route("payment")]
 		[HttpGet]
-		public async Task<IActionResult> Payment(string id) => Response(await _appService.Payment(id));
+		public async Task<IActionResult> Payment(int id) => Response(await _appService.Payment(id));
 
 		/// <summary>
 		/// This endpoint is used to fetch documents required for an application
@@ -140,7 +140,7 @@ namespace Bunkering.Controllers.API
 		[ProducesResponseType(typeof(ApiResponse), 500)]
 		[Route("get-documents")]
 		[HttpGet]
-		public async Task<IActionResult> DocumentUpload(string id) => Response(await _appService.DocumentUpload(id));
+		public async Task<IActionResult> DocumentUpload(int id) => Response(await _appService.DocumentUpload(id));
 
 		/// <summary>
 		/// This endpoint is used to add documents required for an application
@@ -163,7 +163,7 @@ namespace Bunkering.Controllers.API
 		[ProducesResponseType(typeof(ApiResponse), 500)]
 		[Route("add-documents")]
 		[HttpGet]
-		public async Task<IActionResult> AddDocuments(string id) => Response(await _appService.AddDocuments(id));
+		public async Task<IActionResult> AddDocuments(int id) => Response(await _appService.AddDocuments(id));
 
 		/// <summary>
 		/// This endpoint is used to verify depot license
@@ -275,7 +275,7 @@ namespace Bunkering.Controllers.API
 		[ProducesResponseType(typeof(ApiResponse), 500)]
 		[Route("view-application")]
 		[HttpGet]
-		public async Task<IActionResult> ViewApplication(string id) => Response(await _appService.ViewApplication(id));
+		public async Task<IActionResult> ViewApplication(int id) => Response(await _appService.ViewApplication(id));
 
 		/// <summary>
 		/// This endpoint is used to approve or reject an application
@@ -300,7 +300,7 @@ namespace Bunkering.Controllers.API
 		[ProducesResponseType(typeof(ApiResponse), 500)]
 		[Route("process")]
 		[HttpPost]
-		public async Task<IActionResult> Process(string id, string act, string comment) => Response(await _appService.Process(id, act, comment));
+		public async Task<IActionResult> Process(int id, string act, string comment) => Response(await _appService.Process(id, act, comment));
 
 
 

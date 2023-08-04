@@ -78,7 +78,7 @@ namespace Bunkering.Access.DAL
                 foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                     query = query.Include(includeProperty);
 
-            return query.ToList();
+            return query;
         }
 
         public async Task<bool> Remove(T entity)

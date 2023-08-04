@@ -326,5 +326,19 @@ namespace Bunkering.Access.Services
 			};
 		}
 
+		public async Task<ApiResponse> GetProducts()
+		{
+			var products = await unitOfWork_.Product.GetAll();
+
+			return new ApiResponse
+			{
+				Data = products,
+				Message = "All Product Found",
+				StatusCode = HttpStatusCode.OK,
+				Success = true,
+			};
+
+		}
+
 	}
 }

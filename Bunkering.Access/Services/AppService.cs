@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bunkering.Access.DAL;
 using Bunkering.Access.IContracts;
 using Bunkering.Core.Data;
 using Bunkering.Core.Utils;
@@ -6,8 +7,10 @@ using Bunkering.Core.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
+using System.Drawing.Text;
 using System.Net;
 using System.Security.Claims;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -16,7 +19,6 @@ namespace Bunkering.Access.Services
 {
 	public class AppService
 	{
-		private int appId;
 		private readonly IElps _elps;
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly IUnitOfWork _unitOfWork;
@@ -28,6 +30,7 @@ namespace Bunkering.Access.Services
 		private readonly AppLogger _logger;
 		private readonly AppSetting _setting;
 		private readonly string directory = "Application";
+		private readonly IConfiguration _configuration;
 
 		public AppService(
 			UserManager<ApplicationUser> userManager,
@@ -37,7 +40,8 @@ namespace Bunkering.Access.Services
 			IElps elps,
 			IHttpContextAccessor httpContextAccessor,
 			AppLogger logger,
-			IOptions<AppSetting> setting)
+			IOptions<AppSetting> setting,
+			IConfiguration configuration)
 		{
 			_userManager = userManager;
 			_unitOfWork = unitOfWork;
@@ -48,6 +52,7 @@ namespace Bunkering.Access.Services
 			User = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
 			_logger = logger;
 			_setting = setting.Value;
+			_configuration = configuration;
 		}
 
 		private async Task<Facility> CreateFacility(ApplictionViewModel model, ApplicationUser user)
@@ -111,6 +116,7 @@ namespace Bunkering.Access.Services
 					{
 						Message = "There is an existing application for this facility, kindly go to My Application to complete processing",
 						StatusCode = HttpStatusCode.Found,
+						Success = false
 					};
 				else
 				{
@@ -128,14 +134,16 @@ namespace Bunkering.Access.Services
 					};
 					await _unitOfWork.Application.Add(app);
 					await _unitOfWork.SaveChangesAsync(app.UserId);
+					//save app tanks
+					var tank = await AppTanks(model.AppTanks, facility.Id, user.Id);
 
 					await _flow.AppWorkFlow(app.Id, Enum.GetName(typeof(AppActions), AppActions.Initiate), "Application Created");
 
 					_response = new ApiResponse
 					{
-						Message = "There is an existing application for this facility, kindly go to My Application to complete processing",
+						Message = "Application initiated successfully",
 						StatusCode = HttpStatusCode.OK,
-						Data = new { appId = $"{app.Id}".EncryptString() },
+						Data = new { appId = app.Id },
 						Success = true
 					};
 				}
@@ -152,86 +160,107 @@ namespace Bunkering.Access.Services
 			return _response;
 		}
 
-		public async Task<ApiResponse> GetTanksByAppId(string id)
+		//save tank information
+		private async Task<List<Tank>> AppTanks(List<TankViewModel> tank, int facilityId, string userid)
+		{
+			var tanks = await _unitOfWork.Tank.Find(x => x.FacilityId == facilityId);
+			if (tanks.Count() > 0)
+			{
+				await _unitOfWork.Tank.RemoveRange(tanks.ToList());
+				await _unitOfWork.SaveChangesAsync("");
+			}
+
+			var tankList = new List<Tank>();
+			tank.ForEach(x =>
+			{
+				tankList.Add(new Tank
+				{
+					Capacity = x.Capacity,
+					FacilityId = facilityId,
+					Name = x.Name,
+					ProductId = x.ProductId,
+				});
+			});
+
+			if (tankList.Count > 0)
+			{
+				await _unitOfWork.Tank.AddRange(tankList);
+				await _unitOfWork.SaveChangesAsync("");
+			}
+
+			return tankList;
+
+		}
+		public async Task<ApiResponse> GetTanksByAppId(int id)
 		{
 			List<TankViewModel> tankList = new List<TankViewModel>();
-			if (!string.IsNullOrEmpty(id))
+			
+			if (id > 0)
 			{
-				var appid = int.Parse(id.DecryptString());
-				if (appid > 0)
+				try
 				{
-					try
+					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "Facility.FacilityType");
+					if (app != null)
 					{
-						var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(appid), "Facility.FacilityType");
-						if (app != null)
+						if (app.Facility.FacilityType.Name.Equals("Fixed"))
 						{
-							if (app.Facility.FacilityType.Name.Equals("Fixed"))
+							var licenseResponse = (await _unitOfWork.ValidatiionResponse.Find(x => x.UserId.Equals(app.UserId))).OrderByDescending(x => x.Id).FirstOrDefault();
+							if (licenseResponse != null)
 							{
-								var licenseResponse = (await _unitOfWork.ValidatiionResponse.Find(x => x.UserId.Equals(app.UserId))).OrderByDescending(x => x.Id).FirstOrDefault();
-								if (licenseResponse != null)
+								var dic = licenseResponse.Response.Parse<Dictionary<string, object>>();
+								var tankObj = dic.GetValue("Tanks");
+								if (tankObj != null)
 								{
-									var dic = licenseResponse.Response.Parse<Dictionary<string, object>>();
-									var tankObj = dic.GetValue("Tanks");
-									if (tankObj != null)
-									{
-										var tanks = tankObj.Stringify().Parse<List<Dictionary<string, string>>>();
+									var tanks = tankObj.Stringify().Parse<List<Dictionary<string, string>>>();
 
-										foreach (var t in tanks)
+									foreach (var t in tanks)
+									{
+										tankList.Add(new TankViewModel
 										{
-											tankList.Add(new TankViewModel
-											{
-												Capacity = decimal.Parse(t.GetValue("Capacity")),
-												Name = t.GetValue("Name"),
-												ApplicationId = id,
-												FacilityId = app.FacilityId
-											});
-										}
+											Capacity = decimal.Parse(t.GetValue("Capacity")),
+											Name = t.GetValue("Name"),
+											ApplicationId = id,
+											FacilityId = app.FacilityId
+										});
 									}
 								}
 							}
-							else
-							{
-								var tanks = await _unitOfWork.Tank.Find(x => x.FacilityId.Equals(app.FacilityId));
-								if (tanks.Count() > 0)
-									tankList = _mapper.Map<List<TankViewModel>>(tanks);
-							}
-							_response = new ApiResponse
-							{
-								Message = "Success",
-								StatusCode = HttpStatusCode.OK,
-								Success = true,
-								Data = new
-								{
-									AppId = id,
-									Tanks = tankList.Stringify()
-								}
-							};
 						}
 						else
-							_response = new ApiResponse
-							{
-								Success = false,
-								StatusCode = HttpStatusCode.NotFound,
-								Message = "Application not found"
-							};
-					}
-					catch (Exception ex)
-					{
+						{
+							var tanks = await _unitOfWork.Tank.Find(x => x.FacilityId.Equals(app.FacilityId));
+							if (tanks.Count() > 0)
+								tankList = _mapper.Map<List<TankViewModel>>(tanks);
+						}
 						_response = new ApiResponse
 						{
-							Message = ex.Message,
-							StatusCode = HttpStatusCode.InternalServerError,
-							Success = false,
+							Message = "Success",
+							StatusCode = HttpStatusCode.OK,
+							Success = true,
+							Data = new
+							{
+								AppId = id,
+								Tanks = tankList.Stringify()
+							}
 						};
 					}
+					else
+						_response = new ApiResponse
+						{
+							Success = false,
+							StatusCode = HttpStatusCode.NotFound,
+							Message = "Application not found"
+						};
 				}
-				else
+				catch (Exception ex)
+				{
 					_response = new ApiResponse
 					{
+						Message = ex.Message,
+						StatusCode = HttpStatusCode.InternalServerError,
 						Success = false,
-						StatusCode = HttpStatusCode.BadRequest,
-						Message = "ApplicationID invalid"
 					};
+				}
 			}
 			else
 				_response = new ApiResponse
@@ -239,14 +268,14 @@ namespace Bunkering.Access.Services
 					Success = false,
 					StatusCode = HttpStatusCode.BadRequest,
 					Message = "ApplicationID invalid"
-				};
+				};		
 
 			return _response;
 		}
 
 		public async Task<ApiResponse> AddTanks(List<TankViewModel> model)
 		{
-			var appid = model != null && model.Count > 0 ? int.Parse(model.FirstOrDefault().ApplicationId.DecryptString()) : 0;
+			var appid = model != null && model.Count > 0 ? model.FirstOrDefault().ApplicationId : 0;
 			if (appid > 0)
 			{
 				try
@@ -255,30 +284,8 @@ namespace Bunkering.Access.Services
 					if (app != null)
 					{
 						var facid = model.FirstOrDefault().FacilityId;
-						var tanks = await _unitOfWork.Tank.Find(x => x.FacilityId == facid);
-						if (tanks.Count() > 0)
-						{
-							await _unitOfWork.Tank.RemoveRange(tanks.ToList());
-							await _unitOfWork.SaveChangesAsync(app.UserId);
-						}
-
-						var tankList = new List<Tank>();
-						model.ForEach(x =>
-						{
-							tankList.Add(new Tank
-							{
-								Capacity = x.Capacity,
-								FacilityId = facid,
-								Name = x.Name,
-								ProductId = x.ProductId,
-							});
-						});
-
+						var tankList = await AppTanks(model, facid, app.UserId);
 						if (tankList.Count > 0)
-						{
-							await _unitOfWork.Tank.AddRange(tankList);
-							await _unitOfWork.SaveChangesAsync(app.UserId);
-
 							_response = new ApiResponse
 							{
 								Success = true,
@@ -286,7 +293,6 @@ namespace Bunkering.Access.Services
 								StatusCode = HttpStatusCode.OK,
 								Data = model.FirstOrDefault().ApplicationId
 							};
-						}
 					}
 					else
 						_response = new ApiResponse
@@ -308,222 +314,201 @@ namespace Bunkering.Access.Services
 			return _response;
 		}
 
-		public async Task<ApiResponse> Payment(string id)
+		public async Task<ApiResponse> Payment(int id)
 		{
-			if (!string.IsNullOrEmpty(id))
+			if (id > 0)
 			{
-				appId = int.Parse(id.DecryptString());
-				if (appId > 0)
+				try
 				{
-					try
+					var user = await _userManager.FindByEmailAsync(User);
+					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "ApplicationType,Facility.FacilityType");
+					var fee = await _unitOfWork.AppFee.FirstOrDefaultAsync(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId) && x.FacilityTypeId.Equals(app.Facility.FacilityTypeId));
+					var total = fee.AdministrativeFee + fee.VesselLicenseFee + fee.ApplicationFee + fee.InspectionFee + fee.AccreditationFee;
+					var payment = await _unitOfWork.Payment.FirstOrDefaultAsync(x => x.ApplicationId.Equals(id));
+					if (payment == null)
 					{
-						var user = await _userManager.FindByEmailAsync(User);
-						var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(appId), "ApplicationType,Facility.FacilityType,Payments");
-						var fee = await _unitOfWork.AppFee.FirstOrDefaultAsync(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId) && x.FacilityTypeId.Equals(app.Facility.FacilityTypeId));
-						var total = fee.AdministrativeFee + fee.VesselLicenseFee + fee.ApplicationFee + fee.InspectionFee + fee.AccreditationFee;
-						var payment = await _unitOfWork.Payment.FirstOrDefaultAsync(x => x.ApplicationId.Equals(id));
-						if (payment == null)
+						await _unitOfWork.Payment.Add(new Payment
 						{
-							await _unitOfWork.Payment.Add(new Payment
-							{
-								Amount = total,
-								Account = "NMDPRA",
-								ApplicationId = appId,
-								AppReceiptId = "",
-								Arrears = 0,
-								BankCode = "000",
-								Description = $"Payment for Bunkering License ({app.Facility.FacilityType.Name})",
-								PaymentType = "USD",
-								RRR = "N/A",
-								Status = "Pending",
-								TransactionDate = DateTime.UtcNow.AddHours(1),
-								TxnMessage = "",
-								TransactionId = "",
-								RetryCount = 0,
-							});
-						}
-						else
-						{
-							payment.Amount = total;
-							payment.ApplicationId = appId;
-							payment.Description = $"Pyamnet for Bunkering License ({app.Facility.FacilityType.Name})";
-							payment.Status = "Pending";
-							payment.TransactionDate = DateTime.UtcNow.AddHours(1);
-						}
-						await _unitOfWork.SaveChangesAsync(user.Id);
+							Amount = total,
+							Account = "NMDPRA",
+							ApplicationId = id,
+							AppReceiptId = "Dollar Payment",
+							BankCode = "000",
+							Description = $"Payment for Bunkering License ({app.Facility.FacilityType.Name})",
+							PaymentType = "USD",
+							RRR = "N/A",
+							Status = "Pending",
+							TransactionDate = DateTime.UtcNow.AddHours(1),
+							TxnMessage = "Dollar payment",
+							TransactionId = "N/A",							
+						});
+					}
+					else
+					{
+						payment.Amount = total;
+						payment.ApplicationId = id;
+						payment.Description = $"Pyamnet for Bunkering License ({app.Facility.FacilityType.Name})";
+						payment.Status = "Pending";
+						payment.TransactionDate = DateTime.UtcNow.AddHours(1);
+						await _unitOfWork.Payment.Update(payment);
+					}
+					await _unitOfWork.SaveChangesAsync(user.Id);
 
-						_response = new ApiResponse
-						{
-							Message = "Payment generated for application successfully",
-							StatusCode = HttpStatusCode.OK,
-							Success = true,
-							Data = new
-							{
-								FacilityType = fee.FacilityType.Name,
-								APplicationType = app.ApplicationType.Name,
-								fee.AdministrativeFee,
-								fee.AccreditationFee,
-								fee.ApplicationFee,
-								fee.InspectionFee,
-								fee.VesselLicenseFee,
-								Total = total,
-							}
-						};
-					}
-					catch (Exception ex)
-					{
-						_response = new ApiResponse
-						{
-							Message = ex.Message,
-							StatusCode = HttpStatusCode.InternalServerError,
-							Success = false
-						};
-					}
-				}
-				else
 					_response = new ApiResponse
 					{
-						Success = false,
-						StatusCode = HttpStatusCode.BadRequest,
-						Message = "ApplicationID Invalid"
+						Message = "Payment generated for application successfully",
+						StatusCode = HttpStatusCode.OK,
+						Success = true,
+						Data = new
+						{
+							FacilityType = app.Facility.FacilityType.Name,
+							APplicationType = app.ApplicationType.Name,
+							fee.AdministrativeFee,
+							fee.AccreditationFee,
+							fee.ApplicationFee,
+							fee.InspectionFee,
+							fee.VesselLicenseFee,
+							Total = total,
+						}
 					};
+				}
+				catch (Exception ex)
+				{
+					_response = new ApiResponse
+					{
+						Message = ex.Message,
+						StatusCode = HttpStatusCode.InternalServerError,
+						Success = false
+					};
+				}
 			}
 			else
 				_response = new ApiResponse
 				{
 					Success = false,
-					StatusCode = HttpStatusCode.NotFound,
-					Message = "ApplicationID caanot be null"
+					StatusCode = HttpStatusCode.BadRequest,
+					Message = "ApplicationID Invalid"
 				};
+
 			return _response;
 		}
 
-		public async Task<ApiResponse> DocumentUpload(string id)
+		public async Task<ApiResponse> DocumentUpload(int id)
 		{
-			if (!string.IsNullOrEmpty(id))
+
+			if (id > 0)
 			{
-				appId = int.Parse(id.DecryptString());
-				if (appId > 0)
+				var docList = new List<SubmittedDocument>();
+				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == id, "User,Facility,ApplicationType");
+				if (app != null)
 				{
-					var docList = new List<SubmittedDocument>();
-					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == appId, "User,Facility,ApplicationType");
-					if (app != null)
+					var factypedocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.FacilityTypeId.Equals(app.Facility.FacilityTypeId) && x.ApplicationTypeId.Equals(app.ApplicationTypeId));
+					if (factypedocs != null && factypedocs.Count() > 0)
 					{
-						var factypedocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.FacilityTypeId.Equals(app.Facility.FacilityTypeId) && x.ApplicationTypeId.Equals(app.ApplicationTypeId));
-						if (factypedocs != null && factypedocs.Count() > 0)
+						var compdocs = _elps.GetCompanyDocuments(app.User.ElpsId, "company").Stringify().Parse<List<Document>>();
+						var facdocs = _elps.GetCompanyDocuments(app.Facility.ElpsId, "facility").Stringify().Parse<List<FacilityDocument>>();
+						var appdocs = await _unitOfWork.SubmittedDocument.Find(x => x.ApplicationId == id);
+
+						factypedocs.ToList().ForEach(x =>
 						{
-							var compdocs = _elps.GetCompanyDocuments(app.User.ElpsId, "company").Stringify().Parse<List<Document>>();
-							var facdocs = _elps.GetCompanyDocuments(app.Facility.ElpsId, "facility").Stringify().Parse<List<FacilityDocument>>();
-							var appdocs = await _unitOfWork.SubmittedDocument.Find(x => x.ApplicationId == appId);
-
-							factypedocs.ToList().ForEach(x =>
+							if (x.DocType.ToLower().Equals("company"))
 							{
-								if (x.DocType.ToLower().Equals("company"))
+								if (compdocs != null && compdocs.Count > 0)
 								{
-									if (compdocs != null && compdocs.Count > 0)
-									{
 
-										var doc = compdocs.FirstOrDefault(y => int.Parse(y.document_type_id) == x.DocumentTypeId);
-										if (doc != null)
+									var doc = compdocs.FirstOrDefault(y => int.Parse(y.document_type_id) == x.DocumentTypeId);
+									if (doc != null)
+									{
+										docList.Add(new SubmittedDocument
 										{
-											docList.Add(new SubmittedDocument
-											{
-												DocId = x.DocumentTypeId,
-												DocName = x.Name,
-												DocType = x.DocType,
-												FileId = doc.id,
-												DocSource = doc.source,
-												ApplicationId = appId
-											});
-										}
-										else
-										{
-											docList.Add(new SubmittedDocument
-											{
-												DocId = x.DocumentTypeId,
-												DocName = x.Name,
-												DocType = x.DocType,
-											});
-										}
+											DocId = x.DocumentTypeId,
+											DocName = x.Name,
+											DocType = x.DocType,
+											FileId = doc.id,
+											DocSource = doc.source,
+											ApplicationId = id
+										});
 									}
 									else
+									{
 										docList.Add(new SubmittedDocument
 										{
 											DocId = x.DocumentTypeId,
 											DocName = x.Name,
 											DocType = x.DocType,
 										});
+									}
 								}
 								else
-								{
-									if (facdocs != null && facdocs.Count > 0)
+									docList.Add(new SubmittedDocument
 									{
-										var doc = facdocs.FirstOrDefault(y => y.Document_Type_Id == x.DocumentTypeId);
-										if (doc != null)
+										DocId = x.DocumentTypeId,
+										DocName = x.Name,
+										DocType = x.DocType,
+									});
+							}
+							else
+							{
+								if (facdocs != null && facdocs.Count > 0)
+								{
+									var doc = facdocs.FirstOrDefault(y => y.Document_Type_Id == x.DocumentTypeId);
+									if (doc != null)
+									{
+										docList.Add(new SubmittedDocument
 										{
-											docList.Add(new SubmittedDocument
-											{
-												DocId = x.DocumentTypeId,
-												DocName = x.Name,
-												DocType = x.DocType,
-												FileId = doc.Id,
-												DocSource = doc.Source,
-												ApplicationId = appId
-											});
-										}
-										else
-										{
-											docList.Add(new SubmittedDocument
-											{
-												DocId = x.DocumentTypeId,
-												DocName = x.Name,
-												DocType = x.DocType,
-											});
-										}
+											DocId = x.DocumentTypeId,
+											DocName = x.Name,
+											DocType = x.DocType,
+											FileId = doc.Id,
+											DocSource = doc.Source,
+											ApplicationId = id
+										});
 									}
 									else
+									{
 										docList.Add(new SubmittedDocument
 										{
 											DocId = x.DocumentTypeId,
 											DocName = x.Name,
 											DocType = x.DocType,
 										});
+									}
 								}
-							});
-						}
-						_response = new ApiResponse
-						{
-							Message = "Facility Type Documents fetched",
-							StatusCode = HttpStatusCode.OK,
-							Success = true,
-							Data = new
-							{
-								Docs = docList.Stringify(),
-								CompanyElpsId = app.User.ElpsId,
-								FacilityElpsId = app.Facility.ElpsId
+								else
+									docList.Add(new SubmittedDocument
+									{
+										DocId = x.DocumentTypeId,
+										DocName = x.Name,
+										DocType = x.DocType,
+									});
 							}
-						};
+						});
 					}
-					else
-						_response = new ApiResponse
+					_response = new ApiResponse
+					{
+						Message = "Facility Type Documents fetched",
+						StatusCode = HttpStatusCode.OK,
+						Success = true,
+						Data = new
 						{
-							Message = "ApplicationID invalid",
-							StatusCode = HttpStatusCode.BadRequest,
-							Success = false
-						};
+							Docs = docList,
+							CompanyElpsId = app.User.ElpsId,
+							FacilityElpsId = app.Facility.ElpsId
+						}
+					};
 				}
 				else
 					_response = new ApiResponse
 					{
 						Message = "ApplicationID invalid",
-						StatusCode = HttpStatusCode.NotFound,
+						StatusCode = HttpStatusCode.BadRequest,
 						Success = false
 					};
 			}
 			else
 				_response = new ApiResponse
 				{
-					Message = "ApplicationID invacannot be emptylid",
+					Message = "ApplicationID invalid",
 					StatusCode = HttpStatusCode.NotFound,
 					Success = false
 				};
@@ -531,100 +516,90 @@ namespace Bunkering.Access.Services
 			return _response;
 		}
 
-		public async Task<ApiResponse> AddDocuments(string id)
+		public async Task<ApiResponse> AddDocuments(int id)
 		{
-			if (!string.IsNullOrEmpty(id))
+
+			if (id > 0)
 			{
-				appId = int.Parse(id.DecryptString());
-				if (appId > 0)
+				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == id, "Facility.FacilityType");
+				var user = await _userManager.FindByEmailAsync(User);
+				if (app != null)
 				{
-					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == appId, "Facility.FacilityType");
-					var user = await _userManager.FindByEmailAsync(User);
-					if (app != null)
+					var facTypeDocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.FacilityTypeId.Equals(app.Facility.FacilityTypeId) && x.ApplicationTypeId.Equals(app.ApplicationTypeId));
+
+					if (facTypeDocs.Count() > 0)
 					{
-						var facTypeDocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.FacilityTypeId.Equals(app.Facility.FacilityTypeId) && x.ApplicationTypeId.Equals(app.ApplicationTypeId));
+						var compdocs = (List<Document>)_elps.GetCompanyDocuments(user.ElpsId);
+						var facdocs = (List<FacilityDocument>)_elps.GetCompanyDocuments(app.Facility.ElpsId, "facility");
+						var docs = new List<SubmittedDocument>();
 
-						if (facTypeDocs.Count() > 0)
+						foreach (var item in facTypeDocs.ToList())
 						{
-							var compdocs = (List<Document>)_elps.GetCompanyDocuments(user.ElpsId);
-							var facdocs = (List<FacilityDocument>)_elps.GetCompanyDocuments(app.Facility.ElpsId, "facility");
-							var docs = new List<SubmittedDocument>();
-
-							foreach (var item in facTypeDocs.ToList())
+							if (item.DocType.ToLower().Equals("company"))
 							{
-								if (item.DocType.ToLower().Equals("company"))
-								{
-									var doc = compdocs.FirstOrDefault(x => int.Parse(x.document_type_id) == item.DocumentTypeId);
-									if (doc != null)
-										docs.Add(new SubmittedDocument
-										{
-											ApplicationId = app.Id,
-											DocId = item.DocumentTypeId,
-											DocName = item.Name,
-											DocSource = doc.source,
-											DocType = item.DocType,
-											FileId = doc.id,
-										});
-								}
-								else
-								{
-									var doc = facdocs.FirstOrDefault(x => x.Document_Type_Id == item.DocumentTypeId);
-									if (doc != null)
-										docs.Add(new SubmittedDocument
-										{
-											ApplicationId = app.Id,
-											DocId = item.DocumentTypeId,
-											DocName = item.Name,
-											DocSource = doc.Source,
-											DocType = item.DocType,
-											FileId = doc.Id,
-										});
-								}
+								var doc = compdocs.FirstOrDefault(x => int.Parse(x.document_type_id) == item.DocumentTypeId);
+								if (doc != null)
+									docs.Add(new SubmittedDocument
+									{
+										ApplicationId = app.Id,
+										DocId = item.DocumentTypeId,
+										DocName = item.Name,
+										DocSource = doc.source,
+										DocType = item.DocType,
+										FileId = doc.id,
+									});
 							}
-
-							if (docs.Count > 0)
+							else
 							{
-								var appdocs = (await _unitOfWork.SubmittedDocument.Find(x => x.ApplicationId.Equals(app.Id))).ToList();
-								if (appdocs.Count() > 0)
-									await _unitOfWork.SubmittedDocument.RemoveRange(appdocs);
-
-								await _unitOfWork.SubmittedDocument.AddRange(docs);
-								await _unitOfWork.SaveChangesAsync(user.Id);
+								var doc = facdocs.FirstOrDefault(x => x.Document_Type_Id == item.DocumentTypeId);
+								if (doc != null)
+									docs.Add(new SubmittedDocument
+									{
+										ApplicationId = app.Id,
+										DocId = item.DocumentTypeId,
+										DocName = item.Name,
+										DocSource = doc.Source,
+										DocType = item.DocType,
+										FileId = doc.Id,
+									});
 							}
 						}
 
-						var submit = app.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentRejected)) || app.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Rejected))
-							? await _flow.AppWorkFlow(appId, Enum.GetName(typeof(AppActions), AppActions.Resubmit), "Application re-submitted")
-							: await _flow.AppWorkFlow(appId, Enum.GetName(typeof(AppActions), AppActions.Submit), "Application Submitted");
-						if (submit.Item1)
-							_response = new ApiResponse
-							{
-								Message = submit.Item2,
-								StatusCode = HttpStatusCode.OK,
-								Success = true
-							};
+						if (docs.Count > 0)
+						{
+							var appdocs = (await _unitOfWork.SubmittedDocument.Find(x => x.ApplicationId.Equals(app.Id))).ToList();
+							if (appdocs.Count() > 0)
+								await _unitOfWork.SubmittedDocument.RemoveRange(appdocs);
 
+							await _unitOfWork.SubmittedDocument.AddRange(docs);
+							await _unitOfWork.SaveChangesAsync(user.Id);
+						}
 					}
-					else
+
+					var submit = app.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentRejected)) || app.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Rejected))
+						? await _flow.AppWorkFlow(id, Enum.GetName(typeof(AppActions), AppActions.Resubmit), "Application re-submitted")
+						: await _flow.AppWorkFlow(id, Enum.GetName(typeof(AppActions), AppActions.Submit), "Application Submitted");
+					if (submit.Item1)
 						_response = new ApiResponse
 						{
-							Message = "ApplicationID invalid",
-							StatusCode = HttpStatusCode.BadRequest,
-							Success = false
+							Message = submit.Item2,
+							StatusCode = HttpStatusCode.OK,
+							Success = true
 						};
+
 				}
 				else
 					_response = new ApiResponse
 					{
-						Message = "Application not found",
-						StatusCode = HttpStatusCode.NotFound,
+						Message = "ApplicationID invalid",
+						StatusCode = HttpStatusCode.BadRequest,
 						Success = false
 					};
 			}
 			else
 				_response = new ApiResponse
 				{
-					Message = "ApplicationID caanot be empty",
+					Message = "Application not found",
 					StatusCode = HttpStatusCode.NotFound,
 					Success = false
 				};
@@ -749,11 +724,11 @@ namespace Bunkering.Access.Services
 		public async Task<ApiResponse> MyDesk()
 		{
 			var user = await _userManager.FindByEmailAsync(User);
-			var apps = await _unitOfWork.Application.Find(x => x.CurrentDeskId.Equals(user.Id), "Facility.FacilityType,Facility.LGA.State,ApplicationType,WorkFlow");
+			var apps = await _unitOfWork.Application.Find(x => x.CurrentDeskId.Equals(user.Id), "User.Company,Facility.FacilityType,Facility.LGA.State,ApplicationType,WorkFlow");
 			if (await _userManager.IsInRoleAsync(user, "FAD"))
-				apps = await _unitOfWork.Application.Find(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing)), "Facility.FacilityType,Facility.LGA.State,ApplicationType,WorkFlow");
+				apps = await _unitOfWork.Application.Find(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing)), "User.Company,Facility.FacilityType,Facility.LGA.State,ApplicationType,WorkFlow");
 			else if (await _userManager.IsInRoleAsync(user, "Company"))
-				apps = await _unitOfWork.Application.Find(x => x.UserId.Equals(user.Id), "Facility.FacilityType,Facility.LGA.State,ApplicationType,WorkFlow");
+				apps = await _unitOfWork.Application.Find(x => x.UserId.Equals(user.Id), "User.Company,Facility.FacilityType,Facility.LGA.State,ApplicationType,WorkFlow");
 			return new ApiResponse
 			{
 				Message = "Applications fetched successfully",
@@ -773,178 +748,159 @@ namespace Bunkering.Access.Services
 			};
 		}
 
-		public async Task<ApiResponse> ViewApplication(string id)
+		public async Task<ApiResponse> ViewApplication(int id)
 		{
-			if (!string.IsNullOrEmpty(id))
+
+			if (id > 0)
 			{
-				appId = int.Parse(id.DecryptString());
-				if (appId > 0)
+				try
 				{
-					try
+					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "User.Company,Appointment,SubmittedDocuments,ApplicationType,Payments,Facility.FacilityType,Facility.LGA.State,WorkFlow,Histories");
+					if (app != null)
 					{
-						var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "User.Company,Appointment,SubmittedDocuments,ApplicationType,Payments,Facility.FacilityType,Facility.LGA.State,WorkFlow,Histories");
-						if (app != null)
+						var users = _userManager.Users.Include(c => c.Company).Include(ur => ur.UserRoles).ThenInclude(r => r.Role).ToList();
+						var histories = app.Histories.ToList();
+						histories.ForEach(h =>
 						{
-							var users = _userManager.Users.Include(c => c.Company).Include(ur => ur.UserRoles).ThenInclude(r => r.Role).ToList();
-							var histories = app.Histories.ToList();
-							histories.ForEach(h =>
-							{
 
-								var t = users.FirstOrDefault(x => x.Id.Equals(h.TriggeredBy));
-								var r = users.FirstOrDefault(x => x.Id.Equals(h.TargetedTo));
-								h.TriggeredBy = t.Email;
-								h.TriggeredByRole = t.UserRoles.FirstOrDefault().Role.Name;
-								h.TargetedTo = r.Email;
-								h.TargetRole = r.UserRoles.FirstOrDefault().Role.Name;
-							});
-							var schedules = app.Appointment.ToList();
-							schedules.ForEach(a =>
-							{
-								var s = users.FirstOrDefault(x => x.Id.Equals(a.ScheduledBy));
-								var ap = users.FirstOrDefault(x => x.Id.Equals(a.ApprovedBy));
-								a.ScheduledBy = s.Email;
-								a.ApprovedBy = ap.Email;
-							});
-							var paymentStatus = app.Payments.FirstOrDefault().Status.Equals("PaymentCompleted")
-							? "Payment confirmed" : app.Payments.FirstOrDefault().Status.Equals("PaymentRejected") ? "Payment rejected" : "Payment pending";
+							var t = users.FirstOrDefault(x => x.Id.Equals(h.TriggeredBy));
+							var r = users.FirstOrDefault(x => x.Id.Equals(h.TargetedTo));
+							h.TriggeredBy = t.Email;
+							h.TriggeredByRole = t.UserRoles.FirstOrDefault().Role.Name;
+							h.TargetedTo = r.Email;
+							h.TargetRole = r.UserRoles.FirstOrDefault().Role.Name;
+						});
+						var schedules = app.Appointment.ToList();
+						schedules.ForEach(a =>
+						{
+							var s = users.FirstOrDefault(x => x.Id.Equals(a.ScheduledBy));
+							var ap = users.FirstOrDefault(x => x.Id.Equals(a.ApprovedBy));
+							a.ScheduledBy = s.Email;
+							a.ApprovedBy = ap.Email;
+						});
+						var paymentStatus = app.Payments.FirstOrDefault().Status.Equals("PaymentCompleted")
+						? "Payment confirmed" : app.Payments.FirstOrDefault().Status.Equals("PaymentRejected") ? "Payment rejected" : "Payment pending";
 
-							_response = new ApiResponse
-							{
-								Message = "Application detail found",
-								StatusCode = HttpStatusCode.OK,
-								Success = true,
-								Data = new
-								{
-									app.Status,
-									app.Reference,
-									CompanyName = app.User.Company.Name,
-									app.User.Email,
-									FacilityAddress = app.Facility.Address,
-									State = app.Facility.LGA.State.Name,
-									LGA = app.Facility.LGA.Name,
-									FacilityType = app.Facility.FacilityType.Name,
-									AppType = app.ApplicationType.Name,
-									CreatedDate = app.CreatedDate.ToString("MMM dd, yyyy HH:mm:ss"),
-									SubmittedDate = app.SubmittedDate.Value.ToString("MMM dd, yyyy HH:mm:ss"),
-									PaymnetStatus = paymentStatus,
-									TotalAmount = string.Format("{0:N}", app.Payments.Sum(x => x.Amount)),
-									PaymentDescription = app.Payments.FirstOrDefault().Description,
-									PaymnetDate = app.Payments.FirstOrDefault()?.TransactionDate.ToString("MMM dd, yyyy HH:mm:ss"),
-									CurrentDesk = _userManager.Users.FirstOrDefault(x => x.Id.Equals(app.CurrentDeskId))?.Email,
-									AppHistories = histories,
-									Schedules = schedules.Select(s => new
-									{
-										s.ApprovedBy,
-										s.ScheduledBy,
-										s.IsApproved,
-										s.ApprovalMessage,
-										InspectionDate = s.AppointmentDate.ToString("MMM dd, yyyy HH:mm:ss"),
-										s.ClientMessage,
-										s.ContactName,
-										s.IsAccepted,
-										s.ScheduleMessage,
-										s.ScheduleType,
-										ExpiryDate = s.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
-									}),
-									Documents = app.SubmittedDocuments
-								}
-							};
-						}
-						else
-							_response = new ApiResponse
-							{
-								Message = "No Application was found",
-								StatusCode = HttpStatusCode.NotFound,
-							};
-					}
-					catch (Exception ex)
-					{
 						_response = new ApiResponse
 						{
-							Message = ex.Message,
-							StatusCode = HttpStatusCode.InternalServerError,
+							Message = "Application detail found",
+							StatusCode = HttpStatusCode.OK,
+							Success = true,
+							Data = new
+							{
+								app.Status,
+								app.Reference,
+								CompanyName = app.User.Company.Name,
+								app.User.Email,
+								FacilityAddress = app.Facility.Address,
+								State = app.Facility.LGA.State.Name,
+								LGA = app.Facility.LGA.Name,
+								FacilityType = app.Facility.FacilityType.Name,
+								AppType = app.ApplicationType.Name,
+								CreatedDate = app.CreatedDate.ToString("MMM dd, yyyy HH:mm:ss"),
+								SubmittedDate = app.SubmittedDate.Value.ToString("MMM dd, yyyy HH:mm:ss"),
+								PaymnetStatus = paymentStatus,
+								TotalAmount = string.Format("{0:N}", app.Payments.Sum(x => x.Amount)),
+								PaymentDescription = app.Payments.FirstOrDefault().Description,
+								PaymnetDate = app.Payments.FirstOrDefault()?.TransactionDate.ToString("MMM dd, yyyy HH:mm:ss"),
+								CurrentDesk = _userManager.Users.FirstOrDefault(x => x.Id.Equals(app.CurrentDeskId))?.Email,
+								AppHistories = histories,
+								Schedules = schedules.Select(s => new
+								{
+									s.ApprovedBy,
+									s.ScheduledBy,
+									s.IsApproved,
+									s.ApprovalMessage,
+									InspectionDate = s.AppointmentDate.ToString("MMM dd, yyyy HH:mm:ss"),
+									s.ClientMessage,
+									s.ContactName,
+									s.IsAccepted,
+									s.ScheduleMessage,
+									s.ScheduleType,
+									ExpiryDate = s.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
+								}),
+								Documents = app.SubmittedDocuments
+							}
 						};
 					}
+					else
+						_response = new ApiResponse
+						{
+							Message = "No Application was found",
+							StatusCode = HttpStatusCode.NotFound,
+						};
 				}
-				else
+				catch (Exception ex)
+				{
 					_response = new ApiResponse
 					{
-						Message = "ApplicationID invalid",
-						StatusCode = HttpStatusCode.NotFound,
+						Message = ex.Message,
+						StatusCode = HttpStatusCode.InternalServerError,
 					};
+				}
 			}
 			else
 				_response = new ApiResponse
 				{
-					Message = "ApplicationID caanot be empty",
-					StatusCode = HttpStatusCode.BadRequest,
+					Message = "ApplicationID invalid",
+					StatusCode = HttpStatusCode.NotFound,
 				};
-
 			return _response;
 		}
 
-		public async Task<ApiResponse> Process(string id, string act, string comment)
+		public async Task<ApiResponse> Process(int id, string act, string comment)
 		{
-			if (!string.IsNullOrEmpty(id))
+
+			if (id > 0)
 			{
-				appId = int.Parse(id.DecryptString());
-				if (appId > 0)
+				try
 				{
-					try
+					var user = await _userManager.FindByIdAsync(User);
+					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id));
+					_response = new ApiResponse();
+					if (app != null && user != null)
 					{
-						var user = await _userManager.FindByIdAsync(User);
-						var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(appId));
-						_response = new ApiResponse();
-						if (app != null && user != null)
+						var flow = await _userManager.IsInRoleAsync(user, "FAD")
+							? await _flow.AppWorkFlow(id, act, comment, app.FADStaffId)
+							: await _flow.AppWorkFlow(id, act, comment);
+						if (!flow.Item1)
 						{
-							var flow = await _userManager.IsInRoleAsync(user, "FAD")
-								? await _flow.AppWorkFlow(appId, act, comment, app.FADStaffId)
-								: await _flow.AppWorkFlow(appId, act, comment);
-							if (!flow.Item1)
+							if (await _userManager.IsInRoleAsync(user, "Reviewer") && act.ToLower().Equals("approve"))
 							{
-								if (await _userManager.IsInRoleAsync(user, "Reviewer") && act.ToLower().Equals("approve"))
-								{
-									_response.Message = "Application cannot be pushed, awaiting FAD payment approval.";
-									_response.StatusCode = HttpStatusCode.Unauthorized;
-								}
+								_response.Message = "Application cannot be pushed, awaiting FAD payment approval.";
+								_response.StatusCode = HttpStatusCode.Unauthorized;
 							}
+						}
+						else
+						{
+							if (await _userManager.IsInRoleAsync(user, "FAD") && act.ToLower().Equals("approve"))
+								_response.Message = "Payment was confirmed successfully. Application moved to the reviewer for further processing.";
 							else
 							{
-								if (await _userManager.IsInRoleAsync(user, "FAD") && act.ToLower().Equals("approve"))
-									_response.Message = "Payment was confirmed successfully. Application moved to the reviewer for further processing.";
+								if (act.Equals(Enum.GetName(typeof(AppActions), AppActions.Approve)))
+									_response.Message = "Application processed successfully and moved to the next processing staff";
 								else
-								{
-									if (act.Equals(Enum.GetName(typeof(AppActions), AppActions.Approve)))
-										_response.Message = "Application processed successfully and moved to the next processing staff";
-									else
-										_response.Message = "Application has been returned for review";
-									_response.StatusCode = HttpStatusCode.OK;
-									_response.Success = true;
-								}
+									_response.Message = "Application has been returned for review";
+								_response.StatusCode = HttpStatusCode.OK;
+								_response.Success = true;
 							}
 						}
 					}
-					catch (Exception ex)
-					{
-						_response = new ApiResponse
-						{
-							Message = ex.Message,
-							StatusCode = HttpStatusCode.InternalServerError,
-						};
-					}
 				}
-				else
+				catch (Exception ex)
+				{
 					_response = new ApiResponse
 					{
-						Message = "ApplicationID invalid",
-						StatusCode = HttpStatusCode.NotFound,
+						Message = ex.Message,
+						StatusCode = HttpStatusCode.InternalServerError,
 					};
+				}
 			}
 			else
 				_response = new ApiResponse
 				{
-					Message = "ApplicationID cannot be empty",
-					StatusCode = HttpStatusCode.BadRequest,
+					Message = "ApplicationID invalid",
+					StatusCode = HttpStatusCode.NotFound,
 				};
 
 			return _response;
