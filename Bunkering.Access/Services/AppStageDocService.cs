@@ -112,7 +112,7 @@ namespace Bunkering.Access.Services
 
 					_response = new ApiResponse
 					{
-						Message = "Facility Type Dccumnets added successfully",
+						Message = "Facility Type Dccuments added successfully",
 						StatusCode = HttpStatusCode.OK,
 						Success = true
 					};
@@ -120,7 +120,7 @@ namespace Bunkering.Access.Services
 				else
 					_response = new ApiResponse
 					{
-						Message = "No Facility Type Dccumnets to add",
+						Message = "No Facility Type Dccuments to add",
 						StatusCode = HttpStatusCode.OK,
 						Success = false
 					};

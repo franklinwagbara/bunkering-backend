@@ -19,7 +19,6 @@ namespace Bunkering.Access.Services
 {
 	public class AppService
 	{
-		private int appId;
 		private readonly IElps _elps;
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly IUnitOfWork _unitOfWork;
@@ -192,86 +191,76 @@ namespace Bunkering.Access.Services
 			return tankList;
 
 		}
-		public async Task<ApiResponse> GetTanksByAppId(string id)
+		public async Task<ApiResponse> GetTanksByAppId(int id)
 		{
 			List<TankViewModel> tankList = new List<TankViewModel>();
-			if (!string.IsNullOrEmpty(id))
+			
+			if (id > 0)
 			{
-				var appid = int.Parse(id.DecryptString());
-				if (appid > 0)
+				try
 				{
-					try
+					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "Facility.FacilityType");
+					if (app != null)
 					{
-						var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(appid), "Facility.FacilityType");
-						if (app != null)
+						if (app.Facility.FacilityType.Name.Equals("Fixed"))
 						{
-							if (app.Facility.FacilityType.Name.Equals("Fixed"))
+							var licenseResponse = (await _unitOfWork.ValidatiionResponse.Find(x => x.UserId.Equals(app.UserId))).OrderByDescending(x => x.Id).FirstOrDefault();
+							if (licenseResponse != null)
 							{
-								var licenseResponse = (await _unitOfWork.ValidatiionResponse.Find(x => x.UserId.Equals(app.UserId))).OrderByDescending(x => x.Id).FirstOrDefault();
-								if (licenseResponse != null)
+								var dic = licenseResponse.Response.Parse<Dictionary<string, object>>();
+								var tankObj = dic.GetValue("Tanks");
+								if (tankObj != null)
 								{
-									var dic = licenseResponse.Response.Parse<Dictionary<string, object>>();
-									var tankObj = dic.GetValue("Tanks");
-									if (tankObj != null)
-									{
-										var tanks = tankObj.Stringify().Parse<List<Dictionary<string, string>>>();
+									var tanks = tankObj.Stringify().Parse<List<Dictionary<string, string>>>();
 
-										foreach (var t in tanks)
+									foreach (var t in tanks)
+									{
+										tankList.Add(new TankViewModel
 										{
-											tankList.Add(new TankViewModel
-											{
-												Capacity = decimal.Parse(t.GetValue("Capacity")),
-												Name = t.GetValue("Name"),
-												ApplicationId = id,
-												FacilityId = app.FacilityId
-											});
-										}
+											Capacity = decimal.Parse(t.GetValue("Capacity")),
+											Name = t.GetValue("Name"),
+											ApplicationId = id,
+											FacilityId = app.FacilityId
+										});
 									}
 								}
 							}
-							else
-							{
-								var tanks = await _unitOfWork.Tank.Find(x => x.FacilityId.Equals(app.FacilityId));
-								if (tanks.Count() > 0)
-									tankList = _mapper.Map<List<TankViewModel>>(tanks);
-							}
-							_response = new ApiResponse
-							{
-								Message = "Success",
-								StatusCode = HttpStatusCode.OK,
-								Success = true,
-								Data = new
-								{
-									AppId = id,
-									Tanks = tankList.Stringify()
-								}
-							};
 						}
 						else
-							_response = new ApiResponse
-							{
-								Success = false,
-								StatusCode = HttpStatusCode.NotFound,
-								Message = "Application not found"
-							};
-					}
-					catch (Exception ex)
-					{
+						{
+							var tanks = await _unitOfWork.Tank.Find(x => x.FacilityId.Equals(app.FacilityId));
+							if (tanks.Count() > 0)
+								tankList = _mapper.Map<List<TankViewModel>>(tanks);
+						}
 						_response = new ApiResponse
 						{
-							Message = ex.Message,
-							StatusCode = HttpStatusCode.InternalServerError,
-							Success = false,
+							Message = "Success",
+							StatusCode = HttpStatusCode.OK,
+							Success = true,
+							Data = new
+							{
+								AppId = id,
+								Tanks = tankList.Stringify()
+							}
 						};
 					}
+					else
+						_response = new ApiResponse
+						{
+							Success = false,
+							StatusCode = HttpStatusCode.NotFound,
+							Message = "Application not found"
+						};
 				}
-				else
+				catch (Exception ex)
+				{
 					_response = new ApiResponse
 					{
+						Message = ex.Message,
+						StatusCode = HttpStatusCode.InternalServerError,
 						Success = false,
-						StatusCode = HttpStatusCode.BadRequest,
-						Message = "ApplicationID invalid"
 					};
+				}
 			}
 			else
 				_response = new ApiResponse
@@ -279,14 +268,14 @@ namespace Bunkering.Access.Services
 					Success = false,
 					StatusCode = HttpStatusCode.BadRequest,
 					Message = "ApplicationID invalid"
-				};
+				};		
 
 			return _response;
 		}
 
 		public async Task<ApiResponse> AddTanks(List<TankViewModel> model)
 		{
-			var appid = model != null && model.Count > 0 ? int.Parse(model.FirstOrDefault().ApplicationId.DecryptString()) : 0;
+			var appid = model != null && model.Count > 0 ? model.FirstOrDefault().ApplicationId : 0;
 			if (appid > 0)
 			{
 				try
@@ -411,7 +400,7 @@ namespace Bunkering.Access.Services
 			if (id > 0)
 			{
 				var docList = new List<SubmittedDocument>();
-				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == appId, "User,Facility,ApplicationType");
+				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == id, "User,Facility,ApplicationType");
 				if (app != null)
 				{
 					var factypedocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.FacilityTypeId.Equals(app.Facility.FacilityTypeId) && x.ApplicationTypeId.Equals(app.ApplicationTypeId));
@@ -419,7 +408,7 @@ namespace Bunkering.Access.Services
 					{
 						var compdocs = _elps.GetCompanyDocuments(app.User.ElpsId, "company").Stringify().Parse<List<Document>>();
 						var facdocs = _elps.GetCompanyDocuments(app.Facility.ElpsId, "facility").Stringify().Parse<List<FacilityDocument>>();
-						var appdocs = await _unitOfWork.SubmittedDocument.Find(x => x.ApplicationId == appId);
+						var appdocs = await _unitOfWork.SubmittedDocument.Find(x => x.ApplicationId == id);
 
 						factypedocs.ToList().ForEach(x =>
 						{
@@ -438,7 +427,7 @@ namespace Bunkering.Access.Services
 											DocType = x.DocType,
 											FileId = doc.id,
 											DocSource = doc.source,
-											ApplicationId = appId
+											ApplicationId = id
 										});
 									}
 									else
@@ -473,7 +462,7 @@ namespace Bunkering.Access.Services
 											DocType = x.DocType,
 											FileId = doc.Id,
 											DocSource = doc.Source,
-											ApplicationId = appId
+											ApplicationId = id
 										});
 									}
 									else
@@ -597,8 +586,8 @@ namespace Bunkering.Access.Services
 					}
 
 					var submit = app.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentRejected)) || app.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Rejected))
-						? await _flow.AppWorkFlow(appId, Enum.GetName(typeof(AppActions), AppActions.Resubmit), "Application re-submitted")
-						: await _flow.AppWorkFlow(appId, Enum.GetName(typeof(AppActions), AppActions.Submit), "Application Submitted");
+						? await _flow.AppWorkFlow(id, Enum.GetName(typeof(AppActions), AppActions.Resubmit), "Application re-submitted")
+						: await _flow.AppWorkFlow(id, Enum.GetName(typeof(AppActions), AppActions.Submit), "Application Submitted");
 					if (submit.Item1)
 						_response = new ApiResponse
 						{
@@ -876,13 +865,13 @@ namespace Bunkering.Access.Services
 				try
 				{
 					var user = await _userManager.FindByIdAsync(User);
-					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(appId));
+					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id));
 					_response = new ApiResponse();
 					if (app != null && user != null)
 					{
 						var flow = await _userManager.IsInRoleAsync(user, "FAD")
-							? await _flow.AppWorkFlow(appId, act, comment, app.FADStaffId)
-							: await _flow.AppWorkFlow(appId, act, comment);
+							? await _flow.AppWorkFlow(id, act, comment, app.FADStaffId)
+							: await _flow.AppWorkFlow(id, act, comment);
 						if (!flow.Item1)
 						{
 							if (await _userManager.IsInRoleAsync(user, "Reviewer") && act.ToLower().Equals("approve"))

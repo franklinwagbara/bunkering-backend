@@ -21,7 +21,7 @@
             <response code="401">Unauthorized user </response>
             <response code="400">Internal server error - bad request </response>
         </member>
-        <member name="M:Bunkering.Controllers.API.ApplicationController.AddTanks(System.String)">
+        <member name="M:Bunkering.Controllers.API.ApplicationController.AddTanks(System.Int32)">
             <summary>
             This endpoint returns a model of tanks for the application using the application id
             </summary>
