@@ -306,6 +306,22 @@
             <response code="401">Unauthorized user </response>
             <response code="400">Internal server error - bad request </response>
         </member>
+        <member name="M:Bunkering.Controllers.API.AppStageDocumentsController.GetElpsDocs">
+            <summary>
+            This endpoint is used to fetch all document types from ALPS
+            </summary>
+            <returns>Returns a success message or otherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/appstagedoc/get-elps-docs
+            
+            </remarks>
+            <response code="200">Returns a list of documents </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
         <member name="M:Bunkering.Controllers.API.AppStageDocumentsController.AddDocument(Bunkering.Core.ViewModels.AppStageDocsViewModel)">
             <summary>
             This endpoint is used to add document to facility stage

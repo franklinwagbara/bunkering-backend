@@ -31,7 +31,32 @@ namespace Bunkering.Access.Services
 			_userManager = userManager;
 		}
 
-		public async Task<ApiResponse> GetAllFADDoc()
+        public async Task<ApiResponse> GetAllElpsDocs() 
+		{
+            var documents = _elps.GetDocumentTypes();
+            documents.AddRange(_elps.GetDocumentTypes("facility"));
+
+            if (documents.Any())
+            {
+                _response = new ApiResponse
+                {
+                    Message = "Elps Dccumnets successfully found",
+                    StatusCode = HttpStatusCode.OK,
+                    Success = true,
+					Data = documents
+                };
+            }
+            else
+                _response = new ApiResponse
+                {
+                    Message = "No Dccumnet was found",
+                    StatusCode = HttpStatusCode.OK,
+                    Success = false
+                };
+
+			return _response;
+        }
+        public async Task<ApiResponse> GetAllFADDoc()
 		{
 			var docs = await _unitOfWork.FacilityTypeDocuments.GetAll("FacilityType,ApplicationType");
 			if (docs != null)
