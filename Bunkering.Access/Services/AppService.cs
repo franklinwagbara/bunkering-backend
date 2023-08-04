@@ -321,7 +321,7 @@ namespace Bunkering.Access.Services
 				try
 				{
 					var user = await _userManager.FindByEmailAsync(User);
-					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "ApplicationType,Facility.FacilityType,Payments");
+					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "ApplicationType,Facility.FacilityType");
 					var fee = await _unitOfWork.AppFee.FirstOrDefaultAsync(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId) && x.FacilityTypeId.Equals(app.Facility.FacilityTypeId));
 					var total = fee.AdministrativeFee + fee.VesselLicenseFee + fee.ApplicationFee + fee.InspectionFee + fee.AccreditationFee;
 					var payment = await _unitOfWork.Payment.FirstOrDefaultAsync(x => x.ApplicationId.Equals(id));
@@ -332,17 +332,15 @@ namespace Bunkering.Access.Services
 							Amount = total,
 							Account = "NMDPRA",
 							ApplicationId = id,
-							AppReceiptId = "",
-							Arrears = 0,
+							AppReceiptId = "Dollar Payment",
 							BankCode = "000",
 							Description = $"Payment for Bunkering License ({app.Facility.FacilityType.Name})",
 							PaymentType = "USD",
 							RRR = "N/A",
 							Status = "Pending",
 							TransactionDate = DateTime.UtcNow.AddHours(1),
-							TxnMessage = "",
-							TransactionId = "",
-							RetryCount = 0,
+							TxnMessage = "Dollar payment",
+							TransactionId = "N/A",							
 						});
 					}
 					else
@@ -352,6 +350,7 @@ namespace Bunkering.Access.Services
 						payment.Description = $"Pyamnet for Bunkering License ({app.Facility.FacilityType.Name})";
 						payment.Status = "Pending";
 						payment.TransactionDate = DateTime.UtcNow.AddHours(1);
+						await _unitOfWork.Payment.Update(payment);
 					}
 					await _unitOfWork.SaveChangesAsync(user.Id);
 

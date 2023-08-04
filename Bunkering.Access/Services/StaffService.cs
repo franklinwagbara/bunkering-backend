@@ -38,13 +38,13 @@ namespace Bunkering.Access.Services
 		public async Task<ApiResponse> Dashboard()
 		{
 			var user = await _userManager.FindByEmailAsync(User);
-			var allApps = await _unitOfWork.Application.GetAll();
+			var allApps = await _unitOfWork.Application.GetAll("Payments");
 			var apps = await _userManager.IsInRoleAsync(user, "FAD")
 				? (allApps.Where(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))))
 				: (allApps.Where(x => x.CurrentDeskId.Equals(user.Id)));
 			var permits = await _unitOfWork.Permit.GetAll();
 			var facilities = await _unitOfWork.Facility.GetAll("FacilityType");
-			var payments = await _unitOfWork.Payment.GetAll();
+			var payments = await _unitOfWork.Payment.GetAll("Application");
 
 			if (user != null)
 				_response = new ApiResponse
