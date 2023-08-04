@@ -19,19 +19,22 @@ namespace Bunkering.Access.Services
 		private readonly IHttpContextAccessor _contextAccessor;
 		private readonly IElps _elps;
 		private string User;
-		ApiResponse _response;
+        private readonly MessageService _messageService;
+
+        ApiResponse _response;
 
 		public StaffService(
 			IUnitOfWork unitOfWork,
 			UserManager<ApplicationUser> userManager,
 			RoleManager<ApplicationRole> roleManager,
-			IHttpContextAccessor contextAccessor, IElps elps)
+			IHttpContextAccessor contextAccessor, IElps elps, MessageService messageService)
 		{
 			_unitOfWork = unitOfWork;
 			_userManager = userManager;
 			_contextAccessor = contextAccessor;
 			_roleManager = roleManager;
 			_elps = elps;
+			_messageService = messageService;
 			User = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
 		}
 
@@ -39,7 +42,7 @@ namespace Bunkering.Access.Services
 		{
 			var user = await _userManager.FindByEmailAsync(User);
 			var allApps = await _unitOfWork.Application.GetAll();
-
+			var message = _messageService.GetAllMessages();
 			var apps = await _userManager.IsInRoleAsync(user, "FAD")
 				? (allApps.Where(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))))
 				: (allApps.Where(x => x.CurrentDeskId.Equals(user.Id)));
@@ -66,7 +69,7 @@ namespace Bunkering.Access.Services
 						TProcessing = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))),
 						TApproved = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Completed))),
 						TRejected = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Rejected))),
-
+						Message = message,
 					}
 				};
 			else

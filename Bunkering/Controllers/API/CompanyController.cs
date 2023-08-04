@@ -113,7 +113,7 @@ namespace Bunkering.Controllers.API
         [ProducesResponseType(typeof(ApiResponse), 404)]
         [ProducesResponseType(typeof(ApiResponse), 405)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        [Route("CreateMessage")]
+        [Route("Create-Message")]
         [HttpPost]
         public async Task<IActionResult> CreateMessage(MessageModel model) => Response(await _messageService.CreateMessageAsync(model));
 
@@ -137,7 +137,7 @@ namespace Bunkering.Controllers.API
         [ProducesResponseType(typeof(ApiResponse), 404)]
         [ProducesResponseType(typeof(ApiResponse), 405)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        [Route("GetAllMessage")]
+        [Route("Get-All-Message")]
         [HttpGet]
         public async Task<IActionResult> GetMessages() => Response(await _messageService.GetAllMessages());
 
@@ -163,7 +163,7 @@ namespace Bunkering.Controllers.API
         [ProducesResponseType(typeof(ApiResponse), 404)]
         [ProducesResponseType(typeof(ApiResponse), 405)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        [Route("GetMessageById")]
+        [Route("Get-Message-ById")]
         [HttpGet]
         public async Task<IActionResult> GetMessageById(int id) => Response(await _messageService.GetMessageById(id));
 
@@ -189,7 +189,7 @@ namespace Bunkering.Controllers.API
         [ProducesResponseType(typeof(ApiResponse), 404)]
         [ProducesResponseType(typeof(ApiResponse), 405)]
         [ProducesResponseType(typeof(ApiResponse), 500)]
-        [Route("DeleteMessage")]
+        [Route("Delete-Message")]
         [HttpDelete]
         public async Task<IActionResult> DeleteMessage(int id) => Response(await _messageService.DeleteMessage(id));
 

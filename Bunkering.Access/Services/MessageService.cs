@@ -186,13 +186,20 @@ namespace Bunkering.Access.Services
 
         public async Task<ApiResponse> Read(int id)
             {
-               var message = await _unitOfWork.Message.FirstOrDefaultAsync(a=>a.Id == id);
+              var message = await _unitOfWork.Message.FirstOrDefaultAsync(a=>a.Id == id);
 
             if(message != null)
             {
                 message.IsRead = true;
                 await _unitOfWork.Message.Update(message);
                 _unitOfWork.Save();
+
+                return new ApiResponse
+                {
+                    Message = "Read",
+                    StatusCode = HttpStatusCode.OK,
+                    Success = true
+                };
             }
             else
                 _response = new ApiResponse
@@ -202,7 +209,7 @@ namespace Bunkering.Access.Services
                     Success = false
                 };
 
-            return _response;
+            return  _response;
 
         }
     }
