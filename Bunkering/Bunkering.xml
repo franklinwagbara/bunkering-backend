@@ -442,6 +442,23 @@
             <response code="401">Unauthorized user </response>
             <response code="400">Internal server error - bad request </response>
         </member>
+        <member name="M:Bunkering.Controllers.API.CompanyController.GetMessagesByCompId(System.String)">
+            <summary>
+            This endpoint is used to get messages by companyId
+            </summary>
+            <returns>Returns a success message or rotherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/company/GetMessagesByCompId
+            
+            </remarks>
+            <param name="model">This is the model of the get messages by companyId</param>
+            <response code="200">Returns a summary of the get messages by companyId </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
         <member name="M:Bunkering.Controllers.API.InspectionController.Pending(System.String,System.String)">
             <summary>
             This endpoint returns a mode of pending inspection, have application category, user email, and stage for a given inspector/staff 

@@ -115,6 +115,39 @@ namespace Bunkering.Access.Services
         }
 
 
+        public async Task<ApiResponse> GetAllMessagesByCompId(string userId)
+        {
+           
+            var messages = (await _unitOfWork.Message.Find(x => x.UserId.Equals(userId))).OrderByDescending(x => x.Id);
+            if (messages != null)
+                _response = new ApiResponse
+                {
+                    Message = "Success",
+                    StatusCode = HttpStatusCode.OK,
+                    Success = true,
+                    Data = messages.Select(d => new
+                    {
+                        d.Id,
+                        d.Subject,
+                        d.Content,
+                        d.ApplicationId,
+                        d.UserId,
+                        d.Date
+                    })
+                };
+            else
+                _response = new ApiResponse
+                {
+                    Message = "No Message found",
+                    StatusCode = HttpStatusCode.NotFound,
+                    Success = false
+                };
+
+            return _response;
+        }
+
+
+
         public async Task<ApiResponse> GetMessageById(int id)
         {
             var messages = await _unitOfWork.Message.FirstOrDefaultAsync(m => m.Id == id);

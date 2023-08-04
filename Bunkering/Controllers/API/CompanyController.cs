@@ -195,5 +195,30 @@ namespace Bunkering.Controllers.API
 
 
 
+        /// <summary>
+        /// This endpoint is used to get messages by companyId
+        /// </summary>
+        /// <returns>Returns a success message or rotherwise</returns>
+        /// <remarks>
+        /// 
+        /// Sample Request
+        /// GET: api/company/GetMessagesByCompId
+        /// 
+        /// </remarks>
+        /// <param name="model">This is the model of the get messages by companyId</param>
+        /// <response code="200">Returns a summary of the get messages by companyId </response>
+        /// <response code="404">Returns not found </response>
+        /// <response code="401">Unauthorized user </response>
+        /// <response code="400">Internal server error - bad request </response>
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 405)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        [Route("Get-Messages-ByCompId")]
+        [HttpGet]
+        public async Task<IActionResult> GetMessagesByCompId(string userId) => Response(await _messageService.GetAllMessagesByCompId(userId));
+
+
+
     }
 }
