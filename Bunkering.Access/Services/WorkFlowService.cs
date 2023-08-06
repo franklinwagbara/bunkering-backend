@@ -135,6 +135,8 @@ namespace Bunkering.Access.Services
                             //send and save notification
                             await SendNotification(app, action, nextprocessingofficer, comment);
                         }
+                        else
+                            return (false, "No processing officer was found.");
                     }
                 }
             }

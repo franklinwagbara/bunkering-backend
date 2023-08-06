@@ -523,7 +523,6 @@ namespace Bunkering.Access.Services
 
 		public async Task<ApiResponse> AddDocuments(int id)
 		{
-
 			if (id > 0)
 			{
 				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == id, "Facility.FacilityType");
@@ -591,8 +590,14 @@ namespace Bunkering.Access.Services
 							StatusCode = HttpStatusCode.OK,
 							Success = true
 						};
-
-				}
+					else
+                        _response = new ApiResponse
+                        {
+                            Message = submit.Item2,
+                            StatusCode = HttpStatusCode.BadRequest,
+                            Success = false
+                        };
+                }
 				else
 					_response = new ApiResponse
 					{
