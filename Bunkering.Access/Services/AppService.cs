@@ -746,6 +746,7 @@ namespace Bunkering.Access.Services
 				Success = true,
 				Data = apps.Select(x => new
 				{
+					AppId = x.Id,
 					CompanyEmail = x.User.Email,
 					CompanyName = x.User.Company.Name,
 					FacilityAddress = x.Facility.Address,
