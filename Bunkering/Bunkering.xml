@@ -407,6 +407,91 @@
             <response code="401">Unauthorized user </response>
             <response code="400">Internal server error - bad request </response>
         </member>
+        <member name="M:Bunkering.Controllers.API.CompanyController.CreateMessage(Bunkering.Core.ViewModels.MessageModel)">
+            <summary>
+            This endpoint is used to send message info
+            </summary>
+            <returns>Returns a success message or rotherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/company/CreateMessage
+            
+            </remarks>
+            <param name="model">This is the model of the send message</param>
+            <response code="200">Returns a summary of the message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.CompanyController.GetMessages">
+            <summary>
+            This endpoint is used to get all message 
+            </summary>
+            <returns>Returns a success message or rotherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/company/GetAllMessage
+            
+            </remarks>
+            <param name="model">This is the model of the get all message</param>
+            <response code="200">Returns a summary of the message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.CompanyController.GetMessageById(System.Int32)">
+            <summary>
+            This endpoint is used to get single message 
+            </summary>
+            <returns>Returns a success message or rotherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/company/GetMessage
+            
+            </remarks>
+            <param name="model">This is the model of the get single message</param>
+            <response code="200">Returns a summary of the message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.CompanyController.DeleteMessage(System.Int32)">
+            <summary>
+            This endpoint is used to delete message 
+            </summary>
+            <returns>Returns a success message or rotherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/company/DeleteMessage
+            
+            </remarks>
+            <param name="model">This is the model of the delete message</param>
+            <response code="200">Returns a summary of the message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.CompanyController.GetMessagesByCompId(System.String)">
+            <summary>
+            This endpoint is used to get messages by companyId
+            </summary>
+            <returns>Returns a success message or rotherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/company/GetMessagesByCompId
+            
+            </remarks>
+            <param name="model">This is the model of the get messages by companyId</param>
+            <response code="200">Returns a summary of the get messages by companyId </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
         <member name="M:Bunkering.Controllers.API.InspectionController.Pending(System.String,System.String)">
             <summary>
             This endpoint returns a mode of pending inspection, have application category, user email, and stage for a given inspector/staff 
@@ -678,6 +763,23 @@
             
             </remarks>
             <response code="200">Returns a success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
+        <member name="M:Bunkering.Controllers.API.MessageController.ReadMessage(System.Int32)">
+            <summary>
+            This endpoint is used to Read message 
+            </summary>
+            <returns>Returns a success message or rotherwise</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/company/ReadMessage
+            
+            </remarks>
+            <param name="model">This is Read message</param>
+            <response code="200">Returns a summary of the message </response>
             <response code="404">Returns not found </response>
             <response code="401">Unauthorized user </response>
             <response code="400">Internal server error - bad request </response>

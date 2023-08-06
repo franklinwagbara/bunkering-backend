@@ -33,7 +33,7 @@ namespace Bunkering.Access.Services
         {
             _unitOfWork = unitOfWork;
             _contextAccessor = contextAccessor;
-            User = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
+             User = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
             _logger = logger;
             _elps = elps;
             _appSetting = appSetting.Value;
