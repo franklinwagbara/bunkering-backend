@@ -1,5 +1,6 @@
 ﻿using Bunkering.Access.Services;
 using Bunkering.Core.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bunkering.Controllers.API
@@ -48,6 +49,7 @@ namespace Bunkering.Controllers.API
 		/// <response code="404">Returns not found </response>
 		/// <response code="401">Unauthorized user </response>
 		/// <response code="400">Internal server error - bad request </response>
+		[AllowAnonymous]
 		[Route("all-users")]
 		[HttpGet]
 		public async Task<IActionResult> AllUsers() => Response(await _staffService.AllUsers());

@@ -84,7 +84,7 @@ namespace Bunkering.Access.Services
 		public async Task<ApiResponse> AllUsers()
 		{
 			var users = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).Where(x => x.CompanyId == null && !x.IsDeleted).ToList();
-			var apps = await _unitOfWork.Application.GetAll();
+			var apps = await _unitOfWork.Application.GetAll("User.Company,Appointment,SubmittedDocuments,ApplicationType,Payments,Facility.FacilityType,Facility.LGA.State,WorkFlow,Histories");
 			return new ApiResponse
 			{
 				Message = "Users found",
@@ -95,7 +95,11 @@ namespace Bunkering.Access.Services
 					Name = $"{x.FirstName} {x.LastName}",
 					x.Email,
 					Role = x.UserRoles.FirstOrDefault()?.Role.Name,
-					AppCount = x.UserRoles.FirstOrDefault().Role.Name.Equals("FAD") ? apps.Count(x => x.FADStaffId.Equals(x.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))) : apps.Count(x => x.UserId.Equals(x.Id)),
+					x.PhoneNumber,
+					x.CreatedBy,
+					DateCreated = x.CreatedOn,
+					x.IsActive,
+					AppCount = x.UserRoles.FirstOrDefault().Role.Name.Equals(Roles.FAD) ? apps.Count(u => u.FADStaffId.Equals(x.Id) && !u.FADApproved && u.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))) : apps.Count(y => y.UserId.Equals(x.Id)),
 
 				})
 			};
