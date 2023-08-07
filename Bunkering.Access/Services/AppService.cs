@@ -551,6 +551,7 @@ namespace Bunkering.Access.Services
 										DocSource = doc.source,
 										DocType = item.DocType,
 										FileId = doc.id,
+										IsFAD = item.IsFADDoc
 									});
 							}
 							else
@@ -565,7 +566,8 @@ namespace Bunkering.Access.Services
 										DocSource = doc.Source,
 										DocType = item.DocType,
 										FileId = doc.Id,
-									});
+                                        IsFAD = item.IsFADDoc
+                                    });
 							}
 						}
 

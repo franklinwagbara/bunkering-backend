@@ -15,5 +15,6 @@ namespace Bunkering.Core.Data
         public string DocSource { get; set; }
         public string DocType { get; set; }
         public string DocName { get; set; }
+        public bool IsFAD { get; set; }
     }
 }

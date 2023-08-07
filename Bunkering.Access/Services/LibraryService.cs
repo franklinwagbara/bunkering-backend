@@ -2,6 +2,7 @@
 using Bunkering.Access.DAL;
 using Bunkering.Access.IContracts;
 using Bunkering.Core.Data;
+using Bunkering.Core.Utils;
 using Bunkering.Core.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -316,7 +317,7 @@ namespace Bunkering.Access.Services
 
 		public async Task<ApiResponse> GetRoles()
 		{
-			var roles = await _roleManager.Roles.ToListAsync();
+			var roles = await _roleManager.Roles.Where(x => !x.Name.Equals(Roles.Company) && !x.Name.Equals(Roles.SuperAdmin)).ToListAsync();
 			return new ApiResponse
 			{
 				Data = roles,
