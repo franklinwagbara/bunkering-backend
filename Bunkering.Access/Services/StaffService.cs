@@ -105,6 +105,7 @@ namespace Bunkering.Access.Services
 		{
 			try
 			{
+				var user = await _userManager.FindByEmailAsync(User);
 				var staff = await _userManager.FindByEmailAsync(model.Email);
 				if (staff == null)
 				{
@@ -118,6 +119,8 @@ namespace Bunkering.Access.Services
 						IsActive = true,
 						FirstName = model.FirstName,
 						LastName = model.LastName,
+						CreatedBy = user.Email,
+						CreatedOn = DateTime.UtcNow.AddHours(1),
 
 					};
 					await _userManager.CreateAsync(staff);

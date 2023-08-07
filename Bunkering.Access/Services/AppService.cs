@@ -809,14 +809,14 @@ namespace Bunkering.Access.Services
 								FacilityType = app.Facility.FacilityType.Name,
 								AppType = app.ApplicationType.Name,
 								CreatedDate = app.CreatedDate.ToString("MMM dd, yyyy HH:mm:ss"),
-								SubmittedDate = app.SubmittedDate.Value.ToString("MMM dd, yyyy HH:mm:ss"),
+								SubmittedDate = app?.SubmittedDate?.ToString("MMM dd, yyyy HH:mm:ss"),
 								PaymnetStatus = paymentStatus,
-								TotalAmount = string.Format("{0:N}", app.Payments.Sum(x => x.Amount)),
+								TotalAmount = app.Payments.Sum(x => x.Amount),
 								PaymentDescription = app.Payments.FirstOrDefault().Description,
 								PaymnetDate = app.Payments.FirstOrDefault()?.TransactionDate.ToString("MMM dd, yyyy HH:mm:ss"),
-								CurrentDesk = _userManager.Users.FirstOrDefault(x => x.Id.Equals(app.CurrentDeskId))?.Email,
+								CurrentDesk = _userManager.Users.FirstOrDefault(x => x.Id.Equals(app.CurrentDeskId)).Email,
 								AppHistories = histories,
-								Schedules = schedules.Select(s => new
+								Schedules = schedules?.Select(s => new
 								{
 									s.ApprovedBy,
 									s.ScheduledBy,
