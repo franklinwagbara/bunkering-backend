@@ -92,6 +92,7 @@ namespace Bunkering.Access.Services
 				Success = true,
 				Data = users.Select(x => new
 				{
+					x.Id,
 					Name = $"{x.FirstName} {x.LastName}",
 					x.Email,
 					Role = x.UserRoles.FirstOrDefault()?.Role.Name,
