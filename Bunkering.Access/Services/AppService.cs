@@ -693,6 +693,7 @@ namespace Bunkering.Access.Services
 						CompanyName = x.User.Company.Name,
 						FacilityAddress = x.Facility.Address,
 						FacilityType = x.Facility.FacilityType.Name,
+                        ApplicationType = x.ApplicationType.Name,
 						State = x.Facility.LGA.State.Name,
 						x.Reference,
 						x.Status,
