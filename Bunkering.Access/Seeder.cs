@@ -65,7 +65,7 @@ namespace Bunkering.Access
 
 		public async Task CreateAdmin()
 		{
-			var user = await _userMnager.FindByNameAsync("damilare.olanrewaju@brandonetech.com");
+			var user = await _userMnager.FindByEmailAsync("damilare.olanrewaju@brandonetech.com");
 
 			if (user == null)
 			{

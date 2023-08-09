@@ -100,5 +100,6 @@
     <Build Include="dbo\Views\vApplication.sql" />
     <Build Include="dbo\Views\vAppHistory.sql" />
     <Build Include="dbo\Views\vAppDoc.sql" />
+    <Build Include="dbo\Tables\AppSettings.sql" />
   </ItemGroup>
 </Project>
