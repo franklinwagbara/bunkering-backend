@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Bunkering.Core.Data;
+using System.ComponentModel.DataAnnotations;
 
 namespace Bunkering.Core.ViewModels
 {
@@ -17,6 +18,10 @@ namespace Bunkering.Core.ViewModels
 		[Display(Name = "LGA")]
 		public int LgaId { get; set; }
 		public List<TankViewModel> AppTanks { get; set; }
+		public int VesselTypeId { get; set; }
+		public decimal Capacity { get; set; }
+		public decimal DeadWeight { get; set; }
+
 
 
 	}

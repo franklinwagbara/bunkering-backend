@@ -33,6 +33,8 @@ namespace Bunkering.Core.Data
 		public DbSet<Tank> Tanks { get; set; }
 		public DbSet<ValidatiionResponse> ValidatiionResponses { get; set; }
 		public DbSet<WorkFlow> WorkFlows { get; set; }
+		public DbSet<FacilitySource> FacilitySources { get; set; }
+		public DbSet<VesselType> VesselTypes { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
@@ -72,12 +74,12 @@ namespace Bunkering.Core.Data
 				ChangeTracker.DetectChanges();
 				var auditEntries = new List<AuditEntry>();
 
-                var entities = ChangeTracker.Entries() 
+				var entities = ChangeTracker.Entries()
 					.Where(x => x.State != EntityState.Added
-                    && x.State != EntityState.Unchanged
-                    && x.State != EntityState.Detached).ToList();
+					&& x.State != EntityState.Unchanged
+					&& x.State != EntityState.Detached).ToList();
 
-                foreach (var entry in entities)
+				foreach (var entry in entities)
 				{
 					//if (entry.Entity is Audit || entry.State.Equals(EntityState.Detached) || entry.State.Equals(EntityState.Unchanged))
 					//	continue;

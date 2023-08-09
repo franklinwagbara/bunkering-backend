@@ -56,8 +56,8 @@ namespace Bunkering.Access.Services
 					{
 						DeskCount = apps.Count(),
 						TotalApps = allApps.Count(),
-						TMobileFacs = facilities.Count(x => x.FacilityType.Name.ToLower().Equals("mobile")),
-						TFixedFacs = facilities.Count(x => x.FacilityType.Name.ToLower().Equals("fixed")),
+						TMobileFacs = 0,
+						TFixedFacs = 0,
 						TotalLicenses = permits.Count(),
 						TLicensedfacs = facilities.Count(x => x.IsLicensed),
 						TValidLicense = permits.Count(x => x.ExpireDate > DateTime.UtcNow.AddHours(1)),

@@ -236,6 +236,19 @@ namespace Bunkering.Access
 			}
 		}
 
+		public async Task CreateVesselType()
+		{
+			var _context = _serviceProvider.GetRequiredService<ApplicationContext>();
+			var vesselType = new[] { "Badge", "Vessel" };
+			if (!_context.VesselTypes.Any())
+			{
+				foreach (var v in vesselType)
+					_context.VesselTypes.Add(new VesselType { Name = v });
+				_context.SaveChanges();
+			}
+
+		}
+
 		public async Task CreateProducts()
 		{
 			var _context = _serviceProvider.GetRequiredService<ApplicationContext>();

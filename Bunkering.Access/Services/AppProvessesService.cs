@@ -43,7 +43,7 @@ namespace Bunkering.Access.Services
 				var flows = new List<WorkflowviewModel>();
 				var roles = await _role.Roles.ToListAsync();
 				var apptyeps = await _unitOfWork.ApplicationType.GetAll();
-				var facTypes = await _unitOfWork.FacilityType.GetAll();
+				var vesselType = await _unitOfWork.VesselType.GetAll();
 				processes.ForEach(r =>
 				{
 					var trole = roles.FirstOrDefault(x => x.Id.Equals(r.TriggeredByRole));
@@ -53,7 +53,7 @@ namespace Bunkering.Access.Services
 					flow.TriggeredByRole = trole.Name;
 					flow.TargetRole = rrole.Name;
 					flow.ApplicationType = r.ApplicationTypeId != null ? apptyeps.FirstOrDefault(x => x.Id.Equals(r.ApplicationTypeId))?.Name : "N/A";
-					flow.FacilityType = facTypes.FirstOrDefault(x => x.Id.Equals(r.FacilityTypeId))?.Name;
+					flow.VesselType = vesselType.FirstOrDefault(x => x.Id.Equals(r.VesselTypeId))?.Name;
 					flows.Add(flow);
 				});
 
@@ -102,7 +102,7 @@ namespace Bunkering.Access.Services
 					flow.TargetRole = model.TargetRole;
 					flow.Action = model.Action;
 					flow.TriggeredByRole = model.TriggeredByRole;
-					flow.FacilityTypeId = model.FacilityTypeId;
+					flow.VesselTypeId = model.VesselTypeId;
 
 					await _unitOfWork.Workflow.Update(flow);
 					await _unitOfWork.SaveChangesAsync(user.Id);
@@ -140,7 +140,7 @@ namespace Bunkering.Access.Services
 			{
 				var wk = new List<WorkFlow>();
 				var user = await _userManager.FindByEmailAsync(User);
-				var processes = (await _unitOfWork.Workflow.Find(x => x.FacilityTypeId == 1)).ToList();
+				var processes = (await _unitOfWork.Workflow.Find(x => x.VesselTypeId == 1)).ToList();
 				if (processes != null)
 				{
 					processes.ForEach(x =>
@@ -148,7 +148,7 @@ namespace Bunkering.Access.Services
 						wk.Add(new WorkFlow
 						{
 							Action = x.Action,
-							FacilityTypeId = id,
+							VesselTypeId = id,
 							Rate = x.Rate,
 							Status = x.Status,
 							TargetRole = x.TargetRole,

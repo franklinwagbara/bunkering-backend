@@ -24,9 +24,16 @@
     [LockoutEnd]           DATETIMEOFFSET (7) NULL,
     [LockoutEnabled]       BIT                NOT NULL,
     [AccessFailedCount]    INT                NOT NULL,
-    [IsDeleted]            BIT                CONSTRAINT [DF_AspNetUsers_IsDeleted] DEFAULT ((0)) NOT NULL,
-    CONSTRAINT [PK_AspNetUsers] PRIMARY KEY CLUSTERED ([Id] ASC)
+    [IsDeleted]            BIT                DEFAULT (CONVERT([bit],(0))) NOT NULL,
+    CONSTRAINT [PK_AspNetUsers] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_AspNetUsers_Companies_CompanyId] FOREIGN KEY ([CompanyId]) REFERENCES [dbo].[Companies] ([Id])
 );
+
+
+
+
+
+
 
 
 

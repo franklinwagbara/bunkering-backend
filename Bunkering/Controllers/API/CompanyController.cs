@@ -19,27 +19,27 @@ namespace Bunkering.Controllers.API
 			_companySrevice = companyService;
 		}
 
-		/// <summary>
-		/// This endpoint is used to fetch company's dashboard info
-		/// </summary>
-		/// <returns>Returns a success message or rotherwise</returns>
-		/// <remarks>
-		/// 
-		/// Sample Request
-		/// GET: api/company/dashboard
-		/// 
-		/// </remarks>
-		/// <response code="200">Returns a summary of the company's dashboard </response>
-		/// <response code="404">Returns not found </response>
-		/// <response code="401">Unauthorized user </response>
-		/// <response code="400">Internal server error - bad request </response>
-		[ProducesResponseType(typeof(ApiResponse), 200)]
-		[ProducesResponseType(typeof(ApiResponse), 404)]
-		[ProducesResponseType(typeof(ApiResponse), 405)]
-		[ProducesResponseType(typeof(ApiResponse), 500)]
-		[Route("dashboard")]
-		[HttpGet]
-		public async Task<IActionResult> Dashboard() => Response(await _companySrevice.Dashboard());
+		///// <summary>
+		///// This endpoint is used to fetch company's dashboard info
+		///// </summary>
+		///// <returns>Returns a success message or rotherwise</returns>
+		///// <remarks>
+		///// 
+		///// Sample Request
+		///// GET: api/company/dashboard
+		///// 
+		///// </remarks>
+		///// <response code="200">Returns a summary of the company's dashboard </response>
+		///// <response code="404">Returns not found </response>
+		///// <response code="401">Unauthorized user </response>
+		///// <response code="400">Internal server error - bad request </response>
+		//[ProducesResponseType(typeof(ApiResponse), 200)]
+		//[ProducesResponseType(typeof(ApiResponse), 404)]
+		//[ProducesResponseType(typeof(ApiResponse), 405)]
+		//[ProducesResponseType(typeof(ApiResponse), 500)]
+		//[Route("dashboard")]
+		//[HttpGet]
+		//public async Task<IActionResult> Dashboard() => Response(await _companySrevice.Dashboard());
 
 		/// <summary>
 		/// This endpoint is used to fetch company's profile 

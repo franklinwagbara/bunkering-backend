@@ -8,8 +8,15 @@
     [NewValues]       NVARCHAR (MAX) NULL,
     [AffectedColumns] NVARCHAR (MAX) NULL,
     [PrimaryKey]      NVARCHAR (MAX) NOT NULL,
-    CONSTRAINT [PK_AuditLogs] PRIMARY KEY CLUSTERED ([Id] ASC)
+    CONSTRAINT [PK_AuditLogs] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_AuditLogs_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE CASCADE
 );
+
+
+
+
+
+
 
 
 
