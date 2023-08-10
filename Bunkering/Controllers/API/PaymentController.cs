@@ -32,7 +32,7 @@ namespace Bunkering.Controllers.API
         public async Task<IActionResult> CreatePayment(int id) => Response(await _payment.CreatePayment(id).ConfigureAwait(false));
         [HttpGet]
         [Route("pay-online")]
-        public IActionResult PayOnline(string rrr) => Redirect($"{_appSetting}/Payment/Pay?rrr={rrr}");
+        public IActionResult PayOnline(string rrr) => Redirect($"{_appSetting.ElpsUrl}/Payment/Pay?rrr={rrr}");
 
         [HttpPost]
         [Route("remita")]
