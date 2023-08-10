@@ -12,7 +12,7 @@
 		</CustomData>
 		<CustomData Category="Reference" Type="Assembly">
 			<Metadata Name="LogicalName" Value="Bunkering.Database.dll" />
-			<Metadata Name="FileName" Value="C:\USERS\ANYAN\DOCUMENTS\VISUAL STUDIO 2022\PROJECTS\BUNKERINGBACKEND\BUNKERINGBEND\BUNKERING.DATABASE\OBJ\DEBUG\BUNKERING.DATABASE.DLL" />
+			<Metadata Name="FileName" Value="C:\USERS\SUPPO\DOCUMENTS\VISUAL STUDIO 2022\PROJECTS\BUNKERING\BUNKERING.DATABASE\OBJ\DEBUG\BUNKERING.DATABASE.DLL" />
 			<Metadata Name="AssemblyName" Value="Bunkering.Database" />
 			<Metadata Name="PermissionSet" Value="SAFE" />
 			<Metadata Name="Owner" Value="" />
@@ -20,7 +20,7 @@
 			<Metadata Name="IsVisible" Value="True" />
 			<Metadata Name="IsModelAware" Value="True" />
 			<Metadata Name="SkipCreationIfEmpty" Value="True" />
-			<Metadata Name="AssemblySymbolsName" Value="C:\Users\anyan\Documents\Visual Studio 2022\Projects\BunkeringBackEnd\BunkeringBEnd\Bunkering.Database\obj\Debug\Bunkering.Database.pdb" />
+			<Metadata Name="AssemblySymbolsName" Value="C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering.Database\obj\Debug\Bunkering.Database.pdb" />
 		</CustomData>
 		<CustomData Category="SqlCmdVariables" Type="SqlCmdVariable" />
 	</Header>
@@ -41,6 +41,85 @@
 			<Property Name="QueryStoreCaptureMode" Value="1" />
 			<Property Name="QueryStoreStaleQueryThreshold" Value="367" />
 			<Property Name="MaxDop" Value="0" />
+		</Element>
+		<Element Type="SqlDefaultConstraint">
+			<Property Name="DefaultExpressionScript">
+				<Value><![CDATA[(CONVERT([bit],(0)))]]></Value>
+			</Property>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[Applications]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ExpressionDependencies">
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[bit]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForColumn">
+				<Entry>
+					<References Name="[dbo].[Applications].[IsDeleted]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="3" />
+		</Element>
+		<Element Type="SqlDefaultConstraint">
+			<Property Name="DefaultExpressionScript">
+				<Value><![CDATA[(CONVERT([bit],(0)))]]></Value>
+			</Property>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[AspNetUsers]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ExpressionDependencies">
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[bit]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForColumn">
+				<Entry>
+					<References Name="[dbo].[AspNetUsers].[IsDeleted]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="4" />
+		</Element>
+		<Element Type="SqlDefaultConstraint">
+			<Property Name="DefaultExpressionScript">
+				<Value><![CDATA[((0))]]></Value>
+			</Property>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[FacilityTypeDocuments]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForColumn">
+				<Entry>
+					<References Name="[dbo].[FacilityTypeDocuments].[VesselTypeId]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="5" />
+		</Element>
+		<Element Type="SqlDefaultConstraint">
+			<Property Name="DefaultExpressionScript">
+				<Value><![CDATA[(CONVERT([bit],(0)))]]></Value>
+			</Property>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[WorkFlows]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ExpressionDependencies">
+				<Entry>
+					<References ExternalSource="BuiltIns" Name="[bit]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForColumn">
+				<Entry>
+					<References Name="[dbo].[WorkFlows].[IsArchived]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="6" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[__EFMigrationsHistory]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -85,7 +164,7 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="3" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="7" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[AppFees]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -124,7 +203,7 @@
 					</Element>
 				</Entry>
 				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[AppFees].[FacilityTypeId]">
+					<Element Type="SqlSimpleColumn" Name="[dbo].[AppFees].[VesseltypeId]">
 						<Property Name="IsNullable" Value="False" />
 						<Relationship Name="TypeSpecifier">
 							<Entry>
@@ -253,7 +332,9 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="4" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="8" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="9" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="10" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[AppFees].[IX_AppFees_ApplicationTypeId]">
 			<Relationship Name="ColumnSpecifications">
@@ -273,13 +354,13 @@
 				</Entry>
 			</Relationship>
 		</Element>
-		<Element Type="SqlIndex" Name="[dbo].[AppFees].[IX_AppFees_FacilityTypeId]">
+		<Element Type="SqlIndex" Name="[dbo].[AppFees].[IX_AppFees_VesseltypeId]">
 			<Relationship Name="ColumnSpecifications">
 				<Entry>
 					<Element Type="SqlIndexedColumnSpecification">
 						<Relationship Name="Column">
 							<Entry>
-								<References Name="[dbo].[AppFees].[FacilityTypeId]" />
+								<References Name="[dbo].[AppFees].[VesseltypeId]" />
 							</Entry>
 						</Relationship>
 					</Element>
@@ -451,7 +532,8 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="5" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="11" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="12" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[ApplicationHistories].[IX_ApplicationHistories_ApplicationId]">
 			<Relationship Name="ColumnSpecifications">
@@ -701,7 +783,7 @@
 								</Element>
 							</Entry>
 						</Relationship>
-						<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="6" />
+						<AttachedAnnotation Disambiguator="3" />
 					</Element>
 				</Entry>
 			</Relationship>
@@ -710,7 +792,11 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="7" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="13" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="14" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="15" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="16" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="17" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[Applications].[IX_Applications_ApplicationTypeId]">
 			<Relationship Name="ColumnSpecifications">
@@ -827,7 +913,7 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="8" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="18" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[Appointments]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -1085,7 +1171,8 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="9" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="19" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="20" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[Appointments].[IX_Appointments_ApplicationId]">
 			<Relationship Name="ColumnSpecifications">
@@ -1104,68 +1191,6 @@
 					<References Name="[dbo].[Appointments]" />
 				</Entry>
 			</Relationship>
-		</Element>
-		<Element Type="SqlTable" Name="[dbo].[AppSettings]">
-			<Property Name="IsAnsiNullsOn" Value="True" />
-			<Relationship Name="Columns">
-				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[AppSettings].[Id]">
-						<Property Name="IsNullable" Value="False" />
-						<Property Name="IsIdentity" Value="True" />
-						<Relationship Name="TypeSpecifier">
-							<Entry>
-								<Element Type="SqlTypeSpecifier">
-									<Relationship Name="Type">
-										<Entry>
-											<References ExternalSource="BuiltIns" Name="[int]" />
-										</Entry>
-									</Relationship>
-								</Element>
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[AppSettings].[Name]">
-						<Property Name="IsNullable" Value="False" />
-						<Relationship Name="TypeSpecifier">
-							<Entry>
-								<Element Type="SqlTypeSpecifier">
-									<Property Name="IsMax" Value="True" />
-									<Relationship Name="Type">
-										<Entry>
-											<References ExternalSource="BuiltIns" Name="[nvarchar]" />
-										</Entry>
-									</Relationship>
-								</Element>
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[AppSettings].[Value]">
-						<Property Name="IsNullable" Value="False" />
-						<Relationship Name="TypeSpecifier">
-							<Entry>
-								<Element Type="SqlTypeSpecifier">
-									<Property Name="IsMax" Value="True" />
-									<Relationship Name="Type">
-										<Entry>
-											<References ExternalSource="BuiltIns" Name="[nvarchar]" />
-										</Entry>
-									</Relationship>
-								</Element>
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-			</Relationship>
-			<Relationship Name="Schema">
-				<Entry>
-					<References ExternalSource="BuiltIns" Name="[dbo]" />
-				</Entry>
-			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="10" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[AspNetRoleClaims]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -1242,8 +1267,8 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="11" />
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="12" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="21" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="22" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[AspNetRoleClaims].[IX_AspNetRoleClaims_RoleId]">
 			<Relationship Name="ColumnSpecifications">
@@ -1353,7 +1378,7 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="13" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="23" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[AspNetRoles].[RoleNameIndex]">
 			<Property Name="IsUnique" Value="True" />
@@ -1457,7 +1482,8 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="14" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="24" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="25" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[AspNetUserClaims].[IX_AspNetUserClaims_UserId]">
 			<Relationship Name="ColumnSpecifications">
@@ -1553,7 +1579,8 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="15" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="26" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="27" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[AspNetUserLogins].[IX_AspNetUserLogins_UserId]">
 			<Relationship Name="ColumnSpecifications">
@@ -1616,8 +1643,9 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="16" />
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="17" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="28" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="29" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="30" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[AspNetUserRoles].[IX_AspNetUserRoles_RoleId]">
 			<Relationship Name="ColumnSpecifications">
@@ -2056,7 +2084,7 @@
 								</Element>
 							</Entry>
 						</Relationship>
-						<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="18" />
+						<AttachedAnnotation Disambiguator="4" />
 					</Element>
 				</Entry>
 			</Relationship>
@@ -2065,7 +2093,8 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="19" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="31" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="32" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[AspNetUsers].[EmailIndex]">
 			<Relationship Name="ColumnSpecifications">
@@ -2206,7 +2235,8 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="20" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="33" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="34" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[AuditLogs]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -2367,7 +2397,8 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="21" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="35" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="36" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[AuditLogs].[IX_AuditLogs_UserId]">
 			<Relationship Name="ColumnSpecifications">
@@ -2539,7 +2570,7 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="22" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="37" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[Countries]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -2601,55 +2632,39 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="23" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="38" />
 		</Element>
-		<Element Type="SqlDefaultConstraint" Name="[dbo].[DF_Applications_IsDeleted]">
+		<Element Type="SqlDefaultConstraint" Name="[dbo].[DF__tmp_ms_xx__Capac__32767D0B]">
 			<Property Name="DefaultExpressionScript">
-				<Value><![CDATA[((0))]]></Value>
+				<Value><![CDATA[((0.0))]]></Value>
 			</Property>
 			<Relationship Name="DefiningTable">
 				<Entry>
-					<References Name="[dbo].[Applications]" />
+					<References Name="[dbo].[Facilities]" />
 				</Entry>
 			</Relationship>
 			<Relationship Name="ForColumn">
 				<Entry>
-					<References Name="[dbo].[Applications].[IsDeleted]" />
+					<References Name="[dbo].[Facilities].[Capacity]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="6" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="39" />
 		</Element>
-		<Element Type="SqlDefaultConstraint" Name="[dbo].[DF_AspNetUsers_IsDeleted]">
+		<Element Type="SqlDefaultConstraint" Name="[dbo].[DF__tmp_ms_xx__DeadW__336AA144]">
 			<Property Name="DefaultExpressionScript">
-				<Value><![CDATA[((0))]]></Value>
+				<Value><![CDATA[((0.0))]]></Value>
 			</Property>
 			<Relationship Name="DefiningTable">
 				<Entry>
-					<References Name="[dbo].[AspNetUsers]" />
+					<References Name="[dbo].[Facilities]" />
 				</Entry>
 			</Relationship>
 			<Relationship Name="ForColumn">
 				<Entry>
-					<References Name="[dbo].[AspNetUsers].[IsDeleted]" />
+					<References Name="[dbo].[Facilities].[DeadWeight]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="18" />
-		</Element>
-		<Element Type="SqlDefaultConstraint" Name="[dbo].[DF_WorkFlows_IsArchived]">
-			<Property Name="DefaultExpressionScript">
-				<Value><![CDATA[((0))]]></Value>
-			</Property>
-			<Relationship Name="DefiningTable">
-				<Entry>
-					<References Name="[dbo].[WorkFlows]" />
-				</Entry>
-			</Relationship>
-			<Relationship Name="ForColumn">
-				<Entry>
-					<References Name="[dbo].[WorkFlows].[IsArchived]" />
-				</Entry>
-			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="24" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="40" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[ExtraPayments]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -2728,7 +2743,7 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="25" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="41" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[Facilities]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -2783,22 +2798,6 @@
 					</Element>
 				</Entry>
 				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[Facilities].[FacilityTypeId]">
-						<Property Name="IsNullable" Value="False" />
-						<Relationship Name="TypeSpecifier">
-							<Entry>
-								<Element Type="SqlTypeSpecifier">
-									<Relationship Name="Type">
-										<Entry>
-											<References ExternalSource="BuiltIns" Name="[int]" />
-										</Entry>
-									</Relationship>
-								</Element>
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
 					<Element Type="SqlSimpleColumn" Name="[dbo].[Facilities].[Name]">
 						<Property Name="IsNullable" Value="False" />
 						<Relationship Name="TypeSpecifier">
@@ -2816,7 +2815,7 @@
 					</Element>
 				</Entry>
 				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[Facilities].[LgaId]">
+					<Element Type="SqlSimpleColumn" Name="[dbo].[Facilities].[VesselTypeId]">
 						<Property Name="IsNullable" Value="False" />
 						<Relationship Name="TypeSpecifier">
 							<Entry>
@@ -2824,23 +2823,6 @@
 									<Relationship Name="Type">
 										<Entry>
 											<References ExternalSource="BuiltIns" Name="[int]" />
-										</Entry>
-									</Relationship>
-								</Element>
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[Facilities].[Address]">
-						<Property Name="IsNullable" Value="False" />
-						<Relationship Name="TypeSpecifier">
-							<Entry>
-								<Element Type="SqlTypeSpecifier">
-									<Property Name="IsMax" Value="True" />
-									<Relationship Name="Type">
-										<Entry>
-											<References ExternalSource="BuiltIns" Name="[nvarchar]" />
 										</Entry>
 									</Relationship>
 								</Element>
@@ -2864,13 +2846,70 @@
 						</Relationship>
 					</Element>
 				</Entry>
+				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[Facilities].[Capacity]">
+						<Property Name="IsNullable" Value="False" />
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Property Name="Scale" Value="2" />
+									<Property Name="Precision" Value="18" />
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[decimal]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+						<AttachedAnnotation Disambiguator="39" />
+					</Element>
+				</Entry>
+				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[Facilities].[DeadWeight]">
+						<Property Name="IsNullable" Value="False" />
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Property Name="Scale" Value="2" />
+									<Property Name="Precision" Value="18" />
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[decimal]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+						<AttachedAnnotation Disambiguator="40" />
+					</Element>
+				</Entry>
+				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[Facilities].[Operator]">
+						<Property Name="IsNullable" Value="False" />
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Property Name="IsMax" Value="True" />
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
 			</Relationship>
 			<Relationship Name="Schema">
 				<Entry>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="26" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="42" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="43" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="44" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[Facilities].[IX_Facilities_CompanyId]">
 			<Relationship Name="ColumnSpecifications">
@@ -2890,13 +2929,13 @@
 				</Entry>
 			</Relationship>
 		</Element>
-		<Element Type="SqlIndex" Name="[dbo].[Facilities].[IX_Facilities_FacilityTypeId]">
+		<Element Type="SqlIndex" Name="[dbo].[Facilities].[IX_Facilities_VesselTypeId]">
 			<Relationship Name="ColumnSpecifications">
 				<Entry>
 					<Element Type="SqlIndexedColumnSpecification">
 						<Relationship Name="Column">
 							<Entry>
-								<References Name="[dbo].[Facilities].[FacilityTypeId]" />
+								<References Name="[dbo].[Facilities].[VesselTypeId]" />
 							</Entry>
 						</Relationship>
 					</Element>
@@ -2908,23 +2947,149 @@
 				</Entry>
 			</Relationship>
 		</Element>
-		<Element Type="SqlIndex" Name="[dbo].[Facilities].[IX_Facilities_LgaId]">
-			<Relationship Name="ColumnSpecifications">
+		<Element Type="SqlTable" Name="[dbo].[FacilitySources]">
+			<Property Name="IsAnsiNullsOn" Value="True" />
+			<Relationship Name="Columns">
 				<Entry>
-					<Element Type="SqlIndexedColumnSpecification">
-						<Relationship Name="Column">
+					<Element Type="SqlSimpleColumn" Name="[dbo].[FacilitySources].[Id]">
+						<Property Name="IsNullable" Value="False" />
+						<Property Name="IsIdentity" Value="True" />
+						<Relationship Name="TypeSpecifier">
 							<Entry>
-								<References Name="[dbo].[Facilities].[LgaId]" />
+								<Element Type="SqlTypeSpecifier">
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[int]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[FacilitySources].[FacilityTypeId]">
+						<Property Name="IsNullable" Value="False" />
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[int]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[FacilitySources].[FacilityId]">
+						<Property Name="IsNullable" Value="False" />
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[int]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[FacilitySources].[Name]">
+						<Property Name="IsNullable" Value="False" />
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Property Name="IsMax" Value="True" />
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[FacilitySources].[Address]">
+						<Property Name="IsNullable" Value="False" />
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Property Name="IsMax" Value="True" />
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[FacilitySources].[LicenseNumber]">
+						<Property Name="IsNullable" Value="False" />
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Property Name="IsMax" Value="True" />
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[FacilitySources].[StateId]">
+						<Property Name="IsNullable" Value="False" />
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[int]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[FacilitySources].[LgaId]">
+						<Property Name="IsNullable" Value="False" />
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[int]" />
+										</Entry>
+									</Relationship>
+								</Element>
 							</Entry>
 						</Relationship>
 					</Element>
 				</Entry>
 			</Relationship>
-			<Relationship Name="IndexedObject">
+			<Relationship Name="Schema">
 				<Entry>
-					<References Name="[dbo].[Facilities]" />
+					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="45" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="46" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[FacilityTypeDocuments]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -2979,7 +3144,7 @@
 					</Element>
 				</Entry>
 				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[FacilityTypeDocuments].[FacilityTypeId]">
+					<Element Type="SqlSimpleColumn" Name="[dbo].[FacilityTypeDocuments].[VessleTypeId]">
 						<Property Name="IsNullable" Value="False" />
 						<Relationship Name="TypeSpecifier">
 							<Entry>
@@ -3044,13 +3209,32 @@
 						</Relationship>
 					</Element>
 				</Entry>
+				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[FacilityTypeDocuments].[VesselTypeId]">
+						<Property Name="IsNullable" Value="False" />
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[int]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+						<AttachedAnnotation Disambiguator="5" />
+					</Element>
+				</Entry>
 			</Relationship>
 			<Relationship Name="Schema">
 				<Entry>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="27" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="47" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="48" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="49" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[FacilityTypeDocuments].[IX_FacilityTypeDocuments_ApplicationTypeId]">
 			<Relationship Name="ColumnSpecifications">
@@ -3070,13 +3254,13 @@
 				</Entry>
 			</Relationship>
 		</Element>
-		<Element Type="SqlIndex" Name="[dbo].[FacilityTypeDocuments].[IX_FacilityTypeDocuments_FacilityTypeId]">
+		<Element Type="SqlIndex" Name="[dbo].[FacilityTypeDocuments].[IX_FacilityTypeDocuments_VesselTypeId]">
 			<Relationship Name="ColumnSpecifications">
 				<Entry>
 					<Element Type="SqlIndexedColumnSpecification">
 						<Relationship Name="Column">
 							<Entry>
-								<References Name="[dbo].[FacilityTypeDocuments].[FacilityTypeId]" />
+								<References Name="[dbo].[FacilityTypeDocuments].[VesselTypeId]" />
 							</Entry>
 						</Relationship>
 					</Element>
@@ -3148,7 +3332,198 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="28" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="50" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_AppFees_ApplicationTypes_ApplicationTypeId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[AppFees].[ApplicationTypeId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[AppFees]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[ApplicationTypes].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[ApplicationTypes]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="9" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_AppFees_VesselTypes_VesseltypeId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[AppFees].[VesseltypeId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[AppFees]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[VesselTypes].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[VesselTypes]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="10" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_ApplicationHistories_Applications_ApplicationId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[ApplicationHistories].[ApplicationId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[ApplicationHistories]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[Applications].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[Applications]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="12" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_Applications_ApplicationTypes_ApplicationTypeId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[Applications].[ApplicationTypeId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[Applications]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[ApplicationTypes].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[ApplicationTypes]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="14" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_Applications_AspNetUsers_UserId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[Applications].[UserId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[Applications]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[AspNetUsers].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[AspNetUsers]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="15" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_Applications_Facilities_FacilityId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[Applications].[FacilityId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[Applications]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[Facilities].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[Facilities]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="16" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_Applications_WorkFlows_FlowId]">
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[Applications].[FlowId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[Applications]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[WorkFlows].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[WorkFlows]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="17" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_Appointments_Applications_ApplicationId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[Appointments].[ApplicationId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[Appointments]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[Applications].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[Applications]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="20" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_AspNetRoleClaims_AspNetRoles_RoleId]">
 			<Property Name="OnDeleteAction" Value="1" />
@@ -3172,7 +3547,55 @@
 					<References Name="[dbo].[AspNetRoles]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="12" />
+			<AttachedAnnotation Disambiguator="22" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_AspNetUserClaims_AspNetUsers_UserId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[AspNetUserClaims].[UserId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[AspNetUserClaims]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[AspNetUsers].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[AspNetUsers]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="25" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_AspNetUserLogins_AspNetUsers_UserId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[AspNetUserLogins].[UserId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[AspNetUserLogins]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[AspNetUsers].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[AspNetUsers]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="27" />
 		</Element>
 		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_AspNetUserRoles_AspNetRoles_RoleId]">
 			<Property Name="OnDeleteAction" Value="1" />
@@ -3196,7 +3619,460 @@
 					<References Name="[dbo].[AspNetRoles]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="17" />
+			<AttachedAnnotation Disambiguator="29" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_AspNetUserRoles_AspNetUsers_UserId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[AspNetUserRoles].[UserId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[AspNetUserRoles]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[AspNetUsers].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[AspNetUsers]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="30" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_AspNetUsers_Companies_CompanyId]">
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[AspNetUsers].[CompanyId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[AspNetUsers]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[Companies].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[Companies]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="32" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_AspNetUserTokens_AspNetUsers_UserId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[AspNetUserTokens].[UserId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[AspNetUserTokens]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[AspNetUsers].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[AspNetUsers]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="34" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_AuditLogs_AspNetUsers_UserId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[AuditLogs].[UserId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[AuditLogs]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[AspNetUsers].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[AspNetUsers]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="36" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_Facilities_Companies_CompanyId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[Facilities].[CompanyId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[Facilities]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[Companies].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[Companies]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="43" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_Facilities_VesselTypes_VesselTypeId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[Facilities].[VesselTypeId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[Facilities]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[VesselTypes].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[VesselTypes]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="44" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_FacilitySources_Facilityies]">
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[FacilitySources].[FacilityId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[FacilitySources]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[Facilities].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[Facilities]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="46" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_FacilityTypeDocuments_ApplicationTypes_ApplicationTypeId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[FacilityTypeDocuments].[ApplicationTypeId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[FacilityTypeDocuments]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[ApplicationTypes].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[ApplicationTypes]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="48" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_FacilityTypeDocuments_VesselTypes_VesselTypeId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[FacilityTypeDocuments].[VesselTypeId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[FacilityTypeDocuments]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[VesselTypes].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[VesselTypes]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="49" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_Inspections_Applications_ApplicationId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[Inspections].[ApplicationId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[Inspections]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[Applications].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[Applications]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="51" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_LGAs_States_StateId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[LGAs].[StateId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[LGAs]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[States].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[States]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="52" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_Messages_Applications_ApplicationId]">
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[Messages].[ApplicationId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[Messages]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[Applications].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[Applications]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="53" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_Payments_Applications_ApplicationId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[Payments].[ApplicationId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[Payments]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[Applications].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[Applications]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="54" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_Payments_ExtraPayments_ExtraPaymentId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[Payments].[ExtraPaymentId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[Payments]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[ExtraPayments].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[ExtraPayments]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="55" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_Permits_Applications_ApplicationId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[Permits].[ApplicationId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[Permits]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[Applications].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[Applications]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="56" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_States_Countries_CountryId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[States].[CountryId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[States]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[Countries].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[Countries]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="57" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_SubmittedDocuments_Applications_ApplicationId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[SubmittedDocuments].[ApplicationId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[SubmittedDocuments]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[Applications].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[Applications]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="58" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_Tanks_Facilities_FacilityId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[Tanks].[FacilityId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[Tanks]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[Facilities].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[Facilities]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="59" />
+		</Element>
+		<Element Type="SqlForeignKeyConstraint" Name="[dbo].[FK_Tanks_Products_ProductId]">
+			<Property Name="OnDeleteAction" Value="1" />
+			<Relationship Name="Columns">
+				<Entry>
+					<References Name="[dbo].[Tanks].[ProductId]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[Tanks]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignColumns">
+				<Entry>
+					<References Name="[dbo].[Products].[Id]" />
+				</Entry>
+			</Relationship>
+			<Relationship Name="ForeignTable">
+				<Entry>
+					<References Name="[dbo].[Products]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="60" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[Inspections]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -3342,7 +4218,8 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="29" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="61" />
+			<AttachedAnnotation Disambiguator="51" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[Inspections].[IX_Inspections_ApplicationId]">
 			<Relationship Name="ColumnSpecifications">
@@ -3438,7 +4315,8 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="30" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="62" />
+			<AttachedAnnotation Disambiguator="52" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[LGAs].[IX_LGAs_StateId]">
 			<Relationship Name="ColumnSpecifications">
@@ -3583,7 +4461,8 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="31" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="63" />
+			<AttachedAnnotation Disambiguator="53" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[Messages].[IX_Messages_ApplicationId]">
 			<Relationship Name="ColumnSpecifications">
@@ -3641,6 +4520,7 @@
 				</Entry>
 				<Entry>
 					<Element Type="SqlSimpleColumn" Name="[dbo].[Payments].[ExtraPaymentId]">
+						<Property Name="IsNullable" Value="False" />
 						<Relationship Name="TypeSpecifier">
 							<Entry>
 								<Element Type="SqlTypeSpecifier">
@@ -3951,7 +4831,9 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="32" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="64" />
+			<AttachedAnnotation Disambiguator="54" />
+			<AttachedAnnotation Disambiguator="55" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[Payments].[IX_Payments_ApplicationId]">
 			<Relationship Name="ColumnSpecifications">
@@ -3960,6 +4842,24 @@
 						<Relationship Name="Column">
 							<Entry>
 								<References Name="[dbo].[Payments].[ApplicationId]" />
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+			</Relationship>
+			<Relationship Name="IndexedObject">
+				<Entry>
+					<References Name="[dbo].[Payments]" />
+				</Entry>
+			</Relationship>
+		</Element>
+		<Element Type="SqlIndex" Name="[dbo].[Payments].[IX_Payments_ExtraPaymentId]">
+			<Relationship Name="ColumnSpecifications">
+				<Entry>
+					<Element Type="SqlIndexedColumnSpecification">
+						<Relationship Name="Column">
+							<Entry>
+								<References Name="[dbo].[Payments].[ExtraPaymentId]" />
 							</Entry>
 						</Relationship>
 					</Element>
@@ -4114,7 +5014,8 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="33" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="65" />
+			<AttachedAnnotation Disambiguator="56" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[Permits].[IX_Permits_ApplicationId]">
 			<Relationship Name="ColumnSpecifications">
@@ -4151,7 +5052,7 @@
 					<References Name="[dbo].[__EFMigrationsHistory]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="3" />
+			<AttachedAnnotation Disambiguator="7" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_AppFees]">
 			<Relationship Name="ColumnSpecifications">
@@ -4170,7 +5071,7 @@
 					<References Name="[dbo].[AppFees]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="4" />
+			<AttachedAnnotation Disambiguator="8" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_ApplicationHistories]">
 			<Relationship Name="ColumnSpecifications">
@@ -4189,7 +5090,7 @@
 					<References Name="[dbo].[ApplicationHistories]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="5" />
+			<AttachedAnnotation Disambiguator="11" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_Applications]">
 			<Relationship Name="ColumnSpecifications">
@@ -4208,7 +5109,7 @@
 					<References Name="[dbo].[Applications]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="7" />
+			<AttachedAnnotation Disambiguator="13" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_ApplicationTypes]">
 			<Relationship Name="ColumnSpecifications">
@@ -4227,7 +5128,7 @@
 					<References Name="[dbo].[ApplicationTypes]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="8" />
+			<AttachedAnnotation Disambiguator="18" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_Appointments]">
 			<Relationship Name="ColumnSpecifications">
@@ -4246,26 +5147,7 @@
 					<References Name="[dbo].[Appointments]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="9" />
-		</Element>
-		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_AppSettings]">
-			<Relationship Name="ColumnSpecifications">
-				<Entry>
-					<Element Type="SqlIndexedColumnSpecification">
-						<Relationship Name="Column">
-							<Entry>
-								<References Name="[dbo].[AppSettings].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-			</Relationship>
-			<Relationship Name="DefiningTable">
-				<Entry>
-					<References Name="[dbo].[AppSettings]" />
-				</Entry>
-			</Relationship>
-			<AttachedAnnotation Disambiguator="10" />
+			<AttachedAnnotation Disambiguator="19" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_AspNetRoleClaims]">
 			<Relationship Name="ColumnSpecifications">
@@ -4284,7 +5166,7 @@
 					<References Name="[dbo].[AspNetRoleClaims]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="11" />
+			<AttachedAnnotation Disambiguator="21" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_AspNetRoles]">
 			<Relationship Name="ColumnSpecifications">
@@ -4303,7 +5185,7 @@
 					<References Name="[dbo].[AspNetRoles]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="13" />
+			<AttachedAnnotation Disambiguator="23" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_AspNetUserClaims]">
 			<Relationship Name="ColumnSpecifications">
@@ -4322,7 +5204,7 @@
 					<References Name="[dbo].[AspNetUserClaims]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="14" />
+			<AttachedAnnotation Disambiguator="24" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_AspNetUserLogins]">
 			<Relationship Name="ColumnSpecifications">
@@ -4350,7 +5232,7 @@
 					<References Name="[dbo].[AspNetUserLogins]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="15" />
+			<AttachedAnnotation Disambiguator="26" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_AspNetUserRoles]">
 			<Relationship Name="ColumnSpecifications">
@@ -4378,7 +5260,7 @@
 					<References Name="[dbo].[AspNetUserRoles]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="16" />
+			<AttachedAnnotation Disambiguator="28" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_AspNetUsers]">
 			<Relationship Name="ColumnSpecifications">
@@ -4397,7 +5279,7 @@
 					<References Name="[dbo].[AspNetUsers]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="19" />
+			<AttachedAnnotation Disambiguator="31" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_AspNetUserTokens]">
 			<Relationship Name="ColumnSpecifications">
@@ -4434,7 +5316,7 @@
 					<References Name="[dbo].[AspNetUserTokens]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="20" />
+			<AttachedAnnotation Disambiguator="33" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_AuditLogs]">
 			<Relationship Name="ColumnSpecifications">
@@ -4453,7 +5335,7 @@
 					<References Name="[dbo].[AuditLogs]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="21" />
+			<AttachedAnnotation Disambiguator="35" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_Companies]">
 			<Relationship Name="ColumnSpecifications">
@@ -4472,7 +5354,7 @@
 					<References Name="[dbo].[Companies]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="22" />
+			<AttachedAnnotation Disambiguator="37" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_Countries]">
 			<Relationship Name="ColumnSpecifications">
@@ -4491,7 +5373,7 @@
 					<References Name="[dbo].[Countries]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="23" />
+			<AttachedAnnotation Disambiguator="38" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_ExtraPayments]">
 			<Relationship Name="ColumnSpecifications">
@@ -4510,7 +5392,7 @@
 					<References Name="[dbo].[ExtraPayments]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="25" />
+			<AttachedAnnotation Disambiguator="41" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_Facilities]">
 			<Relationship Name="ColumnSpecifications">
@@ -4529,7 +5411,26 @@
 					<References Name="[dbo].[Facilities]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="26" />
+			<AttachedAnnotation Disambiguator="42" />
+		</Element>
+		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_FacilitySources]">
+			<Relationship Name="ColumnSpecifications">
+				<Entry>
+					<Element Type="SqlIndexedColumnSpecification">
+						<Relationship Name="Column">
+							<Entry>
+								<References Name="[dbo].[FacilitySources].[Id]" />
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[FacilitySources]" />
+				</Entry>
+			</Relationship>
+			<AttachedAnnotation Disambiguator="45" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_FacilityTypeDocuments]">
 			<Relationship Name="ColumnSpecifications">
@@ -4548,7 +5449,7 @@
 					<References Name="[dbo].[FacilityTypeDocuments]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="27" />
+			<AttachedAnnotation Disambiguator="47" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_FacilityTypes]">
 			<Relationship Name="ColumnSpecifications">
@@ -4567,7 +5468,7 @@
 					<References Name="[dbo].[FacilityTypes]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="28" />
+			<AttachedAnnotation Disambiguator="50" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_Inspections]">
 			<Relationship Name="ColumnSpecifications">
@@ -4586,7 +5487,7 @@
 					<References Name="[dbo].[Inspections]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="29" />
+			<AttachedAnnotation Disambiguator="61" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_LGAs]">
 			<Relationship Name="ColumnSpecifications">
@@ -4605,7 +5506,7 @@
 					<References Name="[dbo].[LGAs]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="30" />
+			<AttachedAnnotation Disambiguator="62" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_Messages]">
 			<Relationship Name="ColumnSpecifications">
@@ -4624,7 +5525,7 @@
 					<References Name="[dbo].[Messages]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="31" />
+			<AttachedAnnotation Disambiguator="63" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_Payments]">
 			<Relationship Name="ColumnSpecifications">
@@ -4643,7 +5544,7 @@
 					<References Name="[dbo].[Payments]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="32" />
+			<AttachedAnnotation Disambiguator="64" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_Permits]">
 			<Relationship Name="ColumnSpecifications">
@@ -4662,7 +5563,7 @@
 					<References Name="[dbo].[Permits]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="33" />
+			<AttachedAnnotation Disambiguator="65" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_Products]">
 			<Relationship Name="ColumnSpecifications">
@@ -4681,7 +5582,7 @@
 					<References Name="[dbo].[Products]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="34" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="66" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_States]">
 			<Relationship Name="ColumnSpecifications">
@@ -4700,7 +5601,7 @@
 					<References Name="[dbo].[States]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="35" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="67" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_SubmittedDocuments]">
 			<Relationship Name="ColumnSpecifications">
@@ -4719,7 +5620,7 @@
 					<References Name="[dbo].[SubmittedDocuments]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="36" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="68" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_Tanks]">
 			<Relationship Name="ColumnSpecifications">
@@ -4738,7 +5639,7 @@
 					<References Name="[dbo].[Tanks]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="37" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="69" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_ValidatiionResponses]">
 			<Relationship Name="ColumnSpecifications">
@@ -4757,7 +5658,26 @@
 					<References Name="[dbo].[ValidatiionResponses]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="38" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="70" />
+		</Element>
+		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_VesselTypes]">
+			<Relationship Name="ColumnSpecifications">
+				<Entry>
+					<Element Type="SqlIndexedColumnSpecification">
+						<Relationship Name="Column">
+							<Entry>
+								<References Name="[dbo].[VesselTypes].[Id]" />
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+			</Relationship>
+			<Relationship Name="DefiningTable">
+				<Entry>
+					<References Name="[dbo].[VesselTypes]" />
+				</Entry>
+			</Relationship>
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="71" />
 		</Element>
 		<Element Type="SqlPrimaryKeyConstraint" Name="[dbo].[PK_WorkFlows]">
 			<Relationship Name="ColumnSpecifications">
@@ -4776,7 +5696,7 @@
 					<References Name="[dbo].[WorkFlows]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="39" />
+			<Annotation Type="SqlInlineConstraintAnnotation" Disambiguator="72" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[Products]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -4821,7 +5741,7 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="34" />
+			<AttachedAnnotation Disambiguator="66" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[States]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -4830,6 +5750,22 @@
 					<Element Type="SqlSimpleColumn" Name="[dbo].[States].[Id]">
 						<Property Name="IsNullable" Value="False" />
 						<Property Name="IsIdentity" Value="True" />
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[int]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[States].[CountryId]">
+						<Property Name="IsNullable" Value="False" />
 						<Relationship Name="TypeSpecifier">
 							<Entry>
 								<Element Type="SqlTypeSpecifier">
@@ -4877,29 +5813,14 @@
 						</Relationship>
 					</Element>
 				</Entry>
-				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[States].[CountryId]">
-						<Property Name="IsNullable" Value="False" />
-						<Relationship Name="TypeSpecifier">
-							<Entry>
-								<Element Type="SqlTypeSpecifier">
-									<Relationship Name="Type">
-										<Entry>
-											<References ExternalSource="BuiltIns" Name="[int]" />
-										</Entry>
-									</Relationship>
-								</Element>
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
 			</Relationship>
 			<Relationship Name="Schema">
 				<Entry>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="35" />
+			<AttachedAnnotation Disambiguator="67" />
+			<AttachedAnnotation Disambiguator="57" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[States].[IX_States_CountryId]">
 			<Relationship Name="ColumnSpecifications">
@@ -5044,7 +5965,8 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="36" />
+			<AttachedAnnotation Disambiguator="68" />
+			<AttachedAnnotation Disambiguator="58" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[SubmittedDocuments].[IX_SubmittedDocuments_ApplicationId]">
 			<Relationship Name="ColumnSpecifications">
@@ -5101,6 +6023,22 @@
 					</Element>
 				</Entry>
 				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[Tanks].[ProductId]">
+						<Property Name="IsNullable" Value="False" />
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[int]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+				<Entry>
 					<Element Type="SqlSimpleColumn" Name="[dbo].[Tanks].[Name]">
 						<Property Name="IsNullable" Value="False" />
 						<Relationship Name="TypeSpecifier">
@@ -5135,29 +6073,15 @@
 						</Relationship>
 					</Element>
 				</Entry>
-				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[Tanks].[ProductId]">
-						<Property Name="IsNullable" Value="False" />
-						<Relationship Name="TypeSpecifier">
-							<Entry>
-								<Element Type="SqlTypeSpecifier">
-									<Relationship Name="Type">
-										<Entry>
-											<References ExternalSource="BuiltIns" Name="[int]" />
-										</Entry>
-									</Relationship>
-								</Element>
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
 			</Relationship>
 			<Relationship Name="Schema">
 				<Entry>
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="37" />
+			<AttachedAnnotation Disambiguator="69" />
+			<AttachedAnnotation Disambiguator="59" />
+			<AttachedAnnotation Disambiguator="60" />
 		</Element>
 		<Element Type="SqlIndex" Name="[dbo].[Tanks].[IX_Tanks_FacilityId]">
 			<Relationship Name="ColumnSpecifications">
@@ -5288,125 +6212,44 @@
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="38" />
+			<AttachedAnnotation Disambiguator="70" />
 		</Element>
-		<Element Type="SqlView" Name="[dbo].[vAppDoc]">
-			<Property Name="QueryScript">
-				<Value><![CDATA[
-SELECT dbo.Applications.Id AS AppId, dbo.ApplicationTypes.Name AS AppTypeName, dbo.SubmittedDocuments.Id AS SubmittedDocId, dbo.SubmittedDocuments.DocType, dbo.SubmittedDocuments.DocName, dbo.Applications.SubmittedDate, 
-                  dbo.Applications.Status
-FROM     dbo.Applications INNER JOIN
-                  dbo.SubmittedDocuments ON dbo.Applications.Id = dbo.SubmittedDocuments.Id INNER JOIN
-                  dbo.ApplicationTypes ON dbo.Applications.Id = dbo.ApplicationTypes.Id]]></Value>
-			</Property>
+		<Element Type="SqlTable" Name="[dbo].[VesselTypes]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
 			<Relationship Name="Columns">
 				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vAppDoc].[AppId]">
-						<Relationship Name="ExpressionDependencies">
+					<Element Type="SqlSimpleColumn" Name="[dbo].[VesselTypes].[Id]">
+						<Property Name="IsNullable" Value="False" />
+						<Property Name="IsIdentity" Value="True" />
+						<Relationship Name="TypeSpecifier">
 							<Entry>
-								<References Name="[dbo].[Applications].[Id]" />
+								<Element Type="SqlTypeSpecifier">
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[int]" />
+										</Entry>
+									</Relationship>
+								</Element>
 							</Entry>
 						</Relationship>
 					</Element>
 				</Entry>
 				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vAppDoc].[AppTypeName]">
-						<Relationship Name="ExpressionDependencies">
+					<Element Type="SqlSimpleColumn" Name="[dbo].[VesselTypes].[Name]">
+						<Property Name="IsNullable" Value="False" />
+						<Relationship Name="TypeSpecifier">
 							<Entry>
-								<References Name="[dbo].[ApplicationTypes].[Name]" />
+								<Element Type="SqlTypeSpecifier">
+									<Property Name="IsMax" Value="True" />
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[nvarchar]" />
+										</Entry>
+									</Relationship>
+								</Element>
 							</Entry>
 						</Relationship>
 					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vAppDoc].[SubmittedDocId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[SubmittedDocuments].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vAppDoc].[DocType]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[SubmittedDocuments].[DocType]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vAppDoc].[DocName]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[SubmittedDocuments].[DocName]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vAppDoc].[SubmittedDate]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Applications].[SubmittedDate]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vAppDoc].[Status]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Applications].[Status]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-			</Relationship>
-			<Relationship Name="QueryDependencies">
-				<Entry>
-					<References Name="[dbo].[Applications]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[SubmittedDocuments]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Applications].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[SubmittedDocuments].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationTypes]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Applications].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationTypes].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Applications].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationTypes].[Name]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[SubmittedDocuments].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[SubmittedDocuments].[DocType]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[SubmittedDocuments].[DocName]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Applications].[SubmittedDate]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Applications].[Status]" />
 				</Entry>
 			</Relationship>
 			<Relationship Name="Schema">
@@ -5414,1013 +6257,7 @@ FROM     dbo.Applications INNER JOIN
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Length" Value="523" />
-				<Property Name="StartLine" Value="1" />
-				<Property Name="StartColumn" Value="1" />
-				<Property Name="HeaderContents" Value="CREATE VIEW dbo.vAppDoc&#xD;&#xA;AS" />
-			</Annotation>
-		</Element>
-		<Element Type="SqlView" Name="[dbo].[vAppHistory]">
-			<Property Name="QueryScript">
-				<Value><![CDATA[
-SELECT dbo.Applications.Id AS AppId, dbo.ApplicationTypes.Id AS AppTypeId, dbo.AspNetUsers.Id AS AspNetUserId, dbo.ApplicationHistories.Id AS AppHistoryId, dbo.ApplicationHistories.ApplicationId
-FROM     dbo.Applications INNER JOIN
-                  dbo.ApplicationHistories ON dbo.Applications.Id = dbo.ApplicationHistories.ApplicationId INNER JOIN
-                  dbo.ApplicationTypes ON dbo.Applications.ApplicationTypeId = dbo.ApplicationTypes.Id INNER JOIN
-                  dbo.AspNetUsers ON dbo.ApplicationHistories.TriggeredBy = dbo.AspNetUsers.Id]]></Value>
-			</Property>
-			<Property Name="IsAnsiNullsOn" Value="True" />
-			<Relationship Name="Columns">
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vAppHistory].[AppId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Applications].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vAppHistory].[AppTypeId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[ApplicationTypes].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vAppHistory].[AspNetUserId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[AspNetUsers].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vAppHistory].[AppHistoryId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[ApplicationHistories].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vAppHistory].[ApplicationId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[ApplicationHistories].[ApplicationId]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-			</Relationship>
-			<Relationship Name="QueryDependencies">
-				<Entry>
-					<References Name="[dbo].[Applications]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationHistories]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Applications].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationHistories].[ApplicationId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationTypes]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Applications].[ApplicationTypeId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationTypes].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[AspNetUsers]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationHistories].[TriggeredBy]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[AspNetUsers].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Applications].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationTypes].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[AspNetUsers].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationHistories].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationHistories].[ApplicationId]" />
-				</Entry>
-			</Relationship>
-			<Relationship Name="Schema">
-				<Entry>
-					<References ExternalSource="BuiltIns" Name="[dbo]" />
-				</Entry>
-			</Relationship>
-			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Length" Value="595" />
-				<Property Name="StartLine" Value="1" />
-				<Property Name="StartColumn" Value="1" />
-				<Property Name="HeaderContents" Value="CREATE VIEW dbo.vAppHistory&#xD;&#xA;AS" />
-			</Annotation>
-		</Element>
-		<Element Type="SqlView" Name="[dbo].[vApplication]">
-			<Property Name="QueryScript">
-				<Value><![CDATA[
-SELECT dbo.Applications.Id, dbo.ApplicationTypes.Id AS AppId, dbo.ApplicationTypes.Name AS ApplicationName, dbo.Inspections.Id AS InspectionId, dbo.Inspections.InspectionDocument, dbo.SubmittedDocuments.Id AS SubmittedDocId, 
-                  dbo.SubmittedDocuments.DocName, dbo.SubmittedDocuments.DocType, dbo.AppFees.ApplicationFee, dbo.FacilityTypes.Name AS FacilityTypeName
-FROM     dbo.AppFees INNER JOIN
-                  dbo.ApplicationTypes ON dbo.AppFees.ApplicationTypeId = dbo.ApplicationTypes.Id INNER JOIN
-                  dbo.Applications ON dbo.ApplicationTypes.Id = dbo.Applications.ApplicationTypeId INNER JOIN
-                  dbo.FacilityTypes ON dbo.AppFees.FacilityTypeId = dbo.FacilityTypes.Id INNER JOIN
-                  dbo.Inspections ON dbo.Applications.ApplicationTypeId = dbo.Inspections.ApplicationId INNER JOIN
-                  dbo.SubmittedDocuments ON dbo.Applications.Id = dbo.SubmittedDocuments.ApplicationId]]></Value>
-			</Property>
-			<Property Name="IsAnsiNullsOn" Value="True" />
-			<Relationship Name="Columns">
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vApplication].[Id]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Applications].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vApplication].[AppId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[ApplicationTypes].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vApplication].[ApplicationName]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[ApplicationTypes].[Name]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vApplication].[InspectionId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Inspections].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vApplication].[InspectionDocument]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Inspections].[InspectionDocument]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vApplication].[SubmittedDocId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[SubmittedDocuments].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vApplication].[DocName]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[SubmittedDocuments].[DocName]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vApplication].[DocType]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[SubmittedDocuments].[DocType]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vApplication].[ApplicationFee]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[AppFees].[ApplicationFee]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vApplication].[FacilityTypeName]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[FacilityTypes].[Name]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-			</Relationship>
-			<Relationship Name="QueryDependencies">
-				<Entry>
-					<References Name="[dbo].[AppFees]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationTypes]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[AppFees].[ApplicationTypeId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationTypes].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Applications]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationTypes].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Applications].[ApplicationTypeId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[FacilityTypes]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[AppFees].[FacilityTypeId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[FacilityTypes].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Inspections]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Applications].[ApplicationTypeId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Inspections].[ApplicationId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[SubmittedDocuments]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Applications].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[SubmittedDocuments].[ApplicationId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationTypes].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationTypes].[Name]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Inspections].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Inspections].[InspectionDocument]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[SubmittedDocuments].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[SubmittedDocuments].[DocName]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[SubmittedDocuments].[DocType]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[AppFees].[ApplicationFee]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[FacilityTypes].[Name]" />
-				</Entry>
-			</Relationship>
-			<Relationship Name="Schema">
-				<Entry>
-					<References ExternalSource="BuiltIns" Name="[dbo]" />
-				</Entry>
-			</Relationship>
-			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Length" Value="988" />
-				<Property Name="StartLine" Value="1" />
-				<Property Name="StartColumn" Value="1" />
-				<Property Name="HeaderContents" Value="CREATE VIEW dbo.vApplication&#xD;&#xA;AS" />
-			</Annotation>
-		</Element>
-		<Element Type="SqlView" Name="[dbo].[vCountries]">
-			<Property Name="QueryScript">
-				<Value><![CDATA[
-SELECT dbo.Countries.Id AS CountryId, dbo.Countries.Name AS CountryName, dbo.States.Id AS StateId, dbo.States.Name AS StateName, dbo.LGAs.Id AS LGAId, dbo.LGAs.Name AS LGA_Name, dbo.Companies.Id AS CompanyId, 
-                  dbo.Companies.Name AS CompanyName
-FROM     dbo.States INNER JOIN
-                  dbo.Companies ON dbo.States.Id = dbo.Companies.StateId INNER JOIN
-                  dbo.Countries ON dbo.Companies.CountryId = dbo.Countries.Id INNER JOIN
-                  dbo.LGAs ON dbo.States.Id = dbo.LGAs.StateId]]></Value>
-			</Property>
-			<Property Name="IsAnsiNullsOn" Value="True" />
-			<Relationship Name="Columns">
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vCountries].[CountryId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Countries].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vCountries].[CountryName]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Countries].[Name]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vCountries].[StateId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[States].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vCountries].[StateName]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[States].[Name]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vCountries].[LGAId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[LGAs].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vCountries].[LGA_Name]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[LGAs].[Name]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vCountries].[CompanyId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Companies].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vCountries].[CompanyName]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Companies].[Name]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-			</Relationship>
-			<Relationship Name="QueryDependencies">
-				<Entry>
-					<References Name="[dbo].[States]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Companies]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[States].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Companies].[StateId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Countries]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Companies].[CountryId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Countries].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[LGAs]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[States].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[LGAs].[StateId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Countries].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Countries].[Name]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[States].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[States].[Name]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[LGAs].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[LGAs].[Name]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Companies].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Companies].[Name]" />
-				</Entry>
-			</Relationship>
-			<Relationship Name="Schema">
-				<Entry>
-					<References ExternalSource="BuiltIns" Name="[dbo]" />
-				</Entry>
-			</Relationship>
-			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Length" Value="565" />
-				<Property Name="StartLine" Value="1" />
-				<Property Name="StartColumn" Value="1" />
-				<Property Name="HeaderContents" Value="CREATE VIEW dbo.vCountries&#xD;&#xA;AS" />
-			</Annotation>
-		</Element>
-		<Element Type="SqlView" Name="[dbo].[vFacilities]">
-			<Property Name="QueryScript">
-				<Value><![CDATA[
-SELECT dbo.Facilities.Name, dbo.Facilities.Address, dbo.Facilities.IsLicensed, dbo.FacilityTypes.Name AS FacilityTypeName, dbo.Companies.Name AS ComapnyName, dbo.Tanks.Name AS TankName, dbo.Tanks.Capacity, dbo.Facilities.Id, 
-                  dbo.Companies.Id AS CompanyId, dbo.Tanks.Id AS TanksId, dbo.Products.Id AS ProductId, dbo.Products.Name AS ProductName, dbo.FacilityTypes.Id AS Expr5
-FROM     dbo.Products INNER JOIN
-                  dbo.FacilityTypes INNER JOIN
-                  dbo.Tanks INNER JOIN
-                  dbo.Facilities ON dbo.Tanks.FacilityId = dbo.Facilities.Id INNER JOIN
-                  dbo.Companies ON dbo.Facilities.CompanyId = dbo.Companies.Id ON dbo.FacilityTypes.Id = dbo.Facilities.FacilityTypeId ON dbo.Products.Id = dbo.Tanks.ProductId]]></Value>
-			</Property>
-			<Property Name="IsAnsiNullsOn" Value="True" />
-			<Relationship Name="Columns">
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilities].[Name]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Facilities].[Name]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilities].[Address]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Facilities].[Address]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilities].[IsLicensed]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Facilities].[IsLicensed]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilities].[FacilityTypeName]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[FacilityTypes].[Name]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilities].[ComapnyName]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Companies].[Name]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilities].[TankName]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Tanks].[Name]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilities].[Capacity]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Tanks].[Capacity]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilities].[Id]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Facilities].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilities].[CompanyId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Companies].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilities].[TanksId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Tanks].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilities].[ProductId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Products].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilities].[ProductName]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Products].[Name]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilities].[Expr5]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[FacilityTypes].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-			</Relationship>
-			<Relationship Name="QueryDependencies">
-				<Entry>
-					<References Name="[dbo].[Products]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[FacilityTypes]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Tanks]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Facilities]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Tanks].[FacilityId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Facilities].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Companies]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Facilities].[CompanyId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Companies].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[FacilityTypes].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Facilities].[FacilityTypeId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Products].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Tanks].[ProductId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Facilities].[Name]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Facilities].[Address]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Facilities].[IsLicensed]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[FacilityTypes].[Name]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Companies].[Name]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Tanks].[Name]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Tanks].[Capacity]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Facilities].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Companies].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Tanks].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Products].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Products].[Name]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[FacilityTypes].[Id]" />
-				</Entry>
-			</Relationship>
-			<Relationship Name="Schema">
-				<Entry>
-					<References ExternalSource="BuiltIns" Name="[dbo]" />
-				</Entry>
-			</Relationship>
-			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Length" Value="815" />
-				<Property Name="StartLine" Value="1" />
-				<Property Name="StartColumn" Value="1" />
-				<Property Name="HeaderContents" Value="CREATE VIEW dbo.vFacilities&#xD;&#xA;AS" />
-			</Annotation>
-		</Element>
-		<Element Type="SqlView" Name="[dbo].[vFacilityDoc]">
-			<Property Name="QueryScript">
-				<Value><![CDATA[
-SELECT dbo.ApplicationTypes.Id AS AppTypeId, dbo.ApplicationTypes.Name AS AppTypeName, dbo.FacilityTypeDocuments.Id AS FacilityTypeDocId, dbo.FacilityTypeDocuments.DocumentTypeId AS DocTypeId, 
-                  dbo.FacilityTypeDocuments.DocType, dbo.FacilityTypeDocuments.Name AS DocName, dbo.FacilityTypeDocuments.IsFADDoc
-FROM     dbo.FacilityTypeDocuments INNER JOIN
-                  dbo.ApplicationTypes ON dbo.FacilityTypeDocuments.ApplicationTypeId = dbo.ApplicationTypes.Id]]></Value>
-			</Property>
-			<Property Name="IsAnsiNullsOn" Value="True" />
-			<Relationship Name="Columns">
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilityDoc].[AppTypeId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[ApplicationTypes].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilityDoc].[AppTypeName]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[ApplicationTypes].[Name]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilityDoc].[FacilityTypeDocId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[FacilityTypeDocuments].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilityDoc].[DocTypeId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[FacilityTypeDocuments].[DocumentTypeId]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilityDoc].[DocType]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[FacilityTypeDocuments].[DocType]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilityDoc].[DocName]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[FacilityTypeDocuments].[Name]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vFacilityDoc].[IsFADDoc]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[FacilityTypeDocuments].[IsFADDoc]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-			</Relationship>
-			<Relationship Name="QueryDependencies">
-				<Entry>
-					<References Name="[dbo].[FacilityTypeDocuments]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationTypes]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[FacilityTypeDocuments].[ApplicationTypeId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationTypes].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationTypes].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ApplicationTypes].[Name]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[FacilityTypeDocuments].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[FacilityTypeDocuments].[DocumentTypeId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[FacilityTypeDocuments].[DocType]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[FacilityTypeDocuments].[Name]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[FacilityTypeDocuments].[IsFADDoc]" />
-				</Entry>
-			</Relationship>
-			<Relationship Name="Schema">
-				<Entry>
-					<References ExternalSource="BuiltIns" Name="[dbo]" />
-				</Entry>
-			</Relationship>
-			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Length" Value="519" />
-				<Property Name="StartLine" Value="1" />
-				<Property Name="StartColumn" Value="1" />
-				<Property Name="HeaderContents" Value="CREATE VIEW dbo.vFacilityDoc&#xD;&#xA;AS" />
-			</Annotation>
-		</Element>
-		<Element Type="SqlView" Name="[dbo].[vPayments]">
-			<Property Name="QueryScript">
-				<Value><![CDATA[
-SELECT dbo.ExtraPayments.Id, dbo.Payments.ExtraPaymentId
-FROM     dbo.Payments INNER JOIN
-                  dbo.ExtraPayments ON dbo.Payments.ExtraPaymentId = dbo.ExtraPayments.Id]]></Value>
-			</Property>
-			<Property Name="IsAnsiNullsOn" Value="True" />
-			<Relationship Name="Columns">
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vPayments].[Id]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[ExtraPayments].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vPayments].[ExtraPaymentId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Payments].[ExtraPaymentId]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-			</Relationship>
-			<Relationship Name="QueryDependencies">
-				<Entry>
-					<References Name="[dbo].[Payments]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ExtraPayments]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Payments].[ExtraPaymentId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[ExtraPayments].[Id]" />
-				</Entry>
-			</Relationship>
-			<Relationship Name="Schema">
-				<Entry>
-					<References ExternalSource="BuiltIns" Name="[dbo]" />
-				</Entry>
-			</Relationship>
-			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Length" Value="212" />
-				<Property Name="StartLine" Value="1" />
-				<Property Name="StartColumn" Value="1" />
-				<Property Name="HeaderContents" Value="CREATE VIEW dbo.vPayments&#xD;&#xA;AS" />
-			</Annotation>
-		</Element>
-		<Element Type="SqlView" Name="[dbo].[vPermit]">
-			<Property Name="QueryScript">
-				<Value><![CDATA[
-SELECT dbo.Permits.ApplicationId AS AppId, dbo.Applications.FacilityId, dbo.Facilities.Name AS FacilityName, dbo.Permits.Id AS PermitId, dbo.Permits.PermitNo, dbo.Permits.IssuedDate AS IssueDate, dbo.Permits.ExpireDate AS ExpiredDate, 
-                  dbo.Facilities.IsLicensed AS Licensed
-FROM     dbo.Permits INNER JOIN
-                  dbo.Applications ON dbo.Permits.ApplicationId = dbo.Applications.Id INNER JOIN
-                  dbo.Facilities ON dbo.Applications.FacilityId = dbo.Facilities.Id]]></Value>
-			</Property>
-			<Property Name="IsAnsiNullsOn" Value="True" />
-			<Relationship Name="Columns">
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vPermit].[AppId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Permits].[ApplicationId]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vPermit].[FacilityId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Applications].[FacilityId]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vPermit].[FacilityName]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Facilities].[Name]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vPermit].[PermitId]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Permits].[Id]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vPermit].[PermitNo]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Permits].[PermitNo]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vPermit].[IssueDate]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Permits].[IssuedDate]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vPermit].[ExpiredDate]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Permits].[ExpireDate]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlComputedColumn" Name="[dbo].[vPermit].[Licensed]">
-						<Relationship Name="ExpressionDependencies">
-							<Entry>
-								<References Name="[dbo].[Facilities].[IsLicensed]" />
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-			</Relationship>
-			<Relationship Name="QueryDependencies">
-				<Entry>
-					<References Name="[dbo].[Permits]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Applications]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Permits].[ApplicationId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Applications].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Facilities]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Applications].[FacilityId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Facilities].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Permits].[ApplicationId]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Facilities].[Name]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Permits].[Id]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Permits].[PermitNo]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Permits].[IssuedDate]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Permits].[ExpireDate]" />
-				</Entry>
-				<Entry>
-					<References Name="[dbo].[Facilities].[IsLicensed]" />
-				</Entry>
-			</Relationship>
-			<Relationship Name="Schema">
-				<Entry>
-					<References ExternalSource="BuiltIns" Name="[dbo]" />
-				</Entry>
-			</Relationship>
-			<Annotation Type="SysCommentsObjectAnnotation">
-				<Property Name="Length" Value="537" />
-				<Property Name="StartLine" Value="1" />
-				<Property Name="StartColumn" Value="1" />
-				<Property Name="HeaderContents" Value="CREATE VIEW dbo.vPermit&#xD;&#xA;AS" />
-			</Annotation>
+			<AttachedAnnotation Disambiguator="71" />
 		</Element>
 		<Element Type="SqlTable" Name="[dbo].[WorkFlows]">
 			<Property Name="IsAnsiNullsOn" Value="True" />
@@ -6443,7 +6280,23 @@ FROM     dbo.Permits INNER JOIN
 					</Element>
 				</Entry>
 				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[WorkFlows].[Action]">
+					<Element Type="SqlSimpleColumn" Name="[dbo].[WorkFlows].[VesselTypeId]">
+						<Property Name="IsNullable" Value="False" />
+						<Relationship Name="TypeSpecifier">
+							<Entry>
+								<Element Type="SqlTypeSpecifier">
+									<Relationship Name="Type">
+										<Entry>
+											<References ExternalSource="BuiltIns" Name="[int]" />
+										</Entry>
+									</Relationship>
+								</Element>
+							</Entry>
+						</Relationship>
+					</Element>
+				</Entry>
+				<Entry>
+					<Element Type="SqlSimpleColumn" Name="[dbo].[WorkFlows].[TriggeredByRole]">
 						<Property Name="IsNullable" Value="False" />
 						<Relationship Name="TypeSpecifier">
 							<Entry>
@@ -6460,23 +6313,7 @@ FROM     dbo.Permits INNER JOIN
 					</Element>
 				</Entry>
 				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[WorkFlows].[FacilityTypeId]">
-						<Property Name="IsNullable" Value="False" />
-						<Relationship Name="TypeSpecifier">
-							<Entry>
-								<Element Type="SqlTypeSpecifier">
-									<Relationship Name="Type">
-										<Entry>
-											<References ExternalSource="BuiltIns" Name="[int]" />
-										</Entry>
-									</Relationship>
-								</Element>
-							</Entry>
-						</Relationship>
-					</Element>
-				</Entry>
-				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[WorkFlows].[Rate]">
+					<Element Type="SqlSimpleColumn" Name="[dbo].[WorkFlows].[Action]">
 						<Property Name="IsNullable" Value="False" />
 						<Relationship Name="TypeSpecifier">
 							<Entry>
@@ -6510,7 +6347,7 @@ FROM     dbo.Permits INNER JOIN
 					</Element>
 				</Entry>
 				<Entry>
-					<Element Type="SqlSimpleColumn" Name="[dbo].[WorkFlows].[TriggeredByRole]">
+					<Element Type="SqlSimpleColumn" Name="[dbo].[WorkFlows].[Rate]">
 						<Property Name="IsNullable" Value="False" />
 						<Relationship Name="TypeSpecifier">
 							<Entry>
@@ -6572,7 +6409,7 @@ FROM     dbo.Permits INNER JOIN
 								</Element>
 							</Entry>
 						</Relationship>
-						<AttachedAnnotation Disambiguator="24" />
+						<AttachedAnnotation Disambiguator="6" />
 					</Element>
 				</Entry>
 			</Relationship>
@@ -6581,1253 +6418,7 @@ FROM     dbo.Permits INNER JOIN
 					<References ExternalSource="BuiltIns" Name="[dbo]" />
 				</Entry>
 			</Relationship>
-			<AttachedAnnotation Disambiguator="39" />
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vAppDoc].[MS_DiagramPane1]">
-			<Property Name="Value">
-				<Value><![CDATA[N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[40] 4[20] 2[20] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "Applications"
-            Begin Extent = 
-               Top = 7
-               Left = 48
-               Bottom = 170
-               Right = 265
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "SubmittedDocuments"
-            Begin Extent = 
-               Top = 7
-               Left = 313
-               Bottom = 170
-               Right = 507
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "ApplicationTypes"
-            Begin Extent = 
-               Top = 7
-               Left = 555
-               Bottom = 126
-               Right = 749
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1440
-         Alias = 900
-         Table = 1176
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1356
-         SortOrder = 1416
-         GroupBy = 1350
-         Filter = 1356
-         Or = 1350
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-']]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vAppDoc]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vAppDoc].[MS_DiagramPaneCount]">
-			<Property Name="Value">
-				<Value><![CDATA[1]]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vAppDoc]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vAppHistory].[MS_DiagramPane1]">
-			<Property Name="Value">
-				<Value><![CDATA[N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[70] 4[3] 2[18] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "Applications"
-            Begin Extent = 
-               Top = 45
-               Left = 319
-               Bottom = 208
-               Right = 536
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "ApplicationHistories"
-            Begin Extent = 
-               Top = 215
-               Left = 79
-               Bottom = 418
-               Right = 285
-            End
-            DisplayFlags = 280
-            TopColumn = 4
-         End
-         Begin Table = "ApplicationTypes"
-            Begin Extent = 
-               Top = 120
-               Left = 562
-               Bottom = 246
-               Right = 756
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "AspNetUsers"
-            Begin Extent = 
-               Top = 258
-               Left = 358
-               Bottom = 444
-               Right = 618
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1440
-         Alias = 900
-         Table = 1176
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1356
-         SortOrder = 1416
-         GroupBy = 1350
-         Filter = 1356
-         Or = 1350
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-']]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vAppHistory]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vAppHistory].[MS_DiagramPaneCount]">
-			<Property Name="Value">
-				<Value><![CDATA[1]]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vAppHistory]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vApplication].[MS_DiagramPane1]">
-			<Property Name="Value">
-				<Value><![CDATA[N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[59] 4[3] 2[25] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = -240
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "AppFees"
-            Begin Extent = 
-               Top = 343
-               Left = 229
-               Bottom = 506
-               Right = 446
-            End
-            DisplayFlags = 280
-            TopColumn = 4
-         End
-         Begin Table = "ApplicationTypes"
-            Begin Extent = 
-               Top = 221
-               Left = 6
-               Bottom = 372
-               Right = 200
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "Applications"
-            Begin Extent = 
-               Top = 0
-               Left = 229
-               Bottom = 193
-               Right = 446
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "FacilityTypes"
-            Begin Extent = 
-               Top = 490
-               Left = 0
-               Bottom = 631
-               Right = 194
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "Inspections"
-            Begin Extent = 
-               Top = 60
-               Left = 476
-               Bottom = 204
-               Right = 711
-            End
-            DisplayFlags = 280
-            TopColumn = 5
-         End
-         Begin Table = "SubmittedDocuments"
-            Begin Extent = 
-               Top = 251
-               Left = 483
-               Bottom = 414
-               Right = 677
-            End
-            DisplayFlags = 280
-            TopColumn = 3
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-  ']]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vApplication]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vApplication].[MS_DiagramPane2]">
-			<Property Name="Value">
-				<Value><![CDATA[N'       Column = 1440
-         Alias = 900
-         Table = 1176
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1356
-         SortOrder = 1416
-         GroupBy = 1350
-         Filter = 1356
-         Or = 1350
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-']]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vApplication]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vApplication].[MS_DiagramPaneCount]">
-			<Property Name="Value">
-				<Value><![CDATA[2]]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vApplication]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vCountries].[MS_DiagramPane1]">
-			<Property Name="Value">
-				<Value><![CDATA[N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[59] 4[2] 2[20] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "States"
-            Begin Extent = 
-               Top = 0
-               Left = 466
-               Bottom = 163
-               Right = 660
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "Companies"
-            Begin Extent = 
-               Top = 53
-               Left = 223
-               Bottom = 323
-               Right = 433
-            End
-            DisplayFlags = 280
-            TopColumn = 1
-         End
-         Begin Table = "Countries"
-            Begin Extent = 
-               Top = 4
-               Left = 1
-               Bottom = 145
-               Right = 195
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "LGAs"
-            Begin Extent = 
-               Top = 76
-               Left = 690
-               Bottom = 239
-               Right = 884
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1440
-         Alias = 900
-         Table = 1176
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1356
-         SortOrder = 1416
-         GroupBy = 1350
-         Filter = 1356
-         Or = 1350
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-']]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vCountries]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vCountries].[MS_DiagramPaneCount]">
-			<Property Name="Value">
-				<Value><![CDATA[1]]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vCountries]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vFacilities].[MS_DiagramPane1]">
-			<Property Name="Value">
-				<Value><![CDATA[N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[65] 4[3] 2[29] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "Products"
-            Begin Extent = 
-               Top = 224
-               Left = 332
-               Bottom = 343
-               Right = 526
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "FacilityTypes"
-            Begin Extent = 
-               Top = 34
-               Left = 530
-               Bottom = 175
-               Right = 724
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "Tanks"
-            Begin Extent = 
-               Top = 190
-               Left = 23
-               Bottom = 353
-               Right = 217
-            End
-            DisplayFlags = 280
-            TopColumn = 1
-         End
-         Begin Table = "Facilities"
-            Begin Extent = 
-               Top = 10
-               Left = 276
-               Bottom = 193
-               Right = 470
-            End
-            DisplayFlags = 280
-            TopColumn = 1
-         End
-         Begin Table = "Companies"
-            Begin Extent = 
-               Top = 2
-               Left = 6
-               Bottom = 165
-               Right = 216
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1440
-         Alias = 900
-         Table = 1176
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1356
-         SortOrder = 1416
-         GroupBy = 1350
-         Filter = 1356
-         Or = 1350
-         Or = 1350
-         ']]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vFacilities]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vFacilities].[MS_DiagramPane2]">
-			<Property Name="Value">
-				<Value><![CDATA[N'Or = 1350
-      End
-   End
-End
-']]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vFacilities]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vFacilities].[MS_DiagramPaneCount]">
-			<Property Name="Value">
-				<Value><![CDATA[2]]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vFacilities]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vFacilityDoc].[MS_DiagramPane1]">
-			<Property Name="Value">
-				<Value><![CDATA[N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[40] 4[20] 2[20] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "FacilityTypeDocuments"
-            Begin Extent = 
-               Top = 7
-               Left = 290
-               Bottom = 170
-               Right = 507
-            End
-            DisplayFlags = 280
-            TopColumn = 1
-         End
-         Begin Table = "ApplicationTypes"
-            Begin Extent = 
-               Top = 7
-               Left = 48
-               Bottom = 126
-               Right = 242
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1440
-         Alias = 900
-         Table = 1176
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1356
-         SortOrder = 1416
-         GroupBy = 1350
-         Filter = 1356
-         Or = 1350
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-']]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vFacilityDoc]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vFacilityDoc].[MS_DiagramPaneCount]">
-			<Property Name="Value">
-				<Value><![CDATA[1]]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vFacilityDoc]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vPayments].[MS_DiagramPane1]">
-			<Property Name="Value">
-				<Value><![CDATA[N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[60] 4[1] 2[20] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "Payments"
-            Begin Extent = 
-               Top = 7
-               Left = 48
-               Bottom = 170
-               Right = 275
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "ExtraPayments"
-            Begin Extent = 
-               Top = 2
-               Left = 304
-               Bottom = 165
-               Right = 498
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1440
-         Alias = 900
-         Table = 1176
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1356
-         SortOrder = 1416
-         GroupBy = 1350
-         Filter = 1356
-         Or = 1350
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-']]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vPayments]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vPayments].[MS_DiagramPaneCount]">
-			<Property Name="Value">
-				<Value><![CDATA[1]]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vPayments]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vPermit].[MS_DiagramPane1]">
-			<Property Name="Value">
-				<Value><![CDATA[N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
-Begin DesignProperties = 
-   Begin PaneConfigurations = 
-      Begin PaneConfiguration = 0
-         NumPanes = 4
-         Configuration = "(H (1[78] 4[3] 2[13] 3) )"
-      End
-      Begin PaneConfiguration = 1
-         NumPanes = 3
-         Configuration = "(H (1 [50] 4 [25] 3))"
-      End
-      Begin PaneConfiguration = 2
-         NumPanes = 3
-         Configuration = "(H (1 [50] 2 [25] 3))"
-      End
-      Begin PaneConfiguration = 3
-         NumPanes = 3
-         Configuration = "(H (4 [30] 2 [40] 3))"
-      End
-      Begin PaneConfiguration = 4
-         NumPanes = 2
-         Configuration = "(H (1 [56] 3))"
-      End
-      Begin PaneConfiguration = 5
-         NumPanes = 2
-         Configuration = "(H (2 [66] 3))"
-      End
-      Begin PaneConfiguration = 6
-         NumPanes = 2
-         Configuration = "(H (4 [50] 3))"
-      End
-      Begin PaneConfiguration = 7
-         NumPanes = 1
-         Configuration = "(V (3))"
-      End
-      Begin PaneConfiguration = 8
-         NumPanes = 3
-         Configuration = "(H (1[56] 4[18] 2) )"
-      End
-      Begin PaneConfiguration = 9
-         NumPanes = 2
-         Configuration = "(H (1 [75] 4))"
-      End
-      Begin PaneConfiguration = 10
-         NumPanes = 2
-         Configuration = "(H (1[66] 2) )"
-      End
-      Begin PaneConfiguration = 11
-         NumPanes = 2
-         Configuration = "(H (4 [60] 2))"
-      End
-      Begin PaneConfiguration = 12
-         NumPanes = 1
-         Configuration = "(H (1) )"
-      End
-      Begin PaneConfiguration = 13
-         NumPanes = 1
-         Configuration = "(V (4))"
-      End
-      Begin PaneConfiguration = 14
-         NumPanes = 1
-         Configuration = "(V (2))"
-      End
-      ActivePaneConfig = 0
-   End
-   Begin DiagramPane = 
-      Begin Origin = 
-         Top = 0
-         Left = 0
-      End
-      Begin Tables = 
-         Begin Table = "Permits"
-            Begin Extent = 
-               Top = 7
-               Left = 48
-               Bottom = 263
-               Right = 242
-            End
-            DisplayFlags = 280
-            TopColumn = 0
-         End
-         Begin Table = "Applications"
-            Begin Extent = 
-               Top = 7
-               Left = 290
-               Bottom = 170
-               Right = 507
-            End
-            DisplayFlags = 280
-            TopColumn = 4
-         End
-         Begin Table = "Facilities"
-            Begin Extent = 
-               Top = 7
-               Left = 555
-               Bottom = 170
-               Right = 749
-            End
-            DisplayFlags = 280
-            TopColumn = 4
-         End
-      End
-   End
-   Begin SQLPane = 
-   End
-   Begin DataPane = 
-      Begin ParameterDefaults = ""
-      End
-   End
-   Begin CriteriaPane = 
-      Begin ColumnWidths = 11
-         Column = 1440
-         Alias = 900
-         Table = 1170
-         Output = 720
-         Append = 1400
-         NewValue = 1170
-         SortType = 1350
-         SortOrder = 1410
-         GroupBy = 1350
-         Filter = 1350
-         Or = 1350
-         Or = 1350
-         Or = 1350
-      End
-   End
-End
-']]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vPermit]" />
-				</Entry>
-			</Relationship>
-		</Element>
-		<Element Type="SqlExtendedProperty" Name="[SqlView].[dbo].[vPermit].[MS_DiagramPaneCount]">
-			<Property Name="Value">
-				<Value><![CDATA[1]]></Value>
-			</Property>
-			<Relationship Name="Host">
-				<Entry>
-					<References Name="[dbo].[vPermit]" />
-				</Entry>
-			</Relationship>
+			<AttachedAnnotation Disambiguator="72" />
 		</Element>
 	</Model>
 </DataSchemaModel>

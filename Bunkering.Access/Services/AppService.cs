@@ -57,51 +57,47 @@ namespace Bunkering.Access.Services
 
 		private async Task<Facility> CreateFacility(ApplictionViewModel model, ApplicationUser user)
 		{
-			var facility = await _unitOfWork.Facility.FirstOrDefaultAsync(x => x.Name.ToLower().Equals(model.FacilityName.ToLower()) && x.VesselTypeId.Equals(model.VesselTypeId) && x.Capacity.Equals(model.Capacity) && x.DeadWeight.Equals(model.DeadWeight) && x.CompanyId.Equals(user.CompanyId));
 			try
 			{
-				if (facility == null)
-				{
-					facility = new Facility
-					{
-						Name = model.FacilityName,
-						CompanyId = user.CompanyId.Value,
-						VesselTypeId = model.VesselTypeId,
-						Capacity = model.Capacity,
-						DeadWeight = model.DeadWeight,
+                var facility = new Facility
+                {
+                    Name = model.FacilityName,
+                    CompanyId = user.CompanyId.Value,
+                    VesselTypeId = model.VesselTypeId,
+                    Capacity = model.Capacity,
+                    DeadWeight = model.DeadWeight,
+					Operator = model.Operator,
+                    FacilitySources = _mapper.Map<List<FacilitySource>>(model.FacilitySources)
+                };
+                var lga = await _unitOfWork.LGA.FirstOrDefaultAsync(x => x.State.Name.Contains("lagos"), "State");
 
-					};
-					var lga = await _unitOfWork.LGA.Find(x => x.Id == model.LgaId);
+                var facElps = _elps.CreateElpsFacility(new
+                {
+                    Name = model.FacilityName,
+                    StreetAddress = $"{model.FacilityName} - {user.ElpsId}",
+                    CompanyId = user.ElpsId,
+                    DateAdded = DateTime.UtcNow.AddHours(1),
+                    City = lga.Name,
+                    lga.StateId,
+                    LGAId = lga.Id,
+                    FacilityType = "Bunkering Facility",
+                    FacilityDocuments = (string)null,
+                    Id = (string)null
+                })?.Parse<Dictionary<string, object>>();
 
-					var facElps = _elps.CreateElpsFacility(new
-					{
-						Name = model.FacilityName,
-						StreetAddress = model.Address,
-						CompanyId = user.ElpsId,
-						DateAdded = DateTime.UtcNow.AddHours(1),
-						City = lga.FirstOrDefault().Name,
-						model.StateId,
-						//StateId = (string)null,
-						LGAId = model.LgaId,
-						//LGAId = (string)null,
-						FacilityType = "Bunkering Facility",
-						FacilityDocuments = (string)null,
-						Id = (string)null
-					})?.Parse<Dictionary<string, object>>();
+                if (facElps?.Count > 0)
+                    facility.ElpsId = int.Parse($"{facElps.GetValue("id")}");
 
-					if (facElps?.Count > 0)
-						facility.ElpsId = int.Parse($"{facElps.GetValue("id")}");
+                await _unitOfWork.Facility.Add(facility);
+                await _unitOfWork.SaveChangesAsync(user.Id);
 
-					await _unitOfWork.Facility.Add(facility);
-					await _unitOfWork.SaveChangesAsync(user.Id);
-
-				}
-			}
-			catch (Exception ex)
+				return facility;
+            }
+            catch (Exception ex)
 			{
 				_logger.LogRequest($"{ex.Message}\n{ex.InnerException}\n{ex.StackTrace}", true, directory);
 			}
-			return facility;
+			return null;
 		}
 
 		public async Task<ApiResponse> Apply(ApplictionViewModel model)
@@ -110,43 +106,54 @@ namespace Bunkering.Access.Services
 			{
 				var user = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).FirstOrDefault(x => x.Email.Equals(User));
 				//var user = _userManager.Users.Include(c => c.Company).FirstOrDefault(x => x.Email.ToLower().Equals(User.Identity.Name));
-				if (await _unitOfWork.Application.Find(x => x.Facility.Name.Equals(model.FacilityName, StringComparison.OrdinalIgnoreCase)
-						 && x.Facility.VesselTypeId.Equals(model.VesselTypeId) && x.UserId.Equals(user.Id)) != null)
+				if ((await _unitOfWork.Application.Find(x => x.Facility.Name.ToLower().Equals(model.FacilityName.ToLower())
+						 && x.Facility.VesselTypeId.Equals(model.VesselTypeId) && x.UserId.Equals(user.Id), "Facility")).Any())
 					_response = new ApiResponse
 					{
-						Message = "There is an existing application for this facility, kindly go to My Application to complete processing",
+						Message = "There is an existing application for this facility, you are not allowed to use license the same vessel twice",
 						StatusCode = HttpStatusCode.Found,
 						Success = false
 					};
 				else
 				{
 					var facility = await CreateFacility(model, user);
-
-					var app = new Application
+					if(facility != null)
 					{
-						ApplicationTypeId = model.ApplicationTypeId,
-						CreatedDate = DateTime.UtcNow.AddHours(1),
-						CurrentDeskId = user.Id,
-						Reference = Utils.RefrenceCode(),
-						UserId = user.Id,
-						FacilityId = facility.Id,
-						Status = Enum.GetName(typeof(AppStatus), 0),
-					};
-					await _unitOfWork.Application.Add(app);
-					await _unitOfWork.SaveChangesAsync(app.UserId);
-					//save app tanks
-					var tank = await AppTanks(model.AppTanks, facility.Id, user.Id);
+                        var app = new Application
+                        {
+                            ApplicationTypeId = model.ApplicationTypeId,
+                            CreatedDate = DateTime.UtcNow.AddHours(1),
+                            CurrentDeskId = user.Id,
+                            Reference = Utils.RefrenceCode(),
+                            UserId = user.Id,
+                            FacilityId = facility.Id,
+                            Status = Enum.GetName(typeof(AppStatus), 0),
+                        };
+                        await _unitOfWork.Application.Add(app);
+                        await _unitOfWork.SaveChangesAsync(app.UserId);
+                        //save app tanks
+                        //var tank = await AppTanks(model.AppTanks, facility.Id, user.Id);
 
-					await _flow.AppWorkFlow(app.Id, Enum.GetName(typeof(AppActions), AppActions.Initiate), "Application Created");
 
-					_response = new ApiResponse
-					{
-						Message = "Application initiated successfully",
-						StatusCode = HttpStatusCode.OK,
-						Data = new { appId = app.Id },
-						Success = true
-					};
-				}
+                        await _flow.AppWorkFlow(app.Id, Enum.GetName(typeof(AppActions), AppActions.Initiate), "Application Created");
+
+                        _response = new ApiResponse
+                        {
+                            Message = "Application initiated successfully",
+                            StatusCode = HttpStatusCode.OK,
+                            Data = new { appId = app.Id },
+                            Success = true
+                        };
+                    }
+					else
+                        _response = new ApiResponse
+                        {
+                            Message = "An error occured. Pls try again.",
+                            StatusCode = HttpStatusCode.BadRequest,
+                            Success = false
+                        };
+
+                }
 			}
 			catch (Exception ex)
 			{
@@ -323,32 +330,33 @@ namespace Bunkering.Access.Services
 					var user = await _userManager.FindByEmailAsync(User);
 					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "ApplicationType,Facility.VesselType");
 					var fee = await _unitOfWork.AppFee.FirstOrDefaultAsync(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId));
-					var total = fee.AdministrativeFee + fee.VesselLicenseFee + fee.ApplicationFee + fee.InspectionFee + fee.AccreditationFee;
+					var total = fee.AdministrativeFee + fee.VesselLicenseFee + fee.ApplicationFee + fee.InspectionFee + fee.AccreditationFee + fee.SerciveCharge;
 					var payment = await _unitOfWork.Payment.FirstOrDefaultAsync(x => x.ApplicationId.Equals(id));
 					if (payment == null)
 					{
 						await _unitOfWork.Payment.Add(new Payment
-						{
-							Amount = total,
-							Account = "NMDPRA",
-							ApplicationId = id,
-							AppReceiptId = "Dollar Payment",
-							BankCode = "000",
-							Description = $"Payment for Bunkering License ({app.Facility.Name})",
-							PaymentType = "USD",
-							RRR = "N/A",
-							Status = "Pending",
-							TransactionDate = DateTime.UtcNow.AddHours(1),
-							TxnMessage = "Dollar payment",
-							TransactionId = "N/A",
-						});
-					}
-					else
+                        {
+                            Amount = total,
+                            Account = _setting.NMDPRAAccount,
+                            ApplicationId = id,
+                            BankCode = _setting.NMDPRAAccount,
+                            Description = $"Payment for Bunkering License ({app.Facility.Name})",
+                            PaymentType = "NGN",
+                            Status = Enum.GetName(typeof(AppStatus), AppStatus.PaymentPending),
+                            TransactionDate = DateTime.UtcNow.AddHours(1),
+                            ServiceCharge = fee.SerciveCharge,
+							AppReceiptId = "",
+							RRR = "",
+							TransactionId = "",
+							TxnMessage = "Payment initiated"
+                        });
+                    }
+                    else
 					{
 						payment.Amount = total;
 						payment.ApplicationId = id;
-						payment.Description = $"Pyamnet for Bunkering License ({app.Facility.Name})";
-						payment.Status = "Pending";
+						payment.Description = $"Payment for Bunkering License ({app.Facility.Name})";
+						payment.Status = Enum.GetName(typeof(AppStatus), AppStatus.PaymentPending);
 						payment.TransactionDate = DateTime.UtcNow.AddHours(1);
 						await _unitOfWork.Payment.Update(payment);
 					}
@@ -362,12 +370,8 @@ namespace Bunkering.Access.Services
 						Data = new
 						{
 							FacilityType = app.Facility.Name,
-							APplicationType = app.ApplicationType.Name,
-							fee.AdministrativeFee,
-							fee.AccreditationFee,
-							fee.ApplicationFee,
-							fee.InspectionFee,
-							fee.VesselLicenseFee,
+							ApplicationType = app.ApplicationType.Name,
+							fee.SerciveCharge,
 							Total = total,
 						}
 					};
@@ -393,16 +397,16 @@ namespace Bunkering.Access.Services
 			return _response;
 		}
 
-		public async Task<ApiResponse> DocumentUpload(int id)
+        public async Task<ApiResponse> DocumentUpload(int id)
 		{
 
 			if (id > 0)
 			{
 				var docList = new List<SubmittedDocument>();
-				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == id, "User,Facility,ApplicationType");
+				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == id, "User,Facility.VesselType,ApplicationType");
 				if (app != null)
 				{
-					var factypedocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId));
+					var factypedocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId) && x.VessleTypeId.Equals(app.Facility.VesselTypeId));
 					if (factypedocs != null && factypedocs.Count() > 0)
 					{
 						var compdocs = _elps.GetCompanyDocuments(app.User.ElpsId, "company").Stringify().Parse<List<Document>>();
@@ -525,7 +529,7 @@ namespace Bunkering.Access.Services
 				var user = await _userManager.FindByEmailAsync(User);
 				if (app != null)
 				{
-					var facTypeDocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId));
+					var facTypeDocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId) && x.VessleTypeId.Equals(app.Facility.VesselTypeId));
 
 					if (facTypeDocs.Count() > 0)
 					{

@@ -503,6 +503,7 @@ namespace Bunkering.Access.DAL
 				//Charge for IGR payments
 
 				//var type = application.Facility.FacilityType;
+				var amountdue = totalAmount - serviceCharge;
 				var remitaObject = new
 				{
 					serviceTypeId = _appSetting.ServiceTypeId,
@@ -511,7 +512,7 @@ namespace Bunkering.Access.DAL
 					payerName = TruncateText(application.User.Company.Name, 25),
 					payerEmail = application.User.Email,
 					serviceCharge = Decimal.ToInt32(serviceCharge).ToString(),
-					amountDue = Decimal.ToInt32(totalAmount - serviceCharge).ToString(),
+					amountDue = Decimal.ToInt32(amountdue).ToString(),
 					orderId = application.Reference,
 					returnSuccessUrl = $"{baseUrl}/api/bunkering/Payment/Remita?id={application.Id}",
 					returnFailureUrl = $"{baseUrl}/api/bunkering/Payment/Remita?id={application.Id}",
@@ -524,7 +525,7 @@ namespace Bunkering.Access.DAL
 							beneficiaryName = _appSetting.NMDPRABName,
 							bankCode = _appSetting.NMDPRABankCode,
 							beneficiaryAccount = _appSetting.NMDPRAAccount,
-							beneficiaryAmount = $"{(double)totalAmount * 0.5}",
+							beneficiaryAmount = $"{(double)amountdue + ((double)serviceCharge * 0.5)}",
 							deductFeeFrom = "0"
 						},
 						new RPartner
@@ -533,7 +534,7 @@ namespace Bunkering.Access.DAL
 							beneficiaryName = _appSetting.BOBName,
 							bankCode = _appSetting.BOBankCode,
 							beneficiaryAccount = _appSetting.BOAccount,
-							beneficiaryAmount = $"{(double)totalAmount * 0.5}",
+							beneficiaryAmount = $"{(double)serviceCharge * 0.5}",
 							deductFeeFrom = "1"
 						}
 					},
@@ -550,7 +551,7 @@ namespace Bunkering.Access.DAL
 							Name = "COMPANY BRANCH",
 							Value = application.Facility.Name,
 							Type = "All"
-						},
+						}
 						//new CustomField
 						//{
 						//	Name = "FACILITY ADDRESS",
@@ -564,7 +565,7 @@ namespace Bunkering.Access.DAL
                         //    type = "ALL"
                         //}
                     },
-					documentTypes = docs.Select(x => x.DocumentTypeId).ToList(),
+					documentTypes = (string)null,
 					applicationItems = new List<ApplicationItem>
 					{
 						new ApplicationItem { Group = "Bunkering", Name = application.Facility.Name, Description = $"{application.Facility.Name} Facility payment" },

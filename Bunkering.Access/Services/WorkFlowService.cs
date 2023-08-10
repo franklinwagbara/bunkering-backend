@@ -48,7 +48,7 @@ namespace Bunkering.Access.Services
 			var wkflow = new WorkFlow();
 			try
 			{
-				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == appid, "User,Facility.FacilityType,Payments");
+				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == appid, "User,Facility.VesselType,Payments");
 				if (app != null)
 				{
 

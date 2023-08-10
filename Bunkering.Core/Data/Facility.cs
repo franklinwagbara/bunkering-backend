@@ -22,8 +22,10 @@ namespace Bunkering.Core.Data
 		public VesselType VesselType { get; set; }
 		public decimal DeadWeight { get; set; }
 		public decimal Capacity { get; set; }
+        public string Operator { get; set; }
+        public virtual ICollection<FacilitySource> FacilitySources { get; set; }
 
-	}
+    }
 
 
 

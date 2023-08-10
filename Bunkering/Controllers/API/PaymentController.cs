@@ -29,14 +29,14 @@ namespace Bunkering.Controllers.API
         [ProducesResponseType(typeof(ApiResponse), 500)]
         [HttpPost]
         [Route("create-payment")]
-        public async Task<IActionResult> CreatePayment(string id) => Response(await _payment.CreatePayment(id).ConfigureAwait(false));
+        public async Task<IActionResult> CreatePayment(int id) => Response(await _payment.CreatePayment(id).ConfigureAwait(false));
         [HttpGet]
         [Route("pay-online")]
         public IActionResult PayOnline(string rrr) => Redirect($"{_appSetting}/Payment/Pay?rrr={rrr}");
 
         [HttpPost]
         [Route("remita")]
-        public async Task<IActionResult> Remita(string id, RemitaResponse model)
+        public async Task<IActionResult> Remita(int id, RemitaResponse model)
         {
             var payment = await _payment.ConfirmPayment(id);
             return Redirect($"{_appSetting.LoginUrl}/company/paymentsum/{id}");

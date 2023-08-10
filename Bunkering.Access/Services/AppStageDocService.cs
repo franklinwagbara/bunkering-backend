@@ -96,7 +96,7 @@ namespace Bunkering.Access.Services
 				var docs = documents.Where(x => model.DocumentTypeId.Any(y => y.Equals(x.Id))).Select(d => new FacilityTypeDocument
 				{
 					ApplicationTypeId = model.ApplicationTypeId,
-					//FacilityTypeId = model.FacilityTypeId,
+					VessleTypeId = model.VesselTypeId,
 					DocumentTypeId = d.Id,
 					Name = d.Name,
 					DocType = d.Type,
