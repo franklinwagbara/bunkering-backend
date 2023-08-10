@@ -23,10 +23,11 @@ namespace Bunkering.Controllers.API
             _appSetting = appSetting.Value;
         }
 
-        [AllowAnonymous]
         [HttpPost]
         [Route("create-payment")]
         public async Task<IActionResult> CreatePayment(int id) => Response(await _payment.CreatePayment(id).ConfigureAwait(false));
+
+        [AllowAnonymous]
         [HttpGet]
         [Route("pay-online")]
         public IActionResult PayOnline(string rrr) => Redirect($"{_appSetting.ElpsUrl}/Payment/Pay?rrr={rrr}");
