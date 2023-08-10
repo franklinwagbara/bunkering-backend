@@ -397,5 +397,30 @@ namespace Bunkering.Controllers.API
 		[HttpGet]
 
 		public async Task<IActionResult> GetProducts() => Response(await libraryService.GetProducts());
-	}
+
+
+        /// <summary>
+        /// This endpoint is used to get all VesselTypes
+        /// </summary>
+        /// <returns>Returns a success message</returns>
+        /// <remarks>
+        /// 
+        /// Sample Request
+        /// GET: api/location/VesselType 
+        /// 
+        /// </remarks>
+        /// <response code="200">Returns a success message </response>
+        /// <response code="404">Returns not found </response>
+        /// <response code="401">Unauthorized user </response>
+        /// <response code="400">Internal server error - bad request </response>
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        [ProducesResponseType(typeof(ApiResponse), 404)]
+        [ProducesResponseType(typeof(ApiResponse), 405)]
+        [ProducesResponseType(typeof(ApiResponse), 500)]
+        [Route("VesselType")]
+        [HttpGet]
+
+		public async Task<IActionResult> GetVesselType() => Response(await libraryService.GetVesselType());
+
+    }
 }

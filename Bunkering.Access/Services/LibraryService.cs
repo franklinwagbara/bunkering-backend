@@ -340,6 +340,19 @@ namespace Bunkering.Access.Services
 			};
 
 		}
+		public async Task<ApiResponse> GetVesselType()
+		{
+			var vesselType = await unitOfWork_.VesselType.GetAll();
+
+			response = new ApiResponse
+			{
+				Data = vesselType,
+				Message = "VesselType Found",
+				StatusCode = HttpStatusCode.OK,
+				Success = true,
+			};
+			return response;
+		}
 
 	}
 }

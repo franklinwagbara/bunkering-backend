@@ -751,6 +751,22 @@
             <response code="401">Unauthorized user </response>
             <response code="400">Internal server error - bad request </response>
         </member>
+        <member name="M:Bunkering.Controllers.API.LibraryController.GetVesselType">
+            <summary>
+            This endpoint is used to get all VesselTypes
+            </summary>
+            <returns>Returns a success message</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/location/VesselType 
+            
+            </remarks>
+            <response code="200">Returns a success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
         <member name="M:Bunkering.Controllers.API.MessageController.ReadMessage(System.Int32)">
             <summary>
             This endpoint is used to Read message 

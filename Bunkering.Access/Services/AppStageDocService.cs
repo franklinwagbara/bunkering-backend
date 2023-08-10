@@ -58,7 +58,7 @@ namespace Bunkering.Access.Services
 		}
 		public async Task<ApiResponse> GetAllFADDoc()
 		{
-			var docs = await _unitOfWork.FacilityTypeDocuments.GetAll("FacilityType,ApplicationType");
+			var docs = await _unitOfWork.FacilityTypeDocuments.GetAll("VeselType,ApplicationType");
 			if (docs != null)
 				_response = new ApiResponse
 				{

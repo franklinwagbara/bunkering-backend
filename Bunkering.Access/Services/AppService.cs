@@ -672,7 +672,7 @@ namespace Bunkering.Access.Services
 
 		public async Task<ApiResponse> AllApps()
 		{
-			var apps = await _unitOfWork.Application.GetAll("User.Company,ApplicationType,Facility.FacilityType,Facility.LGA.State");
+			var apps = await _unitOfWork.Application.GetAll("User.Company,ApplicationType,Facility.VesselType");
 			if (apps.Count() != null)
 				_response = new ApiResponse
 				{
@@ -728,11 +728,11 @@ namespace Bunkering.Access.Services
 		public async Task<ApiResponse> MyDesk()
 		{
 			var user = await _userManager.FindByEmailAsync(User);
-			var apps = await _unitOfWork.Application.Find(x => x.CurrentDeskId.Equals(user.Id), "User.Company,Facility.FacilityType,Facility.LGA.State,ApplicationType,WorkFlow");
+			var apps = await _unitOfWork.Application.Find(x => x.CurrentDeskId.Equals(user.Id), "User.Company,Facility.VesselType,ApplicationType,WorkFlow");
 			if (await _userManager.IsInRoleAsync(user, "FAD"))
-				apps = await _unitOfWork.Application.Find(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing)), "User.Company,Facility.FacilityType,Facility.LGA.State,ApplicationType,WorkFlow");
+				apps = await _unitOfWork.Application.Find(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing)), "User.Company,Facility.VesselType,ApplicationType,WorkFlow");
 			else if (await _userManager.IsInRoleAsync(user, "Company"))
-				apps = await _unitOfWork.Application.Find(x => x.UserId.Equals(user.Id), "User.Company,Facility.FacilityType,Facility.LGA.State,ApplicationType,WorkFlow");
+				apps = await _unitOfWork.Application.Find(x => x.UserId.Equals(user.Id), "User.Company,Facility.VesselType,ApplicationType,WorkFlow");
 			return new ApiResponse
 			{
 				Message = "Applications fetched successfully",
@@ -760,7 +760,7 @@ namespace Bunkering.Access.Services
 			{
 				try
 				{
-					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "User.Company,Appointment,SubmittedDocuments,ApplicationType,Payments,Facility.FacilityType,Facility.LGA.State,WorkFlow,Histories");
+					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "User.Company,Appointment,SubmittedDocuments,ApplicationType,Payments,Facility.VesselType,Facility.LGA.State,WorkFlow,Histories");
 					if (app != null)
 					{
 						var users = _userManager.Users.Include(c => c.Company).Include(ur => ur.UserRoles).ThenInclude(r => r.Role).ToList();
