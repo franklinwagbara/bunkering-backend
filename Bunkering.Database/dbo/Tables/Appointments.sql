@@ -14,8 +14,15 @@
     [ContactName]     NVARCHAR (MAX) NULL,
     [PhoneNo]         NVARCHAR (MAX) NULL,
     [ExpiryDate]      DATETIME2 (7)  NOT NULL,
-    CONSTRAINT [PK_Appointments] PRIMARY KEY CLUSTERED ([Id] ASC)
+    CONSTRAINT [PK_Appointments] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_Appointments_Applications_ApplicationId] FOREIGN KEY ([ApplicationId]) REFERENCES [dbo].[Applications] ([Id]) ON DELETE CASCADE
 );
+
+
+
+
+
+
 
 
 

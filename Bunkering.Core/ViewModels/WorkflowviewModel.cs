@@ -9,7 +9,7 @@ namespace Bunkering.Core.ViewModels
 	public class WorkflowviewModel
 	{
 		public int Id { get; set; }
-		public string FacilityType { get; set; }
+		public string VesselType { get; set; }
 		public string ApplicationType { get; set; }
 		public string TriggeredByRole { get; set; }
 		public string Action { get; set; }

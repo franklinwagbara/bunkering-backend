@@ -40,17 +40,17 @@ namespace Bunkering.Controllers
 			_authService = authService;
 			_appSetting = appSetting.Value;
 		}
-        //public IActionResult Index()
-        //{
-        //	return View();
-        //}
+		//public IActionResult Index()
+		//{
+		//	return View();
+		//}
 
-        [ProducesResponseType(typeof(ApiResponse), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 405)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
-        [Produces("application/json")]
-        [Route("login-redirect")]
+		[ProducesResponseType(typeof(ApiResponse), 200)]
+		[ProducesResponseType(typeof(ApiResponse), 404)]
+		[ProducesResponseType(typeof(ApiResponse), 405)]
+		[ProducesResponseType(typeof(ApiResponse), 500)]
+		[Produces("application/json")]
+		[Route("login-redirect")]
 		[HttpPost]
 		public async Task<IActionResult> LoginRedirect(LoginViewModel model)
 		{
@@ -63,8 +63,8 @@ namespace Bunkering.Controllers
 			return Redirect($"{_appSetting.LoginUrl}/home");
 		}
 
-        [Route("logout")]
-        [HttpGet]
+		[Route("logout")]
+		[HttpGet]
 		public async Task<IActionResult> Logout()
 		{
 			var elpsLogOffUrl = $"{_appSetting.ElpsUrl}/Account/RemoteLogOff";
@@ -72,6 +72,8 @@ namespace Bunkering.Controllers
 			var frm = "<form action='" + elpsLogOffUrl + "' id='frmTest' method='post'>" + "<input type='hidden' name='returnUrl' value='" + returnUrl + "' />" + "<input type='hidden' name='appId' value='" + _appSetting.PublicKey + "' />" + "</form>" + "<script>document.getElementById('frmTest').submit();</script>";
 			return Content(frm, "text/html");
 		}
+
+
 
 	}
 }

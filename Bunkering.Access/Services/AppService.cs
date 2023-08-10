@@ -57,18 +57,19 @@ namespace Bunkering.Access.Services
 
 		private async Task<Facility> CreateFacility(ApplictionViewModel model, ApplicationUser user)
 		{
-			var facility = await _unitOfWork.Facility.FirstOrDefaultAsync(x => x.Name.ToLower().Equals(model.FacilityName.ToLower()) && x.Address.ToLower().Equals(model.Address.ToLower()) && x.CompanyId.Equals(user.CompanyId));
+			var facility = await _unitOfWork.Facility.FirstOrDefaultAsync(x => x.Name.ToLower().Equals(model.FacilityName.ToLower()) && x.VesselTypeId.Equals(model.VesselTypeId) && x.Capacity.Equals(model.Capacity) && x.DeadWeight.Equals(model.DeadWeight) && x.CompanyId.Equals(user.CompanyId));
 			try
 			{
 				if (facility == null)
 				{
 					facility = new Facility
 					{
-						Address = model.Address,
-						FacilityTypeId = model.FacilityTypeId,
 						Name = model.FacilityName,
-						LgaId = model.LgaId,
-						CompanyId = user.CompanyId.Value
+						CompanyId = user.CompanyId.Value,
+						VesselTypeId = model.VesselTypeId,
+						Capacity = model.Capacity,
+						DeadWeight = model.DeadWeight,
+
 					};
 					var lga = await _unitOfWork.LGA.Find(x => x.Id == model.LgaId);
 
@@ -110,8 +111,7 @@ namespace Bunkering.Access.Services
 				var user = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).FirstOrDefault(x => x.Email.Equals(User));
 				//var user = _userManager.Users.Include(c => c.Company).FirstOrDefault(x => x.Email.ToLower().Equals(User.Identity.Name));
 				if (await _unitOfWork.Application.Find(x => x.Facility.Name.Equals(model.FacilityName, StringComparison.OrdinalIgnoreCase)
-						 && x.Facility.Address.Equals(model.Address, StringComparison.OrdinalIgnoreCase) && x.UserId.Equals(user.Id)
-						 && !x.Status.Equals(Enum.GetName(typeof(AppStatus), 5), StringComparison.OrdinalIgnoreCase)) == null)
+						 && x.Facility.VesselTypeId.Equals(model.VesselTypeId) && x.UserId.Equals(user.Id)) != null)
 					_response = new ApiResponse
 					{
 						Message = "There is an existing application for this facility, kindly go to My Application to complete processing",
@@ -194,7 +194,7 @@ namespace Bunkering.Access.Services
 		public async Task<ApiResponse> GetTanksByAppId(int id)
 		{
 			List<TankViewModel> tankList = new List<TankViewModel>();
-			
+
 			if (id > 0)
 			{
 				try
@@ -202,7 +202,7 @@ namespace Bunkering.Access.Services
 					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "Facility.FacilityType");
 					if (app != null)
 					{
-						if (app.Facility.FacilityType.Name.Equals("Fixed"))
+						if (app.Facility.Name.Equals("Fixed"))
 						{
 							var licenseResponse = (await _unitOfWork.ValidatiionResponse.Find(x => x.UserId.Equals(app.UserId))).OrderByDescending(x => x.Id).FirstOrDefault();
 							if (licenseResponse != null)
@@ -268,7 +268,7 @@ namespace Bunkering.Access.Services
 					Success = false,
 					StatusCode = HttpStatusCode.BadRequest,
 					Message = "ApplicationID invalid"
-				};		
+				};
 
 			return _response;
 		}
@@ -321,8 +321,8 @@ namespace Bunkering.Access.Services
 				try
 				{
 					var user = await _userManager.FindByEmailAsync(User);
-					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "ApplicationType,Facility.FacilityType");
-					var fee = await _unitOfWork.AppFee.FirstOrDefaultAsync(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId) && x.FacilityTypeId.Equals(app.Facility.FacilityTypeId));
+					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "ApplicationType,Facility.VesselType");
+					var fee = await _unitOfWork.AppFee.FirstOrDefaultAsync(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId));
 					var total = fee.AdministrativeFee + fee.VesselLicenseFee + fee.ApplicationFee + fee.InspectionFee + fee.AccreditationFee;
 					var payment = await _unitOfWork.Payment.FirstOrDefaultAsync(x => x.ApplicationId.Equals(id));
 					if (payment == null)
@@ -334,20 +334,20 @@ namespace Bunkering.Access.Services
 							ApplicationId = id,
 							AppReceiptId = "Dollar Payment",
 							BankCode = "000",
-							Description = $"Payment for Bunkering License ({app.Facility.FacilityType.Name})",
+							Description = $"Payment for Bunkering License ({app.Facility.Name})",
 							PaymentType = "USD",
 							RRR = "N/A",
 							Status = "Pending",
 							TransactionDate = DateTime.UtcNow.AddHours(1),
 							TxnMessage = "Dollar payment",
-							TransactionId = "N/A",							
+							TransactionId = "N/A",
 						});
 					}
 					else
 					{
 						payment.Amount = total;
 						payment.ApplicationId = id;
-						payment.Description = $"Pyamnet for Bunkering License ({app.Facility.FacilityType.Name})";
+						payment.Description = $"Pyamnet for Bunkering License ({app.Facility.Name})";
 						payment.Status = "Pending";
 						payment.TransactionDate = DateTime.UtcNow.AddHours(1);
 						await _unitOfWork.Payment.Update(payment);
@@ -361,7 +361,7 @@ namespace Bunkering.Access.Services
 						Success = true,
 						Data = new
 						{
-							FacilityType = app.Facility.FacilityType.Name,
+							FacilityType = app.Facility.Name,
 							APplicationType = app.ApplicationType.Name,
 							fee.AdministrativeFee,
 							fee.AccreditationFee,
@@ -402,7 +402,7 @@ namespace Bunkering.Access.Services
 				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == id, "User,Facility,ApplicationType");
 				if (app != null)
 				{
-					var factypedocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.FacilityTypeId.Equals(app.Facility.FacilityTypeId) && x.ApplicationTypeId.Equals(app.ApplicationTypeId));
+					var factypedocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId));
 					if (factypedocs != null && factypedocs.Count() > 0)
 					{
 						var compdocs = _elps.GetCompanyDocuments(app.User.ElpsId, "company").Stringify().Parse<List<Document>>();
@@ -492,14 +492,9 @@ namespace Bunkering.Access.Services
 						Data = new
 						{
 							Docs = docList,
-							ApiData = new
-							{
-                                CompanyElpsId = app.User.ElpsId,
-                                FacilityElpsId = app.Facility.ElpsId,
-                                ApiEmail = _setting.AppEmail,
-								ApiHash = $"{_setting.AppEmail}{_setting.AppId}".GenerateSha512()
-                            }
-                        }
+							CompanyElpsId = app.User.ElpsId,
+							FacilityElpsId = app.Facility.ElpsId
+						}
 					};
 				}
 				else
@@ -523,13 +518,14 @@ namespace Bunkering.Access.Services
 
 		public async Task<ApiResponse> AddDocuments(int id)
 		{
+
 			if (id > 0)
 			{
 				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == id, "Facility.FacilityType");
 				var user = await _userManager.FindByEmailAsync(User);
 				if (app != null)
 				{
-					var facTypeDocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.FacilityTypeId.Equals(app.Facility.FacilityTypeId) && x.ApplicationTypeId.Equals(app.ApplicationTypeId));
+					var facTypeDocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId));
 
 					if (facTypeDocs.Count() > 0)
 					{
@@ -551,7 +547,6 @@ namespace Bunkering.Access.Services
 										DocSource = doc.source,
 										DocType = item.DocType,
 										FileId = doc.id,
-										IsFAD = item.IsFADDoc
 									});
 							}
 							else
@@ -566,8 +561,7 @@ namespace Bunkering.Access.Services
 										DocSource = doc.Source,
 										DocType = item.DocType,
 										FileId = doc.Id,
-                                        IsFAD = item.IsFADDoc
-                                    });
+									});
 							}
 						}
 
@@ -592,14 +586,8 @@ namespace Bunkering.Access.Services
 							StatusCode = HttpStatusCode.OK,
 							Success = true
 						};
-					else
-                        _response = new ApiResponse
-                        {
-                            Message = submit.Item2,
-                            StatusCode = HttpStatusCode.BadRequest,
-                            Success = false
-                        };
-                }
+
+				}
 				else
 					_response = new ApiResponse
 					{
@@ -691,10 +679,9 @@ namespace Bunkering.Access.Services
 					{
 						CompanyEmail = x.User.Email,
 						CompanyName = x.User.Company.Name,
-						FacilityAddress = x.Facility.Address,
-						FacilityType = x.Facility.FacilityType.Name,
-                        ApplicationType = x.ApplicationType.Name,
-						State = x.Facility.LGA.State.Name,
+						VesselName = x.Facility.Name,
+						VesselType = x.Facility.VesselType.Name,
+						Capacity = x.Facility.Capacity,
 						x.Reference,
 						x.Status,
 						CreatedDate = x.CreatedDate.ToString("MMMM dd, yyyy HH:mm:ss")
@@ -749,12 +736,12 @@ namespace Bunkering.Access.Services
 				Success = true,
 				Data = apps.Select(x => new
 				{
-					AppId = x.Id,
 					CompanyEmail = x.User.Email,
 					CompanyName = x.User.Company.Name,
-					FacilityAddress = x.Facility.Address,
-					FacilityType = x.Facility.FacilityType.Name,
-					State = x.Facility.LGA.State.Name,
+					VesselName = x.Facility.Name,
+					VesselType = x.Facility.VesselType.Name,
+					x.Facility.Capacity,
+					x.Facility.DeadWeight,
 					x.Reference,
 					x.Status,
 					CreatedDate = x.CreatedDate.ToString("MMMM dd, yyyy HH:mm:ss")
@@ -806,20 +793,20 @@ namespace Bunkering.Access.Services
 								app.Reference,
 								CompanyName = app.User.Company.Name,
 								app.User.Email,
-								FacilityAddress = app.Facility.Address,
-								State = app.Facility.LGA.State.Name,
-								LGA = app.Facility.LGA.Name,
-								FacilityType = app.Facility.FacilityType.Name,
+								//FacilityAddress = app.Facility.Address,
+								//State = app.Facility.LGA.State.Name,
+								//LGA = app.Facility.LGA.Name,
+								VesselType = app.Facility.VesselType.Name,
 								AppType = app.ApplicationType.Name,
 								CreatedDate = app.CreatedDate.ToString("MMM dd, yyyy HH:mm:ss"),
-								SubmittedDate = app?.SubmittedDate?.ToString("MMM dd, yyyy HH:mm:ss"),
+								SubmittedDate = app.SubmittedDate.Value.ToString("MMM dd, yyyy HH:mm:ss"),
 								PaymnetStatus = paymentStatus,
-								TotalAmount = app.Payments.Sum(x => x.Amount),
+								TotalAmount = string.Format("{0:N}", app.Payments.Sum(x => x.Amount)),
 								PaymentDescription = app.Payments.FirstOrDefault().Description,
 								PaymnetDate = app.Payments.FirstOrDefault()?.TransactionDate.ToString("MMM dd, yyyy HH:mm:ss"),
-								CurrentDesk = _userManager.Users.FirstOrDefault(x => x.Id.Equals(app.CurrentDeskId)).Email,
+								CurrentDesk = _userManager.Users.FirstOrDefault(x => x.Id.Equals(app.CurrentDeskId))?.Email,
 								AppHistories = histories,
-								Schedules = schedules?.Select(s => new
+								Schedules = schedules.Select(s => new
 								{
 									s.ApprovedBy,
 									s.ScheduledBy,

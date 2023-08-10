@@ -4,7 +4,7 @@ namespace Bunkering.Core.Data
 	public class WorkFlow
 	{
 		public int Id { get; set; }
-		public int FacilityTypeId { get; set; }
+		public int VesselTypeId { get; set; }
 		public int? ApplicationTypeId { get; set; }
 		public string TriggeredByRole { get; set; }
 		public string Action { get; set; }

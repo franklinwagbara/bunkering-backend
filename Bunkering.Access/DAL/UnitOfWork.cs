@@ -26,6 +26,7 @@ namespace Bunkering.Access.DAL
 		public ITank Tank { get; private set; }
 		public IValidatiionResponse ValidatiionResponse { get; set; }
 		public IWorkflow Workflow { get; private set; }
+		public IVesselType VesselType { get; set; }
 
 		public UnitOfWork(ApplicationContext context)
 		{
@@ -50,6 +51,7 @@ namespace Bunkering.Access.DAL
 			Tank = Tank != null ? Tank : new TankRepository(_context);
 			ValidatiionResponse = ValidatiionResponse != null ? ValidatiionResponse : new ValidatiionResponseRepo(_context);
 			Workflow = Workflow != null ? Workflow : new WorkflowRepository(_context);
+			VesselType = VesselType != null ? VesselType : new VeseelTypeRepository(_context);
 		}
 
 		public int Save() => _context.SaveChanges();

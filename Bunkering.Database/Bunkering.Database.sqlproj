@@ -92,14 +92,7 @@
     <Build Include="dbo\Tables\ExtraPayments.sql" />
     <Build Include="dbo\Tables\WorkFlows.sql" />
     <Build Include="dbo\Tables\FacilityTypeDocuments.sql" />
-    <Build Include="dbo\Views\vPermit.sql" />
-    <Build Include="dbo\Views\vPayments.sql" />
-    <Build Include="dbo\Views\vFacilityDoc.sql" />
-    <Build Include="dbo\Views\vFacilities.sql" />
-    <Build Include="dbo\Views\vCountries.sql" />
-    <Build Include="dbo\Views\vApplication.sql" />
-    <Build Include="dbo\Views\vAppHistory.sql" />
-    <Build Include="dbo\Views\vAppDoc.sql" />
-    <Build Include="dbo\Tables\AppSettings.sql" />
+    <Build Include="dbo\Tables\VesselTypes.sql" />
+    <Build Include="dbo\Tables\FacilitySources.sql" />
   </ItemGroup>
 </Project>

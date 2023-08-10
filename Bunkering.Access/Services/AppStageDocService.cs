@@ -31,32 +31,32 @@ namespace Bunkering.Access.Services
 			_userManager = userManager;
 		}
 
-        public async Task<ApiResponse> GetAllElpsDocs() 
+		public async Task<ApiResponse> GetAllElpsDocs()
 		{
-            var documents = _elps.GetDocumentTypes();
-            documents.AddRange(_elps.GetDocumentTypes("facility"));
+			var documents = _elps.GetDocumentTypes();
+			documents.AddRange(_elps.GetDocumentTypes("facility"));
 
-            if (documents.Any())
-            {
-                _response = new ApiResponse
-                {
-                    Message = "Elps Dccumnets successfully found",
-                    StatusCode = HttpStatusCode.OK,
-                    Success = true,
+			if (documents.Any())
+			{
+				_response = new ApiResponse
+				{
+					Message = "Elps Dccumnets successfully found",
+					StatusCode = HttpStatusCode.OK,
+					Success = true,
 					Data = documents
-                };
-            }
-            else
-                _response = new ApiResponse
-                {
-                    Message = "No Dccumnet was found",
-                    StatusCode = HttpStatusCode.OK,
-                    Success = false
-                };
+				};
+			}
+			else
+				_response = new ApiResponse
+				{
+					Message = "No Dccumnet was found",
+					StatusCode = HttpStatusCode.OK,
+					Success = false
+				};
 
 			return _response;
-        }
-        public async Task<ApiResponse> GetAllFADDoc()
+		}
+		public async Task<ApiResponse> GetAllFADDoc()
 		{
 			var docs = await _unitOfWork.FacilityTypeDocuments.GetAll("FacilityType,ApplicationType");
 			if (docs != null)
@@ -71,7 +71,7 @@ namespace Bunkering.Access.Services
 						d.IsFADDoc,
 						AppType = d.ApplicationType.Name,
 						d.DocType,
-						FacilityType = d.FacilityType.Name,
+						VesselType = d.VesselType.Name,
 						DocId = d.DocumentTypeId
 					})
 				};
@@ -96,7 +96,7 @@ namespace Bunkering.Access.Services
 				var docs = documents.Where(x => model.DocumentTypeId.Any(y => y.Equals(x.Id))).Select(d => new FacilityTypeDocument
 				{
 					ApplicationTypeId = model.ApplicationTypeId,
-					FacilityTypeId = model.FacilityTypeId,
+					//FacilityTypeId = model.FacilityTypeId,
 					DocumentTypeId = d.Id,
 					Name = d.Name,
 					DocType = d.Type,
@@ -106,7 +106,7 @@ namespace Bunkering.Access.Services
 				{
 					var user = await _userManager.FindByEmailAsync(User);
 
-                    docs = await _unitOfWork.FacilityTypeDocuments.AddRange(docs);
+					docs = await _unitOfWork.FacilityTypeDocuments.AddRange(docs);
 					await _unitOfWork.SaveChangesAsync(user.Id);
 					//_unitOfWork.Save();
 
