@@ -110,7 +110,7 @@ namespace Bunkering.Access.Services
 											_response = new ApiResponse
 											{
 												Message = successMsg,
-												Data = payment.RRR,
+												Data = new { rrr = payment.RRR },
 												StatusCode = HttpStatusCode.OK,
 												Success = true
 											};

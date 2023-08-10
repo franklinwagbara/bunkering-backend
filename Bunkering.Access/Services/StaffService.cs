@@ -84,7 +84,7 @@ namespace Bunkering.Access.Services
 		public async Task<ApiResponse> AllUsers()
 		{
 			var users = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).Where(x => x.CompanyId == null && !x.IsDeleted).ToList();
-			var apps = await _unitOfWork.Application.GetAll("User.Company,Appointment,SubmittedDocuments,ApplicationType,Payments,Facility.FacilityType,Facility.LGA.State,WorkFlow,Histories");
+			var apps = await _unitOfWork.Application.GetAll("User.Company,Appointment,SubmittedDocuments,ApplicationType,Payments,Facility.VesselType,WorkFlow,Histories");
 			return new ApiResponse
 			{
 				Message = "Users found",

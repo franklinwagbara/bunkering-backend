@@ -373,6 +373,8 @@ namespace Bunkering.Access.Services
 							ApplicationType = app.ApplicationType.Name,
 							fee.SerciveCharge,
 							Total = total,
+							payment.RRR,
+							PaymentStatus = payment.Status
 						}
 					};
 				}
