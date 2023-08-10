@@ -23,10 +23,7 @@ namespace Bunkering.Controllers.API
             _appSetting = appSetting.Value;
         }
 
-        [ProducesResponseType(typeof(ApiResponse), 200)]
-        [ProducesResponseType(typeof(ApiResponse), 404)]
-        [ProducesResponseType(typeof(ApiResponse), 409)]
-        [ProducesResponseType(typeof(ApiResponse), 500)]
+        [AllowAnonymous]
         [HttpPost]
         [Route("create-payment")]
         public async Task<IActionResult> CreatePayment(int id) => Response(await _payment.CreatePayment(id).ConfigureAwait(false));
