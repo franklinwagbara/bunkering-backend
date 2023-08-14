@@ -11,7 +11,7 @@ namespace Bunkering.Core.Data
 	{
 		public int Id { get; set; }
 		public int DocumentTypeId { get; set; }
-		public int VessleTypeId { get; set; }
+		public int VesselTypeId { get; set; }
 		public int ApplicationTypeId { get; set; }
 		//public int FacilityTypeId { get; set; }
 		public bool IsFADDoc { get; set; }

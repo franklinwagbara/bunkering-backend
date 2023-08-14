@@ -405,7 +405,7 @@ namespace Bunkering.Access.Services
 				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == id, "User,Facility.VesselType,ApplicationType");
 				if (app != null)
 				{
-					var factypedocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId) && x.VessleTypeId.Equals(app.Facility.VesselTypeId));
+					var factypedocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId) && x.VesselTypeId.Equals(app.Facility.VesselTypeId));
 					if (factypedocs != null && factypedocs.Count() > 0)
 					{
 						var compdocs = _elps.GetCompanyDocuments(app.User.ElpsId, "company").Stringify().Parse<List<Document>>();
@@ -528,7 +528,7 @@ namespace Bunkering.Access.Services
 				var user = await _userManager.FindByEmailAsync(User);
 				if (app != null)
 				{
-					var facTypeDocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId) && x.VessleTypeId.Equals(app.Facility.VesselTypeId));
+					var facTypeDocs = await _unitOfWork.FacilityTypeDocuments.Find(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId) && x.VesselTypeId.Equals(app.Facility.VesselTypeId));
 
 					if (facTypeDocs.Count() > 0)
 					{

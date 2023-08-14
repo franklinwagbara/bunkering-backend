@@ -1,28 +1,26 @@
 ﻿using Bunkering.Core.ViewModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Operations;
 using System.Net;
 
 namespace Bunkering.Controllers
 {
-    public class ResponseController : ControllerBase
-    {
-        protected new IActionResult Response(ApiResponse response)
-        {
-            if (response.StatusCode == HttpStatusCode.OK)
-                return Ok(response);
+	public class ResponseController : ControllerBase
+	{
+		protected new IActionResult Response(ApiResponse response)
+		{
+			if (response.StatusCode == HttpStatusCode.OK)
+				return Ok(response);
 
-            if (response.StatusCode == HttpStatusCode.BadRequest)
-                return BadRequest(response);
+			if (response.StatusCode == HttpStatusCode.BadRequest)
+				return BadRequest(response);
 
-            if (response.StatusCode == HttpStatusCode.NotFound)
-                return NotFound(response);
+			if (response.StatusCode == HttpStatusCode.NotFound)
+				return NotFound(response);
 
-            if (response.StatusCode == HttpStatusCode.Conflict)
-                return Conflict(response);
+			if (response.StatusCode == HttpStatusCode.Conflict)
+				return Conflict(response);
 
-            return NotFound(response);
-        }
-    }
+			return NotFound(response);
+		}
+	}
 }
