@@ -25,7 +25,7 @@ namespace Bunkering.Core.Data
 		public DbSet<Inspection> Inspections { get; set; }
 		public DbSet<LGA> LGAs { get; set; }
 		public DbSet<Message> Messages { get; set; }
-		public DbSet<Bunkering.Core.Data.Payment> Payments { get; set; }
+		public DbSet<Payment> Payments { get; set; }
 		public DbSet<Permit> Permits { get; set; }
 		public DbSet<Product> Products { get; set; }
 		public DbSet<State> States { get; set; }
