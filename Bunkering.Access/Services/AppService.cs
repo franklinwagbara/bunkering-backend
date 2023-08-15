@@ -69,6 +69,11 @@ namespace Bunkering.Access.Services
 					Operator = model.Operator,
 					FacilitySources = _mapper.Map<List<FacilitySource>>(model.FacilitySources),
 					Tanks = _mapper.Map<List<Tank>>(model.TankList),
+					CallSIgn = model.CallSIgn,
+					Flag = model.Flag,
+					IMONumber = model.IMONumber,
+					PlaceOfBuild = model.PlaceOfBuild,
+					YearOfBuild = model.YearOfBuild,
 				};
 				var lga = await _unitOfWork.LGA.FirstOrDefaultAsync(x => x.State.Name.Contains("lagos"), "State");
 

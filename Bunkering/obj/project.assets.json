@@ -13640,23 +13640,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\anyan\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\suppo\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\anyan\\Documents\\Visual Studio 2022\\Projects\\BUNKERING\\BunkeringBEnd\\Bunkering\\Bunkering.csproj",
+      "projectUniqueName": "C:\\Users\\suppo\\Documents\\Visual Studio 2022\\Projects\\Bunkering\\Bunkering\\Bunkering.csproj",
       "projectName": "Bunkering",
-      "projectPath": "C:\\Users\\anyan\\Documents\\Visual Studio 2022\\Projects\\BUNKERING\\BunkeringBEnd\\Bunkering\\Bunkering.csproj",
-      "packagesPath": "C:\\Users\\anyan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\anyan\\Documents\\Visual Studio 2022\\Projects\\BUNKERING\\BunkeringBEnd\\Bunkering\\obj\\",
+      "projectPath": "C:\\Users\\suppo\\Documents\\Visual Studio 2022\\Projects\\Bunkering\\Bunkering\\Bunkering.csproj",
+      "packagesPath": "C:\\Users\\suppo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\suppo\\Documents\\Visual Studio 2022\\Projects\\Bunkering\\Bunkering\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\anyan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\suppo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -13666,14 +13668,15 @@
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "C:\\Program Files\\dotnet\\library-packs": {},
+        "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\anyan\\Documents\\Visual Studio 2022\\Projects\\BUNKERING\\BunkeringBEnd\\Bunkering.Access\\Bunkering.Access.csproj": {
-              "projectPath": "C:\\Users\\anyan\\Documents\\Visual Studio 2022\\Projects\\BUNKERING\\BunkeringBEnd\\Bunkering.Access\\Bunkering.Access.csproj"
+            "C:\\Users\\suppo\\Documents\\Visual Studio 2022\\Projects\\Bunkering\\Bunkering.Access\\Bunkering.Access.csproj": {
+              "projectPath": "C:\\Users\\suppo\\Documents\\Visual Studio 2022\\Projects\\Bunkering\\Bunkering.Access\\Bunkering.Access.csproj"
             }
           }
         }
@@ -13734,7 +13737,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }
