@@ -765,7 +765,7 @@ namespace Bunkering.Access.Services
 			{
 				try
 				{
-					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "User.Company,Appointment,SubmittedDocuments,ApplicationType,Payments,Facility.VesselType,Facility.LGA.State,WorkFlow,Histories,Facility.Tanks.Product,Facility.FacilitySources");
+					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "User.Company,Appointment,SubmittedDocuments,ApplicationType,Payments,Facility.VesselType,Facility.LGA.State,WorkFlow,Histories,Facility.Tanks.Product,Facility.FacilitySources,Facility.State,Facility.LGA");
 					if (app != null)
 					{
 						var users = _userManager.Users.Include(c => c.Company).Include(ur => ur.UserRoles).ThenInclude(r => r.Role).ToList();
@@ -850,7 +850,8 @@ namespace Bunkering.Access.Services
 										f.Name,
 										f.LicenseNumber,
 										f.Address,
-										f.
+										State = f.State.Name,
+										LGA = f.LGA.Name
 									})
                                 }
                             }
