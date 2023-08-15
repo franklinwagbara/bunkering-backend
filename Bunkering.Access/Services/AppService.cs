@@ -331,12 +331,12 @@ namespace Bunkering.Access.Services
 				{
 					var user = await _userManager.FindByEmailAsync(User);
 					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "ApplicationType,Facility.VesselType,Payments");
-					var fee = await _unitOfWork.AppFee.FirstOrDefaultAsync(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId));
+					var fee = await _unitOfWork.AppFee.FirstOrDefaultAsync(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId) && x.VesseltypeId.Equals(app.Facility.VesselTypeId));
 					var total = fee.AdministrativeFee + fee.VesselLicenseFee + fee.ApplicationFee + fee.InspectionFee + fee.AccreditationFee + fee.SerciveCharge;
 					var payment = await _unitOfWork.Payment.FirstOrDefaultAsync(x => x.ApplicationId.Equals(id));
 					if (payment == null)
 					{
-						await _unitOfWork.Payment.Add(new Payment
+						payment = new Payment
 						{
 							Amount = total,
 							Account = _setting.NMDPRAAccount,
@@ -351,7 +351,8 @@ namespace Bunkering.Access.Services
 							RRR = "",
 							TransactionId = "",
 							TxnMessage = "Payment initiated"
-						});
+						};
+						await _unitOfWork.Payment.Add(payment);
 					}
 					else
 					{
