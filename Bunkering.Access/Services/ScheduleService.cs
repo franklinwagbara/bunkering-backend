@@ -35,7 +35,7 @@ namespace Bunkering.Access.Services
 
 		public async Task<ApiResponse> ScheduleInspection(ScheduleViewModel model)
 		{
-			if (appId > 0)
+			if (model.ApplicationId > 0)
 			{
 				try
 				{
@@ -64,11 +64,11 @@ namespace Bunkering.Access.Services
 						var schFlow = await _flow.GetWorkFlow(Enum.GetName(typeof(AppActions), AppActions.ScheduleInspection), user.UserRoles.FirstOrDefault().RoleId, app.ApplicationTypeId, app.Facility.VesselTypeId);
 						if (schFlow != null)
 						{
-							var nextUser = await _flow.GetNextStaff(appId, Enum.GetName(typeof(AppActions), AppActions.ScheduleInspection), schFlow, user);
+							var nextUser = await _flow.GetNextStaff(model.ApplicationId, Enum.GetName(typeof(AppActions), AppActions.ScheduleInspection), schFlow, user);
 							if (nextUser != null && await _userManager.IsInRoleAsync(user, "Reviewer"))
 								appointment.ApprovedBy = nextUser.Id;
 
-							await _flow.SaveHistory(Enum.GetName(typeof(AppActions), AppActions.ScheduleInspection), appId, schFlow, user, nextUser, model.ScheduleMessage);
+							await _flow.SaveHistory(Enum.GetName(typeof(AppActions), AppActions.ScheduleInspection), model.ApplicationId, schFlow, user, nextUser, model.ScheduleMessage);
 						}
 
 						await _unitOfWork.Appointment.Add(appointment);

@@ -39,14 +39,14 @@ namespace Bunkering.Access.Services
 		{
 			var user = await _userManager.FindByEmailAsync(User);
 			var allApps = await _userManager.IsInRoleAsync(user, Roles.Company) ? await _unitOfWork.Application.Find(x => x.UserId.Equals(user.Id), "Payments") : await _unitOfWork.Application.GetAll("Payments");
-            var apps = await _userManager.IsInRoleAsync(user, Roles.FAD)
+			var apps = await _userManager.IsInRoleAsync(user, Roles.FAD)
 				? (allApps.Where(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))))
 				: (allApps.Where(x => x.CurrentDeskId.Equals(user.Id)));
 			var permits = await _userManager.IsInRoleAsync(user, Roles.Company) ? await _unitOfWork.Permit.Find(x => x.Application.UserId.Equals(user.Id), "Application") : await _unitOfWork.Permit.GetAll("Application");
-			var facilities = await _userManager.IsInRoleAsync(user, Roles.Company) ? await _unitOfWork.Facility.Find(x => x.CompanyId.Equals(user.CompanyId),"VesselType") : await _unitOfWork.Facility.GetAll("VesselType");
+			var facilities = await _userManager.IsInRoleAsync(user, Roles.Company) ? await _unitOfWork.Facility.Find(x => x.CompanyId.Equals(user.CompanyId), "VesselType") : await _unitOfWork.Facility.GetAll("VesselType");
 			var payments = await _userManager.IsInRoleAsync(user, Roles.Company) ? await _unitOfWork.Payment.Find(x => x.Application.UserId.Equals(user.Id), "Application") : await _unitOfWork.Payment.GetAll("Application");
 
-            if (user != null)
+			if (user != null)
 				_response = new ApiResponse
 				{
 					Message = "Success",
@@ -65,10 +65,10 @@ namespace Bunkering.Access.Services
 						TProcessing = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))),
 						TApproved = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Completed))),
 						TRejected = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Rejected))),
-						TExpiring30 = await _userManager.IsInRoleAsync(user, Roles.Company) 
-						? permits.Count(x => x.Application.UserId.Equals(user.Id) && x.ExpireDate.AddDays(30) >= DateTime.UtcNow.AddHours(1)) 
+						TExpiring30 = await _userManager.IsInRoleAsync(user, Roles.Company)
+						? permits.Count(x => x.Application.UserId.Equals(user.Id) && x.ExpireDate.AddDays(30) >= DateTime.UtcNow.AddHours(1))
 						: permits.Count(x => x.ExpireDate.AddDays(30) >= DateTime.UtcNow.AddHours(1))
-                    }
+					}
 				};
 			else
 				_response = new ApiResponse
@@ -168,13 +168,27 @@ namespace Bunkering.Access.Services
 				var user = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).FirstOrDefault(x => x.Id.Equals(model.Id));
 				if (user != null)
 				{
+					if (!model.Email.Equals(user.Email))
+					{
+						var checkEmail = await _userManager.FindByEmailAsync(model.Email);
+						if (checkEmail != null)
+						{
+							return new ApiResponse
+							{
+								Message = "Email Already Exist",
+								StatusCode = HttpStatusCode.BadRequest,
+								Success = false
+							};
+						}
+
+					}
 					var role = await _roleManager.FindByIdAsync(model.RoleId);
 					var apps = await _unitOfWork.Application.Find(x => x.CurrentDeskId.Equals(user.Id));
 					if (apps != null && apps.Count() > 0)
 					{
 						if (role != null && !await _userManager.IsInRoleAsync(user, role.Name))
 						{
-							_response = new ApiResponse
+							return new ApiResponse
 							{
 								Message = "There are pending applications on the staff desk, pls reroute and try again",
 								StatusCode = HttpStatusCode.BadRequest,
@@ -182,28 +196,34 @@ namespace Bunkering.Access.Services
 							};
 						}
 					}
-					else
+					user.PhoneNumber = model.Phone;
+					user.Email = model.Email;
+					user.FirstName = model.FirstName;
+					user.LastName = model.LastName;
+					user.IsActive = model.IsActive;
+
+					await _userManager.UpdateAsync(user);
+
+					if (!await _userManager.IsInRoleAsync(user, role.Name))
 					{
-						user.PhoneNumber = model.Phone;
-						user.Email = model.Email;
-						user.FirstName = model.FirstName;
-						user.LastName = model.LastName;
-						user.IsActive = model.IsActive;
-
-						await _userManager.UpdateAsync(user);
-
-						if (!await _userManager.IsInRoleAsync(user, role.Name))
-						{
-							await _userManager.RemoveFromRoleAsync(user, user.UserRoles.FirstOrDefault().Role.Name);
-							await _userManager.AddToRoleAsync(user, role.Name);
-						}
-						_response = new ApiResponse
-						{
-							Message = "Staff profile updated successfully!",
-							StatusCode = HttpStatusCode.OK,
-							Success = true
-						};
+						await _userManager.RemoveFromRoleAsync(user, user.UserRoles.FirstOrDefault().Role.Name);
+						await _userManager.AddToRoleAsync(user, role.Name);
 					}
+					_response = new ApiResponse
+					{
+						Message = "Staff profile updated successfully!",
+						StatusCode = HttpStatusCode.OK,
+						Success = true
+					};
+				}
+				else
+				{
+					_response = new ApiResponse
+					{
+						Message = "Staff not found",
+						StatusCode = HttpStatusCode.BadRequest,
+						Success = false
+					};
 				}
 			}
 			catch (Exception ex)

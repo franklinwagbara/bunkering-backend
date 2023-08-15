@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bunkering.Core.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -22,10 +23,11 @@ namespace Bunkering.Core.Data
 		public VesselType VesselType { get; set; }
 		public decimal DeadWeight { get; set; }
 		public decimal Capacity { get; set; }
-        public string Operator { get; set; }
-        public virtual ICollection<FacilitySource> FacilitySources { get; set; }
+		public string Operator { get; set; }
+		public virtual ICollection<FacilitySource> FacilitySources { get; set; }
+		public ICollection<Tank> Tanks { get; set; }
 
-    }
+	}
 
 
 
