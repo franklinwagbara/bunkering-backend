@@ -745,6 +745,7 @@ namespace Bunkering.Access.Services
 				Success = true,
 				Data = apps.Select(x => new
 				{
+					x.Id,
 					CompanyEmail = x.User.Email,
 					CompanyName = x.User.Company.Name,
 					VesselName = x.Facility.Name,
@@ -832,7 +833,7 @@ namespace Bunkering.Access.Services
 								Vessel = new
 								{
 									app.Facility.Name,
-                                    VesselType = app.Facility.VesselType.Name,
+									VesselType = app.Facility.VesselType.Name,
 									app.Facility.Capacity,
 									app.Facility.DeadWeight,
 									app.Facility.IMONumber,
@@ -845,7 +846,7 @@ namespace Bunkering.Access.Services
 										t.Capacity,
 										Product = t.Product.Name
 									}),
-                                    FacilitySources = app.Facility.FacilitySources.Select(f => new
+									FacilitySources = app.Facility.FacilitySources.Select(f => new
 									{
 										f.Name,
 										f.LicenseNumber,
@@ -853,8 +854,8 @@ namespace Bunkering.Access.Services
 										State = f.State.Name,
 										LGA = f.LGA.Name
 									})
-                                }
-                            }
+								}
+							}
 						};
 					}
 					else
