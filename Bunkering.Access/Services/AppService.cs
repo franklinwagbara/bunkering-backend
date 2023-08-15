@@ -685,11 +685,12 @@ namespace Bunkering.Access.Services
 					Success = true,
 					Data = apps.Select(x => new
 					{
+						x.Id,
 						CompanyEmail = x.User.Email,
 						CompanyName = x.User.Company.Name,
 						VesselName = x.Facility.Name,
 						VesselType = x.Facility.VesselType.Name,
-						Capacity = x.Facility.Capacity,
+						x.Facility.Capacity,
 						x.Reference,
 						x.Status,
 						CreatedDate = x.CreatedDate.ToString("MMMM dd, yyyy HH:mm:ss")
@@ -764,7 +765,7 @@ namespace Bunkering.Access.Services
 			{
 				try
 				{
-					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "User.Company,Appointment,SubmittedDocuments,ApplicationType,Payments,Facility.VesselType,Facility.LGA.State,WorkFlow,Histories");
+					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "User.Company,Appointment,SubmittedDocuments,ApplicationType,Payments,Facility.VesselType,Facility.LGA.State,WorkFlow,Histories,Facility.Tanks.Product,Facility.FacilitySources");
 					if (app != null)
 					{
 						var users = _userManager.Users.Include(c => c.Company).Include(ur => ur.UserRoles).ThenInclude(r => r.Role).ToList();
@@ -804,7 +805,6 @@ namespace Bunkering.Access.Services
 								//FacilityAddress = app.Facility.Address,
 								//State = app.Facility.LGA.State.Name,
 								//LGA = app.Facility.LGA.Name,
-								VesselType = app.Facility.VesselType.Name,
 								AppType = app.ApplicationType.Name,
 								CreatedDate = app.CreatedDate.ToString("MMM dd, yyyy HH:mm:ss"),
 								SubmittedDate = app.SubmittedDate.Value.ToString("MMM dd, yyyy HH:mm:ss"),
@@ -828,8 +828,32 @@ namespace Bunkering.Access.Services
 									s.ScheduleType,
 									ExpiryDate = s.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
 								}),
-								Documents = app.SubmittedDocuments
-							}
+								Documents = app.SubmittedDocuments,
+								Vessel = new
+								{
+									app.Facility.Name,
+                                    VesselType = app.Facility.VesselType.Name,
+									app.Facility.Capacity,
+									app.Facility.DeadWeight,
+									app.Facility.IMONumber,
+									app.Facility.Flag,
+									app.Facility.CallSIgn,
+									app.Facility.Operator,
+									Tanks = app.Facility.Tanks.Select(t => new
+									{
+										t.Name,
+										t.Capacity,
+										Product = t.Product.Name
+									}),
+                                    FacilitySources = app.Facility.FacilitySources.Select(f => new
+									{
+										f.Name,
+										f.LicenseNumber,
+										f.Address,
+										f.
+									})
+                                }
+                            }
 						};
 					}
 					else
