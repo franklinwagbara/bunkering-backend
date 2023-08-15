@@ -10,18 +10,15 @@ namespace Bunkering.Core.Data
 	public class FacilitySource
 	{
 		public int Id { get; set; }
-        public int FacilityId { get; set; }
-        public int FacilityTypeId { get; set; }
+		public int FacilityId { get; set; }
+		public int FacilityTypeId { get; set; }
 		public string Name { get; set; }
 		public string Address { get; set; }
 		public string LicenseNumber { get; set; }
-		public int StateId { get; set; }
 		public int LgaId { get; set; }
 		[ForeignKey(nameof(FacilityId))]
-        public Facility Facility { get; set; }
-        [ForeignKey(nameof(StateId))]
-        public State State { get; set; }
-        [ForeignKey(nameof(LgaId))]
-        public LGA LGA { get; set; }
-    }
+		public Facility Facility { get; set; }
+		[ForeignKey(nameof(LgaId))]
+		public LGA LGA { get; set; }
+	}
 }
