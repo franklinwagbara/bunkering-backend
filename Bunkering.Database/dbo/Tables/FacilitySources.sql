@@ -8,8 +8,12 @@
     [StateId]        INT            NOT NULL,
     [LgaId]          INT            NOT NULL,
     CONSTRAINT [PK_FacilitySources] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_FacilitySources_Facilityies] FOREIGN KEY ([FacilityId]) REFERENCES [dbo].[Facilities] ([Id])
+    CONSTRAINT [FK_FacilitySources_FacilitySources] FOREIGN KEY ([Id]) REFERENCES [dbo].[FacilitySources] ([Id]),
+    CONSTRAINT [FK_FacilitySources_Lga_LgaId] FOREIGN KEY ([LgaId]) REFERENCES [dbo].[LGAs] ([Id]),
+    CONSTRAINT [FK_FacilitySources_State_StateId] FOREIGN KEY ([StateId]) REFERENCES [dbo].[States] ([Id])
 );
+
+
 
 
 

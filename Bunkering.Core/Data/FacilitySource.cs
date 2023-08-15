@@ -19,5 +19,9 @@ namespace Bunkering.Core.Data
 		public int LgaId { get; set; }
 		[ForeignKey(nameof(FacilityId))]
         public Facility Facility { get; set; }
+        [ForeignKey(nameof(StateId))]
+        public State State { get; set; }
+        [ForeignKey(nameof(LgaId))]
+        public LGA LGA { get; set; }
     }
 }
