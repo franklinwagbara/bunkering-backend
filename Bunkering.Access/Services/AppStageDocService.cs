@@ -180,21 +180,33 @@ namespace Bunkering.Access.Services
 			try
 			{
 				var save = 0;
-				var faddoc = await _unitOfWork.FacilityTypeDocuments.FirstOrDefaultAsync(d => d.DocumentTypeId.Equals(id));
+				var faddoc = await _unitOfWork.FacilityTypeDocuments.FirstOrDefaultAsync(d => d.Id.Equals(id));
 				if (faddoc != null)
 				{
 					await _unitOfWork.FacilityTypeDocuments.Remove(faddoc);
 					save = _unitOfWork.Save();
-				}
-				if (save > 0)
-				{
-					return new ApiResponse
+
+					if (save > 0)
 					{
-						Message = "Deleted Successful",
-						StatusCode = HttpStatusCode.OK,
-						Success = true
+						return new ApiResponse
+						{
+							Message = "Deleted Successful",
+							StatusCode = HttpStatusCode.OK,
+							Success = true
+						};
+					}
+				}
+				else
+				{
+					_response = new ApiResponse
+					{
+						Data = faddoc,
+						Message = "Document Not Found",
+						StatusCode = HttpStatusCode.NotFound,
+						Success = false
 					};
 				}
+
 			}
 
 			catch (Exception ex)
@@ -208,12 +220,13 @@ namespace Bunkering.Access.Services
 				};
 			}
 
-			return new ApiResponse
-			{
-				Message = "Error in operation",
-				StatusCode = HttpStatusCode.BadRequest,
-				Success = false
-			};
+			return _response;
+
+			/* Message = "Error in operation",
+			StatusCode = HttpStatusCode.BadRequest,
+			Success = false
+			*/
+
 
 
 

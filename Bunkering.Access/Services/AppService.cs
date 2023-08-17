@@ -331,12 +331,12 @@ namespace Bunkering.Access.Services
 				{
 					var user = await _userManager.FindByEmailAsync(User);
 					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "ApplicationType,Facility.VesselType,Payments");
-					var fee = await _unitOfWork.AppFee.FirstOrDefaultAsync(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId));
+					var fee = await _unitOfWork.AppFee.FirstOrDefaultAsync(x => x.ApplicationTypeId.Equals(app.ApplicationTypeId) && x.VesseltypeId.Equals(app.Facility.VesselTypeId));
 					var total = fee.AdministrativeFee + fee.VesselLicenseFee + fee.ApplicationFee + fee.InspectionFee + fee.AccreditationFee + fee.SerciveCharge;
 					var payment = await _unitOfWork.Payment.FirstOrDefaultAsync(x => x.ApplicationId.Equals(id));
 					if (payment == null)
 					{
-						await _unitOfWork.Payment.Add(new Payment
+						payment = new Payment
 						{
 							Amount = total,
 							Account = _setting.NMDPRAAccount,
@@ -351,7 +351,8 @@ namespace Bunkering.Access.Services
 							RRR = "",
 							TransactionId = "",
 							TxnMessage = "Payment initiated"
-						});
+						};
+						await _unitOfWork.Payment.Add(payment);
 					}
 					else
 					{
@@ -745,6 +746,7 @@ namespace Bunkering.Access.Services
 				Success = true,
 				Data = apps.Select(x => new
 				{
+					x.Id,
 					CompanyEmail = x.User.Email,
 					CompanyName = x.User.Company.Name,
 					VesselName = x.Facility.Name,
@@ -765,7 +767,7 @@ namespace Bunkering.Access.Services
 			{
 				try
 				{
-					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "User.Company,Appointment,SubmittedDocuments,ApplicationType,Payments,Facility.VesselType,Facility.LGA.State,WorkFlow,Histories,Facility.Tanks.Product,Facility.FacilitySources,Facility.State,Facility.LGA");
+					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "User.Company,Appointment,SubmittedDocuments,ApplicationType,Payments,Facility.VesselType,WorkFlow,Histories,Facility.Tanks.Product,Facility.FacilitySources.LGA.State,");
 					if (app != null)
 					{
 						var users = _userManager.Users.Include(c => c.Company).Include(ur => ur.UserRoles).ThenInclude(r => r.Role).ToList();
@@ -832,7 +834,7 @@ namespace Bunkering.Access.Services
 								Vessel = new
 								{
 									app.Facility.Name,
-                                    VesselType = app.Facility.VesselType.Name,
+									VesselType = app.Facility.VesselType.Name,
 									app.Facility.Capacity,
 									app.Facility.DeadWeight,
 									app.Facility.IMONumber,
@@ -845,16 +847,16 @@ namespace Bunkering.Access.Services
 										t.Capacity,
 										Product = t.Product.Name
 									}),
-                                    FacilitySources = app.Facility.FacilitySources.Select(f => new
+									FacilitySources = app.Facility.FacilitySources.Select(f => new
 									{
 										f.Name,
 										f.LicenseNumber,
 										f.Address,
-										State = f.State.Name,
+										State = f.LGA.State.Name,
 										LGA = f.LGA.Name
 									})
-                                }
-                            }
+								}
+							}
 						};
 					}
 					else

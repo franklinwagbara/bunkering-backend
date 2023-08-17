@@ -356,6 +356,22 @@
             <response code="401">Unauthorized user </response>
             <response code="400">Internal server error - bad request </response>
         </member>
+        <member name="M:Bunkering.Controllers.API.AppStageDocumentsController.DeleteFADDoc(System.Int32)">
+            <summary>
+            This endpoint is used to delete FacilityType Documents
+            </summary>
+            <returns>Returns a success message</returns>
+            <remarks>
+            
+            Sample Request
+            GET: api/location/local Government 
+            
+            </remarks>
+            <response code="200">Returns a success message </response>
+            <response code="404">Returns not found </response>
+            <response code="401">Unauthorized user </response>
+            <response code="400">Internal server error - bad request </response>
+        </member>
         <member name="M:Bunkering.Controllers.API.CompanyController.GetProfile(System.String)">
             <summary>
             This endpoint is used to fetch company's profile 
@@ -658,22 +674,6 @@
         <member name="M:Bunkering.Controllers.API.LibraryController.GetRoles">
             <summary>
             This endpoint is used to get All Roles
-            </summary>
-            <returns>Returns a success message</returns>
-            <remarks>
-            
-            Sample Request
-            GET: api/location/local Government 
-            
-            </remarks>
-            <response code="200">Returns a success message </response>
-            <response code="404">Returns not found </response>
-            <response code="401">Unauthorized user </response>
-            <response code="400">Internal server error - bad request </response>
-        </member>
-        <member name="M:Bunkering.Controllers.API.LibraryController.DeleteFADDoc(System.Int32)">
-            <summary>
-            This endpoint is used to delete FacilityType Documents
             </summary>
             <returns>Returns a success message</returns>
             <remarks>

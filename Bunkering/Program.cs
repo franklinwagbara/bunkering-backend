@@ -18,8 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddCors();
 builder.Services.AddDbContext<ApplicationContext>(options =>
-				options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-				m => m.MigrationsAssembly("Bunkering")));
+				options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options => options.SignIn.RequireConfirmedAccount = true)
 	.AddEntityFrameworkStores<ApplicationContext>();

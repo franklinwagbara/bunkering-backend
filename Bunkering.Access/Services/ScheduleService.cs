@@ -83,10 +83,17 @@ namespace Bunkering.Access.Services
 							Success = true
 						};
 					}
+					else
+						_response = new ApiResponse
+						{
+							Message = "Application not found",
+							StatusCode = HttpStatusCode.NotFound,
+							Success = false
+						};
 				}
 				catch (Exception ex)
 				{
-					_response = new ApiResponse
+					return new ApiResponse
 					{
 						Message = ex.Message,
 						StatusCode = HttpStatusCode.InternalServerError,
@@ -95,7 +102,7 @@ namespace Bunkering.Access.Services
 				}
 			}
 			else
-				_response = new ApiResponse
+				return new ApiResponse
 				{
 					Message = "ApplicationID invalid",
 					StatusCode = HttpStatusCode.BadRequest,
