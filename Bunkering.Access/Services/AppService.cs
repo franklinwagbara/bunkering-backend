@@ -205,6 +205,7 @@ namespace Bunkering.Access.Services
 			return tankList;
 
 		}
+
 		public async Task<ApiResponse> GetTanksByAppId(int id)
 		{
 			List<TankViewModel> tankList = new List<TankViewModel>();
@@ -342,6 +343,7 @@ namespace Bunkering.Access.Services
 							Amount = total,
 							Account = _setting.NMDPRAAccount,
 							ApplicationId = id,
+							OrderId = app.Reference,
 							BankCode = _setting.NMDPRAAccount,
 							Description = $"Payment for Bunkering License ({app.Facility.Name})",
 							PaymentType = "NGN",
@@ -791,6 +793,20 @@ namespace Bunkering.Access.Services
 							a.ScheduledBy = s.Email;
 							a.ApprovedBy = ap.Email;
 						});
+						var sch = schedules.Select(s => new
+						{
+							s.ApprovedBy,
+							s.ScheduledBy,
+							s.IsApproved,
+							s.ApprovalMessage,
+							InspectionDate = s.AppointmentDate.ToString("MMM dd, yyyy HH:mm:ss"),
+							s.ClientMessage,
+							s.ContactName,
+							s.IsAccepted,
+							s.ScheduleMessage,
+							s.ScheduleType,
+							ExpiryDate = s.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
+						});
 						var paymentStatus = app.Payments.FirstOrDefault().Status.Equals("PaymentCompleted")
 						? "Payment confirmed" : app.Payments.FirstOrDefault().Status.Equals("PaymentRejected") ? "Payment rejected" : "Payment pending";
 
@@ -810,27 +826,14 @@ namespace Bunkering.Access.Services
 								//LGA = app.Facility.LGA.Name,
 								AppType = app.ApplicationType.Name,
 								CreatedDate = app.CreatedDate.ToString("MMM dd, yyyy HH:mm:ss"),
-								SubmittedDate = app.SubmittedDate.Value.ToString("MMM dd, yyyy HH:mm:ss"),
+								SubmittedDate = app.SubmittedDate != null ? app.SubmittedDate.Value.ToString("MMM dd, yyyy HH:mm:ss") : null,
 								PaymnetStatus = paymentStatus,
 								TotalAmount = string.Format("{0:N}", app.Payments.Sum(x => x.Amount)),
 								PaymentDescription = app.Payments.FirstOrDefault().Description,
 								PaymnetDate = app.Payments.FirstOrDefault()?.TransactionDate.ToString("MMM dd, yyyy HH:mm:ss"),
 								CurrentDesk = _userManager.Users.FirstOrDefault(x => x.Id.Equals(app.CurrentDeskId))?.Email,
 								AppHistories = histories,
-								Schedules = schedules.Select(s => new
-								{
-									s.ApprovedBy,
-									s.ScheduledBy,
-									s.IsApproved,
-									s.ApprovalMessage,
-									InspectionDate = s.AppointmentDate.ToString("MMM dd, yyyy HH:mm:ss"),
-									s.ClientMessage,
-									s.ContactName,
-									s.IsAccepted,
-									s.ScheduleMessage,
-									s.ScheduleType,
-									ExpiryDate = s.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
-								}),
+								Schedules = sch,
 								Documents = app.SubmittedDocuments,
 								Vessel = new
 								{

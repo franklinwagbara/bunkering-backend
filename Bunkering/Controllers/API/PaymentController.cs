@@ -23,21 +23,37 @@ namespace Bunkering.Controllers.API
 			_appSetting = appSetting.Value;
 		}
 
+		[ProducesResponseType(typeof(ApiResponse), 200)]
+		[ProducesResponseType(typeof(ApiResponse), 404)]
+		[ProducesResponseType(typeof(ApiResponse), 405)]
+		[ProducesResponseType(typeof(ApiResponse), 500)]
+		[Produces("application/json")]
 		[HttpPost]
 		[Route("create-payment")]
 		public async Task<IActionResult> CreatePayment(int id) => Response(await _payment.CreatePayment(id).ConfigureAwait(false));
 
 		[AllowAnonymous]
+		[ProducesResponseType(typeof(ApiResponse), 200)]
+		[ProducesResponseType(typeof(ApiResponse), 404)]
+		[ProducesResponseType(typeof(ApiResponse), 405)]
+		[ProducesResponseType(typeof(ApiResponse), 500)]
+		[Produces("application/json")]
 		[HttpGet]
 		[Route("pay-online")]
 		public IActionResult PayOnline(string rrr) => Redirect($"{_appSetting.ElpsUrl}/Payment/Pay?rrr={rrr}");
 
+		[AllowAnonymous]
+		[ProducesResponseType(typeof(ApiResponse), 200)]
+		[ProducesResponseType(typeof(ApiResponse), 404)]
+		[ProducesResponseType(typeof(ApiResponse), 405)]
+		[ProducesResponseType(typeof(ApiResponse), 500)]
+		[Produces("application/json")]
 		[HttpPost]
 		[Route("remita")]
-		public async Task<IActionResult> Remita(int id, RemitaResponse model)
+		public async Task<IActionResult> Remita(int id, [FromForm] string status, [FromForm] string statuscode, [FromForm] string orderId, [FromForm] string RRR)
 		{
-			var payment = await _payment.ConfirmPayment(id);
-			return Redirect($"{_appSetting.LoginUrl}/company/paymentsum/{id}");
+			var payment = await _payment.ConfirmPayment(id, orderId);
+			return Redirect($"{_appSetting.LoginUrl}/paymentsum/{id}");
 		}
 	}
 }
