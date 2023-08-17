@@ -110,6 +110,7 @@ namespace Bunkering.Access.Services
 		{
 			try
 			{
+				//querying the database to retrieve a user along with their associated roles
 				var user = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).FirstOrDefault(x => x.Email.Equals(User));
 				//var user = _userManager.Users.Include(c => c.Company).FirstOrDefault(x => x.Email.ToLower().Equals(User.Identity.Name));
 				if ((await _unitOfWork.Application.Find(x => x.Facility.Name.ToLower().Equals(model.FacilityName.ToLower())
@@ -212,7 +213,7 @@ namespace Bunkering.Access.Services
 			{
 				try
 				{
-					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "Facility.FacilityType");
+					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "Facility.VesselType");
 					if (app != null)
 					{
 						if (app.Facility.Name.Equals("Fixed"))
@@ -530,7 +531,7 @@ namespace Bunkering.Access.Services
 
 			if (id > 0)
 			{
-				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == id, "Facility.FacilityType");
+				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == id, "Facility.VesselType");
 				var user = await _userManager.FindByEmailAsync(User);
 				if (app != null)
 				{
