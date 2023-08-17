@@ -356,17 +356,22 @@ namespace Bunkering.Access.Services
 							TxnMessage = "Payment initiated"
 						};
 						await _unitOfWork.Payment.Add(payment);
+						await _unitOfWork.SaveChangesAsync(user.Id);
 					}
 					else
 					{
-						payment.Amount = total;
-						payment.ApplicationId = id;
-						payment.Description = $"Payment for Bunkering License ({app.Facility.Name})";
-						payment.Status = Enum.GetName(typeof(AppStatus), AppStatus.PaymentPending);
-						payment.TransactionDate = DateTime.UtcNow.AddHours(1);
-						await _unitOfWork.Payment.Update(payment);
+						if (string.IsNullOrEmpty(payment.RRR))
+						{
+							payment.Amount = total;
+							payment.OrderId = app.Reference;
+							payment.Description = $"Payment for Bunkering License ({app.Facility.Name})";
+							payment.Status = Enum.GetName(typeof(AppStatus), AppStatus.PaymentPending);
+							payment.TransactionDate = DateTime.UtcNow.AddHours(1);
+
+							await _unitOfWork.Payment.Update(payment);
+							await _unitOfWork.SaveChangesAsync(user.Id);
+						}
 					}
-					await _unitOfWork.SaveChangesAsync(user.Id);
 
 					_response = new ApiResponse
 					{

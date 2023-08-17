@@ -55,5 +55,18 @@ namespace Bunkering.Controllers.API
 			var payment = await _payment.ConfirmPayment(id, orderId);
 			return Redirect($"{_appSetting.LoginUrl}/paymentsum/{id}");
 		}
+
+
+		[AllowAnonymous]
+		[ProducesResponseType(typeof(ApiResponse), 200)]
+		[ProducesResponseType(typeof(ApiResponse), 404)]
+		[ProducesResponseType(typeof(ApiResponse), 405)]
+		[ProducesResponseType(typeof(ApiResponse), 500)]
+		[Produces("application/json")]
+		[HttpGet]
+		[Route("confirm-payment")]
+
+		public async Task<IActionResult> ConfirmPayment(int Id, string OrderId) => Response(await _payment.ConfirmPayment(Id, OrderId));
+
 	}
 }
