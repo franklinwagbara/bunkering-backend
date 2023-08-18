@@ -690,8 +690,13 @@ namespace Bunkering.Access.Services
 
 		public async Task<ApiResponse> AllApps()
 		{
-			var apps = await _unitOfWork.Application.GetAll("User.Company,ApplicationType,Facility.VesselType");
-			if (apps.Count() != null)
+			var user = await _userManager.FindByEmailAsync(User);
+
+			var apps = await _userManager.IsInRoleAsync(user, Roles.Company) 
+				? await _unitOfWork.Application.Find(a => a.UserId.Equals(user.Id) , "User.Company,ApplicationType,Facility.VesselType,Payments")
+                : await _unitOfWork.Application.GetAll("User.Company,ApplicationType,Facility.VesselType,Payments");
+
+            if (apps.Count() != null)
 				_response = new ApiResponse
 				{
 					Message = "Applications fetched successfully",
@@ -707,6 +712,9 @@ namespace Bunkering.Access.Services
 						x.Facility.Capacity,
 						x.Reference,
 						x.Status,
+						PaymnetStatus = x.Payments.FirstOrDefault().Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentCompleted))
+                        ? "Payment confirmed" : x.Payments.FirstOrDefault().Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentRejected)) ? "Payment rejected" : "Payment pending",
+                        RRR = x.Payments.FirstOrDefault()?.RRR,
 						CreatedDate = x.CreatedDate.ToString("MMMM dd, yyyy HH:mm:ss")
 					})
 				};
@@ -817,10 +825,12 @@ namespace Bunkering.Access.Services
 							s.ScheduleType,
 							ExpiryDate = s.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
 						});
-						var paymentStatus = app.Payments.FirstOrDefault().Status.Equals("PaymentCompleted")
-						? "Payment confirmed" : app.Payments.FirstOrDefault().Status.Equals("PaymentRejected") ? "Payment rejected" : "Payment pending";
+						var paymentStatus = app.Payments.FirstOrDefault().Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentCompleted))
+						? "Payment confirmed" : app.Payments.FirstOrDefault().Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentRejected)) ? "Payment rejected" : "Payment pending";
 
-						_response = new ApiResponse
+						var rrr = app.Payments.FirstOrDefault()?.RRR;
+
+                        _response = new ApiResponse
 						{
 							Message = "Application detail found",
 							StatusCode = HttpStatusCode.OK,
@@ -838,6 +848,7 @@ namespace Bunkering.Access.Services
 								CreatedDate = app.CreatedDate.ToString("MMM dd, yyyy HH:mm:ss"),
 								SubmittedDate = app.SubmittedDate != null ? app.SubmittedDate.Value.ToString("MMM dd, yyyy HH:mm:ss") : null,
 								PaymnetStatus = paymentStatus,
+								RRR = rrr,
 								TotalAmount = string.Format("{0:N}", app.Payments.Sum(x => x.Amount)),
 								PaymentDescription = app.Payments.FirstOrDefault().Description,
 								PaymnetDate = app.Payments.FirstOrDefault()?.TransactionDate.ToString("MMM dd, yyyy HH:mm:ss"),
