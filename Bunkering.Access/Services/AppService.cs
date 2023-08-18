@@ -755,11 +755,11 @@ namespace Bunkering.Access.Services
 		public async Task<ApiResponse> MyDesk()
 		{
 			var user = await _userManager.FindByEmailAsync(User);
-			var apps = await _unitOfWork.Application.Find(x => x.CurrentDeskId.Equals(user.Id), "User.Company,Facility.VesselType,ApplicationType,WorkFlow");
+			var apps = await _unitOfWork.Application.Find(x => x.CurrentDeskId.Equals(user.Id), "User.Company,Facility.VesselType,ApplicationType,WorkFlow,Payments");
 			if (await _userManager.IsInRoleAsync(user, "FAD"))
-				apps = await _unitOfWork.Application.Find(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing)), "User.Company,Facility.VesselType,ApplicationType,WorkFlow");
+				apps = await _unitOfWork.Application.Find(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing)), "User.Company,Facility.VesselType,ApplicationType,WorkFlow,Payments");
 			else if (await _userManager.IsInRoleAsync(user, "Company"))
-				apps = await _unitOfWork.Application.Find(x => x.UserId.Equals(user.Id), "User.Company,Facility.VesselType,ApplicationType,WorkFlow");
+				apps = await _unitOfWork.Application.Find(x => x.UserId.Equals(user.Id), "User.Company,Facility.VesselType,ApplicationType,WorkFlow,Payments");
 			return new ApiResponse
 			{
 				Message = "Applications fetched successfully",
@@ -776,7 +776,10 @@ namespace Bunkering.Access.Services
 					x.Facility.DeadWeight,
 					x.Reference,
 					x.Status,
-					CreatedDate = x.CreatedDate.ToString("MMMM dd, yyyy HH:mm:ss")
+                    PaymnetStatus = x.Payments.FirstOrDefault().Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentCompleted))
+                        ? "Payment confirmed" : x.Payments.FirstOrDefault().Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentRejected)) ? "Payment rejected" : "Payment pending",
+                    RRR = x.Payments.FirstOrDefault()?.RRR,
+                    CreatedDate = x.CreatedDate.ToString("MMMM dd, yyyy HH:mm:ss")
 				})
 			};
 		}
