@@ -136,69 +136,74 @@ namespace Bunkering.Access.Services
 			return _response;
 		}
 
-		public async Task<ApiResponse> ConfirmPayment(int id)
+		public async Task<ApiResponse> ConfirmPayment(int id, string orderId)
 		{
 			try
 			{
-				var payment = await _unitOfWork.Payment.FirstOrDefaultAsync(x => x.ApplicationId == id, "Application.User.Company,Application.Facility.LGA.State,Application.Facility.FacilityType");
-				if (payment != null)
+				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id), "Payments");
+				if (app != null)
 				{
-					if (!payment.Status.Equals(Enum.GetName(typeof(AppStatus), 2)) && !string.IsNullOrEmpty(payment.RRR))
+					var payment = await _unitOfWork.Payment.FirstOrDefaultAsync(x => x.ApplicationId == id && x.OrderId.Equals(orderId), "Application");
+					if (payment != null)
 					{
-						//confirm payme nt status on remita via ELPS
-						var http = await Utils.Send(_appSetting.ElpsUrl, new HttpRequestMessage(HttpMethod.Get, $"/Payment/checkifpaid?id=r{payment.RRR}"));
-
-						if (http.IsSuccessStatusCode)
+						if (!payment.Status.Equals(Enum.GetName(typeof(AppStatus), 2)) && !string.IsNullOrEmpty(payment.RRR))
 						{
-							var content = http.Content.ReadAsStringAsync().Result;
-							if (content != null)
+							//confirm payme nt status on remita via ELPS
+							var http = await Utils.Send(_appSetting.ElpsUrl, new HttpRequestMessage(HttpMethod.Get, $"/Payment/checkifpaid?id=r{payment.RRR}"));
+
+							if (http.IsSuccessStatusCode)
 							{
-								var dic = content.Parse<Dictionary<string, string>>();
-								if ((!string.IsNullOrEmpty(dic.GetValue("message").ToString()) && dic.GetValue("message").ToString().Equals("successful"))
-									|| (!string.IsNullOrEmpty(dic.GetValue("status").ToString()) && dic.GetValue("status").ToString().Equals("00")))
+								var content = http.Content.ReadAsStringAsync().Result;
+								if (content != null)
 								{
-									payment.Status = Enum.GetName(typeof(AppStatus), AppStatus.PaymentCompleted);
-									payment.TransactionDate = Convert.ToDateTime(dic.GetValue("transactiontime"));
-									payment.AppReceiptId = dic.GetValue("appreceiptid");
-									payment.TxnMessage = "Confirmed";
-									//payment.tx = Convert.ToDecimal(dic.GetValue("amount"));
-									//payment.Application.Status = Enum.GetName(typeof(AppStatus), 2);
-
-									await _unitOfWork.Payment.Update(payment);
-									await _unitOfWork.SaveChangesAsync(payment.Application.UserId);
-
-									_response = new ApiResponse
+									var dic = content.Parse<Dictionary<string, string>>();
+									if ((!string.IsNullOrEmpty(dic.GetValue("message").ToString()) && dic.GetValue("message").ToString().Equals("successful"))
+										|| (!string.IsNullOrEmpty(dic.GetValue("status").ToString()) && dic.GetValue("status").ToString().Equals("00")))
 									{
-										Message = "Payment confirmed successfully",
-										StatusCode = HttpStatusCode.OK,
-										Success = true,
-									};
+										payment.Status = Enum.GetName(typeof(AppStatus), AppStatus.PaymentCompleted);
+										payment.TransactionDate = Convert.ToDateTime(dic.GetValue("transactiontime"));
+										payment.PaymentDate = Convert.ToDateTime(dic.GetValue("paymentDate"));
+										payment.AppReceiptId = dic.GetValue("appreceiptid") != null ? dic.GetValue("appreceiptid") : "";
+										payment.TxnMessage = dic.GetValue("message");
+										//payment.tx = Convert.ToDecimal(dic.GetValue("amount"));
+										//payment.Application.Status = Enum.GetName(typeof(AppStatus), 2);
+
+										await _unitOfWork.Payment.Update(payment);
+										await _unitOfWork.SaveChangesAsync(payment.Application.UserId);
+
+										_response = new ApiResponse
+										{
+											Message = "Payment confirmed successfully",
+											StatusCode = HttpStatusCode.OK,
+											Success = true,
+										};
+									}
+									else
+										_response = new ApiResponse
+										{
+											Message = "Not Successful",
+											StatusCode = HttpStatusCode.BadRequest
+										};
 								}
-								else
-									_response = new ApiResponse
-									{
-										Message = "Not Successful",
-										StatusCode = HttpStatusCode.BadRequest
-									};
 							}
+							else
+								_response = new ApiResponse
+								{
+									Message = "Failed",
+									StatusCode = HttpStatusCode.NotFound
+								};
 						}
 						else
 							_response = new ApiResponse
 							{
-								Message = "Failed",
-								StatusCode = HttpStatusCode.NotFound
+								Message = "Payment already completed",
+								StatusCode = HttpStatusCode.OK,
+								Success = true
 							};
 					}
-					else
-						_response = new ApiResponse
-						{
-							Message = "Payment already completed",
-							StatusCode = HttpStatusCode.OK,
-							Success = true
-						};
-				}
 
-				_logger.LogRequest($"\"Getting payment for company application -:{payment.Application.Reference}{" by"}{_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email)} {" - "}{DateTime.Now}", false, directory);
+					_logger.LogRequest($"\"Getting payment for company application -:{payment.Application.Reference}{" by"}{_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email)} {" - "}{DateTime.Now}", false, directory);
+				}
 			}
 			catch (Exception ex)
 			{
