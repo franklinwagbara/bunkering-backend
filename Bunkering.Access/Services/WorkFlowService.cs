@@ -46,6 +46,7 @@ namespace Bunkering.Access.Services
 			var res = false;
 			ApplicationUser nextprocessingofficer = null;
 			var wkflow = new WorkFlow();
+			string processingMsg = string.Empty;
 			try
 			{
 				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == appid, "User,Facility.VesselType,Payments");
@@ -101,21 +102,26 @@ namespace Bunkering.Access.Services
 							//}
 
 							//on approval by FAD or Bunkering Reviewer
+							//if (action.Equals(Enum.GetName(typeof(AppActions), AppActions.Approve)))
+							//{
+							//	if (currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("fad"))
+							//	{
+							//		var payment = await _unitOfWork.Payment.FirstOrDefaultAsync(x => x.ApplicationId == appid);
+							//		if (payment != null)
+							//		{
+							//			payment.Status = Enum.GetName(typeof(AppStatus), AppStatus.PaymentCompleted);
+							//			payment.TransactionDate = DateTime.UtcNow.AddHours(1);
+							//		}
+							//		app.FADApproved = true;
+							//	}
+							//	if (currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("reviewer") && !app.FADApproved)
+							//		return (false, string.Empty);
+							//}
 							if (action.Equals(Enum.GetName(typeof(AppActions), AppActions.Approve)))
-							{
-								if (currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("fad"))
-								{
-									var payment = await _unitOfWork.Payment.FirstOrDefaultAsync(x => x.ApplicationId == appid);
-									if (payment != null)
-									{
-										payment.Status = Enum.GetName(typeof(AppStatus), AppStatus.PaymentCompleted);
-										payment.TransactionDate = DateTime.UtcNow.AddHours(1);
-									}
-									app.FADApproved = true;
-								}
-								if (currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("reviewer") && !app.FADApproved)
-									return (false, string.Empty);
-							}
+								processingMsg = "Application processed successfully and moved to the next processing staff";
+							else
+								processingMsg = "Application has been returned for review";
+
 
 							//await _unitOfWork.Application.Update(app);
 							await _unitOfWork.SaveChangesAsync(currentUser.Id);
@@ -130,10 +136,10 @@ namespace Bunkering.Access.Services
 							{
 								var permit = await GeneratePermit(appid, currentUser.Id);
 								if (permit.Item1)
-									comment = $"Application with reference {app.Reference} has been approved and permit {permit.Item2} has been generated successfully";
+									processingMsg = $"Application with reference {app.Reference} has been approved and license {permit.Item2} has been generated successfully";
 							}
 							//send and save notification
-							await SendNotification(app, action, nextprocessingofficer, comment);
+							await SendNotification(app, action, nextprocessingofficer, processingMsg);
 						}
 					}
 				}
@@ -142,7 +148,7 @@ namespace Bunkering.Access.Services
 			{
 				//_generalLogger.LogRequest($"{"Internal server error occurred while trying to fetch staff dashboard"}{"-"}{DateTime.Now}", true, directory);
 			}
-			return (res, nextprocessingofficer.Id);
+			return (res, processingMsg);
 		}
 
 		public async Task<WorkFlow> GetWorkFlow(string action, string currentuserrole, int apptypeid, int VesselTypeId)
@@ -221,11 +227,11 @@ namespace Bunkering.Access.Services
 
 		internal async Task<(bool, string)> GeneratePermit(int id, string userid)
 		{
-			var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == id, "Facility.FacilityType,ApplicationType");
+			var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == id, "Facility.VesselType,ApplicationType");
 			if (app != null)
 			{
 				var year = DateTime.Now.Year.ToString();
-				var pno = $"NMDPRA/BUNK/{app.Facility}/{app.ApplicationType.Name.Substring(0, 1).ToUpper()}/{year.Substring(0)}/{app.Id}";
+				var pno = $"NMDPRA/BUNK/{app.Facility.VesselType.Name.Substring(0, 1).ToUpper()}/{app.ApplicationType.Name.Substring(0, 1).ToUpper()}/{year.Substring(0)}/{app.Id}";
 				var qrcode = Utils.GenerateQrCode($"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/License/ValidateQrCode/{id}");
 				//license.QRCode = Convert.ToBase64String(qrcode, 0, qrcode.Length);
 				//save permit to elps and portal

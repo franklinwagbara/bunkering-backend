@@ -12,7 +12,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using System.Drawing.Text;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Bunkering.Access.Services
@@ -633,7 +635,18 @@ namespace Bunkering.Access.Services
 			{
 				//check license on local system
 				var lno = await _unitOfWork.ValidatiionResponse.FirstOrDefaultAsync(x => x.LicenseNo.ToLower().Equals(license.ToLower()));
-				var dicResponse = new LicenseValidationViewModel();
+				//var dicResponse = await _unitOfWork.Permit.FirstOrDefaultAsync(y => y.IssuedDate.ToString("MMM dd, yyyy HH:mm:ss") && y.ExpireDate.ToString("MMM dd, yyyy HH:mm:ss"));
+
+				var dicResponse = new LicenseValidationViewModel()
+				{
+					Facility_Name = "",
+					License_Number = license.ToLower(),
+					Date_Issued = DateTime.UtcNow,
+					Date_Expired = DateTime.UtcNow.AddHours(1),
+
+
+				};
+
 				if (lno == null)
 				{
 					var resp = await Utils.Send(baseUrl, new HttpRequestMessage(HttpMethod.Get, reqUri));
@@ -643,11 +656,28 @@ namespace Bunkering.Access.Services
 						if (!string.IsNullOrEmpty(content))
 							dicResponse = content.Parse<LicenseValidationViewModel>();
 					}
+
+					_response = new ApiResponse
+					{
+						Data = dicResponse,
+						Message = "License verified successfully",
+						StatusCode = HttpStatusCode.OK,
+						Success = true
+					};
+					return _response;
 				}
 				else
 					dicResponse = lno.Response.Parse<LicenseValidationViewModel>();
 
-				if (dicResponse.Date_Expired > DateTime.UtcNow.AddHours(1))
+				if (dicResponse.Date_Expired <= DateTime.UtcNow.AddHours(1))
+					_response = new ApiResponse
+					{
+						Message = "License not valid",
+						StatusCode = HttpStatusCode.OK,
+						Success = false
+					};
+
+				/*else
 				{
 					//var data = new
 					//{
@@ -663,13 +693,7 @@ namespace Bunkering.Access.Services
 						Success = true
 					};
 				}
-				else
-					_response = new ApiResponse
-					{
-						Message = "License not valid",
-						StatusCode = HttpStatusCode.OK,
-						Success = false
-					};
+				*/
 			}
 			catch (Exception ex)
 			{
@@ -900,36 +924,49 @@ namespace Bunkering.Access.Services
 			{
 				try
 				{
-					var user = await _userManager.FindByIdAsync(User);
+					var user = await _userManager.FindByEmailAsync(User);
 					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(id));
 					_response = new ApiResponse();
 					if (app != null && user != null)
 					{
-						var flow = await _userManager.IsInRoleAsync(user, "FAD")
-							? await _flow.AppWorkFlow(id, act, comment, app.FADStaffId)
-							: await _flow.AppWorkFlow(id, act, comment);
-						if (!flow.Item1)
+						//var flow = await _userManager.IsInRoleAsync(user, "FAD")
+						//	? await _flow.AppWorkFlow(id, act, comment, app.FADStaffId)
+						//	: await _flow.AppWorkFlow(id, act, comment);
+						var flow = await _flow.AppWorkFlow(id, act, comment);
+
+						if (flow.Item1)
 						{
-							if (await _userManager.IsInRoleAsync(user, "Reviewer") && act.ToLower().Equals("approve"))
-							{
-								_response.Message = "Application cannot be pushed, awaiting FAD payment approval.";
-								_response.StatusCode = HttpStatusCode.Unauthorized;
-							}
+							_response.StatusCode = HttpStatusCode.OK;
+							_response.Success = true;
 						}
 						else
 						{
-							if (await _userManager.IsInRoleAsync(user, "FAD") && act.ToLower().Equals("approve"))
-								_response.Message = "Payment was confirmed successfully. Application moved to the reviewer for further processing.";
-							else
-							{
-								if (act.Equals(Enum.GetName(typeof(AppActions), AppActions.Approve)))
-									_response.Message = "Application processed successfully and moved to the next processing staff";
-								else
-									_response.Message = "Application has been returned for review";
-								_response.StatusCode = HttpStatusCode.OK;
-								_response.Success = true;
-							}
+
+							_response.Message = "Application cannot be pushed";
 						}
+
+						//if (!flow.Item1)
+						//{
+						//	if (await _userManager.IsInRoleAsync(user, "Reviewer") && act.ToLower().Equals("approve"))
+						//	{
+						//		_response.Message = "Application cannot be pushed, awaiting FAD payment approval.";
+						//		_response.StatusCode = HttpStatusCode.Unauthorized;
+						//	}
+						//}
+						//else
+						//{
+						//	if (await _userManager.IsInRoleAsync(user, "FAD") && act.ToLower().Equals("approve"))
+						//		_response.Message = "Payment was confirmed successfully. Application moved to the reviewer for further processing.";
+						//	else
+						//	{
+						//		if (act.Equals(Enum.GetName(typeof(AppActions), AppActions.Approve)))
+						//			_response.Message = "Application processed successfully and moved to the next processing staff";
+						//		else
+						//			_response.Message = "Application has been returned for review";
+						//		_response.StatusCode = HttpStatusCode.OK;
+						//		_response.Success = true;
+						//	}
+						//}
 					}
 				}
 				catch (Exception ex)
