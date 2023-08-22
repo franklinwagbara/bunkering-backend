@@ -184,7 +184,7 @@ namespace Bunkering.Access.Services
 				}
 				else if (await _userManager.IsInRoleAsync(user, "Company"))
 				{
-					if (model.Company.name != null)
+					if (model.Company != null)
 					{
 						user = MapUserCompanyModel(user, model);
 						model.Company.id = user.ElpsId;
