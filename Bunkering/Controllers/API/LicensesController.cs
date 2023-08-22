@@ -9,7 +9,9 @@ using System.Net;
 namespace Bunkering.Controllers.API
 {
 	[Authorize]
-	public class LicensesController : Controller
+	[Route("api/bunkering/[controller]")]
+	[ApiController]
+	public class LicensesController : ResponseController
 	{
 		private readonly IUnitOfWork _unitOfWork;
 
@@ -18,11 +20,19 @@ namespace Bunkering.Controllers.API
 			_unitOfWork = unitOfWork;
 		}
 
+
+		[ProducesResponseType(typeof(ApiResponse), 200)]
+		[ProducesResponseType(typeof(ApiResponse), 404)]
+		[ProducesResponseType(typeof(ApiResponse), 405)]
+		[ProducesResponseType(typeof(ApiResponse), 500)]
+		[Produces("application/json")]
+		[Route("all_permits")]
 		[HttpGet]
 		public async Task<IActionResult> Index()
 		{
-			var permits = await _unitOfWork.Permit.GetAll("Application.User.Company,Application.Facility.FacilityType");
+			var permits = await _unitOfWork.Permit.GetAll("Application.User.Company,Application.Facility.VesselType");
 			if (permits.Count() > 0)
+			{
 				return Ok(new ApiResponse
 				{
 					Message = "Success",
@@ -39,6 +49,7 @@ namespace Bunkering.Controllers.API
 						FacilityName = x.Application.Facility.Name,
 					})
 				});
+			}
 			else
 				return NotFound(new ApiResponse
 				{
@@ -48,6 +59,13 @@ namespace Bunkering.Controllers.API
 				});
 		}
 
+		[AllowAnonymous]
+		[ProducesResponseType(typeof(ApiResponse), 200)]
+		[ProducesResponseType(typeof(ApiResponse), 404)]
+		[ProducesResponseType(typeof(ApiResponse), 405)]
+		[ProducesResponseType(typeof(ApiResponse), 500)]
+		[Produces("application/json")]
+		[Route("view_license")]
 		[HttpGet]
 		public async Task<IActionResult> ViewLicense(int id)
 		{
