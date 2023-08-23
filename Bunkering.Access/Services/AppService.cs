@@ -716,7 +716,7 @@ namespace Bunkering.Access.Services
 		{
 			var user = await _userManager.FindByEmailAsync(User);
 
-			var apps = await _userManager.IsInRoleAsync(user, Roles.Company)
+			var apps = await _userManager.IsInRoleAsync(user, "Company")
 				? await _unitOfWork.Application.Find(a => a.UserId.Equals(user.Id), "User.Company,ApplicationType,Facility.VesselType,Payments")
 				: await _unitOfWork.Application.GetAll("User.Company,ApplicationType,Facility.VesselType,Payments");
 
