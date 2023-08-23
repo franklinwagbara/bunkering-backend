@@ -513,11 +513,11 @@ namespace Bunkering.Access.Services
 							Docs = docList,
 							ApiData = new
 							{
-                                CompanyElpsId = app.User.ElpsId,
-                                FacilityElpsId = app.Facility.ElpsId,
+								CompanyElpsId = app.User.ElpsId,
+								FacilityElpsId = app.Facility.ElpsId,
 								ApiEmail = _setting.AppEmail,
 								ApiHash = $"{_setting.AppEmail}{_setting.AppId}".GenerateSha512()
-                            }
+							}
 						}
 					};
 				}
@@ -716,11 +716,11 @@ namespace Bunkering.Access.Services
 		{
 			var user = await _userManager.FindByEmailAsync(User);
 
-			var apps = await _userManager.IsInRoleAsync(user, Roles.Company) 
-				? await _unitOfWork.Application.Find(a => a.UserId.Equals(user.Id) , "User.Company,ApplicationType,Facility.VesselType,Payments")
-                : await _unitOfWork.Application.GetAll("User.Company,ApplicationType,Facility.VesselType,Payments");
+			var apps = await _userManager.IsInRoleAsync(user, Roles.Company)
+				? await _unitOfWork.Application.Find(a => a.UserId.Equals(user.Id), "User.Company,ApplicationType,Facility.VesselType,Payments")
+				: await _unitOfWork.Application.GetAll("User.Company,ApplicationType,Facility.VesselType,Payments");
 
-            if (apps.Count() != null)
+			if (apps.Count() != null)
 				_response = new ApiResponse
 				{
 					Message = "Applications fetched successfully",
@@ -737,8 +737,8 @@ namespace Bunkering.Access.Services
 						x.Reference,
 						x.Status,
 						PaymnetStatus = x.Payments.FirstOrDefault().Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentCompleted))
-                        ? "Payment confirmed" : x.Payments.FirstOrDefault().Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentRejected)) ? "Payment rejected" : "Payment pending",
-                        RRR = x.Payments.FirstOrDefault()?.RRR,
+						? "Payment confirmed" : x.Payments.FirstOrDefault().Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentRejected)) ? "Payment rejected" : "Payment pending",
+						RRR = x.Payments.FirstOrDefault()?.RRR,
 						CreatedDate = x.CreatedDate.ToString("MMMM dd, yyyy HH:mm:ss")
 					})
 				};
@@ -800,10 +800,10 @@ namespace Bunkering.Access.Services
 					x.Facility.DeadWeight,
 					x.Reference,
 					x.Status,
-                    PaymnetStatus = x.Payments.FirstOrDefault().Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentCompleted))
-                        ? "Payment confirmed" : x.Payments.FirstOrDefault().Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentRejected)) ? "Payment rejected" : "Payment pending",
-                    RRR = x.Payments.FirstOrDefault()?.RRR,
-                    CreatedDate = x.CreatedDate.ToString("MMMM dd, yyyy HH:mm:ss")
+					PaymnetStatus = x.Payments.FirstOrDefault().Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentCompleted))
+						? "Payment confirmed" : x.Payments.FirstOrDefault().Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentRejected)) ? "Payment rejected" : "Payment pending",
+					RRR = x.Payments.FirstOrDefault()?.RRR,
+					CreatedDate = x.CreatedDate.ToString("MMMM dd, yyyy HH:mm:ss")
 				})
 			};
 		}
@@ -857,13 +857,14 @@ namespace Bunkering.Access.Services
 
 						var rrr = app.Payments.FirstOrDefault()?.RRR;
 
-                        _response = new ApiResponse
+						_response = new ApiResponse
 						{
 							Message = "Application detail found",
 							StatusCode = HttpStatusCode.OK,
 							Success = true,
 							Data = new
 							{
+								app.Id,
 								app.Status,
 								app.Reference,
 								CompanyName = app.User.Company.Name,
@@ -1005,6 +1006,42 @@ namespace Bunkering.Access.Services
 				};
 
 			return _response;
+		}
+
+		public async Task<ApiResponse> ApplicationReport(ApplicationReportViewModel model)
+		{
+			var appReport = await _unitOfWork.Application.Find(x => x.CreatedDate >= model.Min && x.SubmittedDate <= model.Max);
+			if (appReport != null)
+			{
+				_response = new ApiResponse
+				{
+					Message = "Application Report Found",
+					StatusCode = HttpStatusCode.OK,
+					Success = true,
+					Data = appReport.Select(a => new
+					{
+						a.CreatedDate,
+						a.SubmittedDate,
+						a.ApplicationType,
+						a.Facility,
+						a.Status,
+						a.IsDeleted,
+
+					})
+				};
+
+				return _response;
+			}
+			else
+				_response = new ApiResponse
+				{
+					Message = "Application Report Not Found",
+					StatusCode = HttpStatusCode.NotFound,
+					Success = false
+				};
+
+			return _response;
+
 		}
 	}
 }

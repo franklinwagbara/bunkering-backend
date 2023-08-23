@@ -213,6 +213,38 @@ namespace Bunkering.Access.Services
 			return _response;
 		}
 
+		public async Task<ApiResponse> PaymentReport(PaymentReportViewModel model)
+		{
+			var payment = await _unitOfWork.Payment.Find(x => x.TransactionDate >= model.Min && x.TransactionDate <= model.Max);
+			if (payment.Count() > 0)
+			{
+				if (model.AppStatus != null)
+					payment = payment.Where(y => y.Status == model.AppStatus);
+
+				_response = new ApiResponse
+				{
+					Data = payment,
+					Message = "Success",
+					StatusCode = HttpStatusCode.OK,
+					Success = true
+				};
+
+				return _response;
+			}
+			else
+			{
+				_response = new ApiResponse
+				{
+					Message = "Payment not found",
+					StatusCode = HttpStatusCode.BadRequest,
+					Success = false
+
+				};
+			}
+
+			return _response;
+		}
+
 
 	}
 }

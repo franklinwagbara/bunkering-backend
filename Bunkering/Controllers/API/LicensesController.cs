@@ -31,32 +31,25 @@ namespace Bunkering.Controllers.API
 		public async Task<IActionResult> Index()
 		{
 			var permits = await _unitOfWork.Permit.GetAll("Application.User.Company,Application.Facility.VesselType");
-			if (permits.Count() > 0)
+
+			return Ok(new ApiResponse
 			{
-				return Ok(new ApiResponse
+				//using if statements here ?: to check conditions for the permit
+				Message = permits.Count() > 0 ? "Success, Permit Found" : "Permit Not Found",
+				StatusCode = permits.Count() > 0 ? HttpStatusCode.OK : HttpStatusCode.BadRequest,
+				Success = permits.Count() > 0 ? true : false,
+				Data = permits.Count() > 0 ? permits.Select(x => new
 				{
-					Message = "Success",
-					StatusCode = HttpStatusCode.OK,
-					Success = true,
-					Data = permits.Select(x => new
-					{
-						CompanyName = x.Application.User.Company.Name,
-						x.PermitNo,
-						IssuedDate = x.IssuedDate.ToString("MMM dd, yyyy HH:mm:ss"),
-						ExpiryDate = x.ExpireDate.ToString("MMM dd, yyyy HH:mm:ss"),
-						x.Application.User.Email,
-						VesselTypeType = x.Application.Facility.VesselType.Name,
-						FacilityName = x.Application.Facility.Name,
-					})
-				});
-			}
-			else
-				return NotFound(new ApiResponse
-				{
-					Message = "Not found",
-					StatusCode = HttpStatusCode.NotFound,
-					Success = false,
-				});
+					CompanyName = x.Application.User.Company.Name,
+					LicenseNo = x.PermitNo,
+					IssuedDate = x.IssuedDate.ToString("MMM dd, yyyy HH:mm:ss"),
+					ExpiryDate = x.ExpireDate.ToString("MMM dd, yyyy HH:mm:ss"),
+					x.Application.User.Email,
+					VesselTypeType = x.Application.Facility.VesselType.Name,
+					VesselName = x.Application.Facility.Name,
+				}) : new { }
+			});
+
 		}
 
 		[AllowAnonymous]

@@ -129,5 +129,15 @@ namespace Bunkering.Controllers.API
 		[Route("all-schedules")]
 		[HttpGet]
 		public async Task<IActionResult> Schedules() => Response(await _schedules.Schedules());
+
+		[ProducesResponseType(typeof(ApiResponse), 200)]
+		[ProducesResponseType(typeof(ApiResponse), 404)]
+		[ProducesResponseType(typeof(ApiResponse), 405)]
+		[ProducesResponseType(typeof(ApiResponse), 500)]
+		[Produces("application/json")]
+		[Route("accept-schedule")]
+		[HttpPost]
+
+		public async Task<IActionResult> AcceptSchedule(ScheduleViewModel model) => Response(await _schedules.AcceptSchedule(model));
 	}
 }
