@@ -52,7 +52,9 @@ namespace Bunkering.Access
 					Roles.Staff,
 					Roles.Planning,
 					Roles.AD,
-					Roles.FAD
+					Roles.FAD,
+					Roles.GMOps,
+					Roles.Manager
 				};
 			foreach (var role in roles)
 			{
