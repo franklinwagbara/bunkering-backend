@@ -149,7 +149,7 @@ namespace Bunkering.Access.Services
 			return _response;
 		}
 
-		public async Task<ApiResponse> UpdateProfile(CompanyInformation model, string oldemail)
+		public async Task<ApiResponse> UpdateProfile(CompanyInformation model, string oldemail = null)
 		{
 			var user = _userManager.Users.Include("Company").FirstOrDefault(x => x.Email == User);
 			try
