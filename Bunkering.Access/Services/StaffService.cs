@@ -136,18 +136,22 @@ namespace Bunkering.Access.Services
 
 					_response = new ApiResponse
 					{
-						Message = "User was profiled successfully",
+						Message = "User was profiled successfully.",
 						StatusCode = HttpStatusCode.OK,
 						Success = true
 					};
 				}
 				else
+				{
 					_response = new ApiResponse
 					{
 						Message = "User already exists",
 						StatusCode = HttpStatusCode.BadRequest,
 						Success = false
 					};
+					if (staff.IsDeleted)
+						_response.Message += " and has been deleted. Please contact Admin to restore the user.";
+				}
 			}
 			catch (Exception ex)
 			{

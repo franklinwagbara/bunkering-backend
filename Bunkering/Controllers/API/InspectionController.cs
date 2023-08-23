@@ -48,7 +48,7 @@ namespace Bunkering.Controllers.API
 			try
 			{
 				var user = await _userManager.FindByEmailAsync(email);
-				var schedules = await _unitOfWork.Appointment.Find(x => user.Id.Equals(x.ScheduledBy) && x.IsAccepted && x.IsAccepted && x.ExpiryDate >= DateTime.UtcNow.AddHours(1), "Application.User,Application.Facility.FacilityType,Application.ApplicationType");
+				var schedules = await _unitOfWork.Appointment.Find(x => user.Id.Equals(x.ScheduledBy) && x.IsAccepted && x.IsAccepted && x.ExpiryDate >= DateTime.UtcNow.AddHours(1), "Application.User,Application.Facility.VesselType,Application.ApplicationType");
 				var resposne = new InspectionResponse(); ;
 				if (schedules == null || schedules.Count() == 0)
 					return NotFound(new InspectionResponse
@@ -120,9 +120,9 @@ namespace Bunkering.Controllers.API
 		{
 			try
 			{
-				var user = await _userManager.FindByEmailAsync(model.ScheduledBy);
-				var schedules = await _unitOfWork.Appointment.Find(x => user.Id.Equals(x.ScheduledBy) && x.IsAccepted && x.IsAccepted, "Application.User,Application.Facility.FacilityType,Application.ApplicationType");
-				var resposne = new InspectionResponse(); ;
+				var user = await _userManager.FindByIdAsync(model.ScheduledBy);
+				var schedules = await _unitOfWork.Appointment.Find(x => user.Id.Equals(x.ScheduledBy) && x.IsAccepted && x.IsAccepted, "Application.User,Application.Facility.VesselType,Application.ApplicationType");
+				var resposne = new InspectionResponse();
 				if (schedules == null || schedules.Count() == 0)
 					return NotFound(new InspectionResponse
 					{
