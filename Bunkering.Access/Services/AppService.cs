@@ -835,8 +835,8 @@ namespace Bunkering.Access.Services
 						{
 							var s = users.FirstOrDefault(x => x.Id.Equals(a.ScheduledBy));
 							var ap = users.FirstOrDefault(x => x.Id.Equals(a.ApprovedBy));
-							a.ScheduledBy = s.Email;
-							a.ApprovedBy = ap.Email;
+							a.ScheduledBy = s?.Email;
+							a.ApprovedBy = ap?.Email;
 						});
 						var sch = schedules.Select(s => new
 						{
