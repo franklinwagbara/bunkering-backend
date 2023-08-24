@@ -79,7 +79,7 @@
             </tr>
             <tr>
                 <td>Fees Paid:</td>
-                <td colspan="5">Annual non-refundable Vessel License Fees, $10,000.00,<br/> Verification Inspection Fee, $500.00</td>
+                <td colspan="5">@Model.Application.Payments.Sum(x => x.Amount).ToString("#,###.##")</td>
             </tr>
             <tr>
                 <td>Dated this</td>
