@@ -81,21 +81,21 @@ namespace Bunkering.Access.Services
 							app.FlowId = wkflow.Id;
 							app.ModifiedDate = DateTime.Now.AddHours(1);
 
-							if (action.Equals(Enum.GetName(typeof(AppActions), AppActions.Submit)))
-							{
-								app.SubmittedDate = DateTime.Now.AddHours(1);
-								var fadusers = await _userManager.GetUsersInRoleAsync("FAD");
-								if (fadusers.Count > 0)
-								{
-									var fadStaff = fadusers.Where(x => x.IsActive).OrderBy(x => x.LastJobDate).FirstOrDefault();
-									if (fadStaff != null)
-									{
-										app.FADStaffId = fadStaff.Id;
-										fadStaff.LastJobDate = DateTime.UtcNow.AddHours(1);
-										await _userManager.UpdateAsync(fadStaff);
-									}
-								}
-							}
+							//if (action.Equals(Enum.GetName(typeof(AppActions), AppActions.Submit)))
+							//{
+							//	app.SubmittedDate = DateTime.Now.AddHours(1);
+							//	var fadusers = await _userManager.GetUsersInRoleAsync("FAD");
+							//	if (fadusers.Count > 0)
+							//	{
+							//		var fadStaff = fadusers.Where(x => x.IsActive).OrderBy(x => x.LastJobDate).FirstOrDefault();
+							//		if (fadStaff != null)
+							//		{
+							//			app.FADStaffId = fadStaff.Id;
+							//			fadStaff.LastJobDate = DateTime.UtcNow.AddHours(1);
+							//			await _userManager.UpdateAsync(fadStaff);
+							//		}
+							//	}
+							//}
 							//else if(action.ToLower().Equals("resubmit") && !app.FADApproved)
 							//{
 							//    var prevFadSTaff = await _unitOfWork.ApplicationHistory.Find(x => x.Action.ToLower().Equals())
@@ -197,7 +197,7 @@ namespace Bunkering.Access.Services
 					if (history != null)
 					{
 						nextprocessingofficer = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role)
-													.FirstOrDefault(x => x.Id.Equals(history.TargetedTo));
+													.FirstOrDefault(x => x.Id.Equals(history.TriggeredBy));
 						if (nextprocessingofficer != null && !nextprocessingofficer.IsActive)
 						{
 							var users = _userManager.Users

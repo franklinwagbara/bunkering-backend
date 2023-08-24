@@ -38,13 +38,14 @@ namespace Bunkering.Access.Services
 		public async Task<ApiResponse> Dashboard()
 		{
 			var user = await _userManager.FindByEmailAsync(User);
-			var allApps = await _userManager.IsInRoleAsync(user, Roles.Company) ? await _unitOfWork.Application.Find(x => x.UserId.Equals(user.Id), "Payments") : await _unitOfWork.Application.GetAll("Payments");
-			var apps = await _userManager.IsInRoleAsync(user, Roles.FAD)
-				? (allApps.Where(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))))
-				: (allApps.Where(x => x.CurrentDeskId.Equals(user.Id)));
-			var permits = await _userManager.IsInRoleAsync(user, Roles.Company) ? await _unitOfWork.Permit.Find(x => x.Application.UserId.Equals(user.Id), "Application") : await _unitOfWork.Permit.GetAll("Application");
-			var facilities = await _userManager.IsInRoleAsync(user, Roles.Company) ? await _unitOfWork.Facility.Find(x => x.CompanyId.Equals(user.CompanyId), "VesselType") : await _unitOfWork.Facility.GetAll("VesselType");
-			var payments = await _userManager.IsInRoleAsync(user, Roles.Company) ? await _unitOfWork.Payment.Find(x => x.Application.UserId.Equals(user.Id), "Application") : await _unitOfWork.Payment.GetAll("Application");
+			var allApps = await _userManager.IsInRoleAsync(user, "Company") ? await _unitOfWork.Application.Find(x => x.UserId.Equals(user.Id), "Payments") : await _unitOfWork.Application.GetAll("Payments");
+			//var apps = await _userManager.IsInRoleAsync(user, Roles.FAD)
+			//	? (allApps.Where(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))))
+			//	: (allApps.Where(x => x.CurrentDeskId.Equals(user.Id)));
+			var apps = allApps.Where(x => x.CurrentDeskId.Equals(user.Id));
+            var permits = await _userManager.IsInRoleAsync(user, "Company") ? await _unitOfWork.Permit.Find(x => x.Application.UserId.Equals(user.Id), "Application") : await _unitOfWork.Permit.GetAll("Application");
+			var facilities = await _userManager.IsInRoleAsync(user, "Company") ? await _unitOfWork.Facility.Find(x => x.CompanyId.Equals(user.CompanyId), "VesselType") : await _unitOfWork.Facility.GetAll("VesselType");
+			var payments = await _userManager.IsInRoleAsync(user, "Company") ? await _unitOfWork.Payment.Find(x => x.Application.UserId.Equals(user.Id), "Application") : await _unitOfWork.Payment.GetAll("Application");
 
 			if (user != null)
 				_response = new ApiResponse
@@ -65,7 +66,7 @@ namespace Bunkering.Access.Services
 						TProcessing = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))),
 						TApproved = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Completed))),
 						TRejected = allApps.Count(x => x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Rejected))),
-						TExpiring30 = await _userManager.IsInRoleAsync(user, Roles.Company)
+						TExpiring30 = await _userManager.IsInRoleAsync(user, "Company")
 						? permits.Count(x => x.Application.UserId.Equals(user.Id) && x.ExpireDate.AddDays(30) >= DateTime.UtcNow.AddHours(1))
 						: permits.Count(x => x.ExpireDate.AddDays(30) >= DateTime.UtcNow.AddHours(1))
 					}
@@ -100,7 +101,7 @@ namespace Bunkering.Access.Services
 					x.CreatedBy,
 					DateCreated = x.CreatedOn,
 					x.IsActive,
-					AppCount = x.UserRoles.FirstOrDefault().Role.Name.Equals(Roles.FAD) ? apps.Count(u => u.FADStaffId.Equals(x.Id) && !u.FADApproved && u.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))) : apps.Count(y => y.UserId.Equals(x.Id)),
+					AppCount = apps.Count(y => y.UserId.Equals(x.Id)),
 
 				})
 			};

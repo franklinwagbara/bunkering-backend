@@ -62,7 +62,7 @@ namespace Bunkering.Controllers.API
 		[HttpGet]
 		public async Task<IActionResult> ViewLicense(int id)
 		{
-			var license = await _unitOfWork.Permit.FirstOrDefaultAsync(x => x.Id.Equals(id), "Application.User.Company");
+			var license = await _unitOfWork.Permit.FirstOrDefaultAsync(x => x.Id.Equals(id), "Application.User.Company,Application.Facility.VesselType,Application.Payments");
 			if (license != null)
 			{
 				var qrcode = Utils.GenerateQrCode($"{Request.Scheme}://{Request.Host}/License/ValidateQrCode/{license.ApplicationId}");
