@@ -554,8 +554,8 @@ C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Deb
 C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Debug\net7.0\Bunkering.pdb
 C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Debug\net7.0\Bunkering.genruntimeconfig.cache
 C:\Users\suppo\Documents\Visual Studio 2022\Projects\Bunkering\Bunkering\obj\Debug\net7.0\ref\Bunkering.dll
-C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\bin\Debug\net7.0\appsettings.Development.json
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\bin\Debug\net7.0\appsettings.json
+C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\bin\Debug\net7.0\appsettings.Development.json
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\bin\Debug\net7.0\Bunkering.staticwebassets.runtime.json
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\bin\Debug\net7.0\Bunkering.exe
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\bin\Debug\net7.0\Bunkering.deps.json

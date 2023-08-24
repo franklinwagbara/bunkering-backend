@@ -238,7 +238,7 @@ namespace Bunkering.Access.Services
 				var permit = new Permit
 				{
 					ApplicationId = id,
-					ExpireDate = DateTime.Now,
+					ExpireDate = DateTime.UtcNow.AddHours(1).AddMonths(12),
 					IssuedDate = DateTime.Now,
 					PermitNo = pno,
 					Signature = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/wwwroot/assets/fa.png",

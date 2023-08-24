@@ -40,6 +40,7 @@ namespace Bunkering.Controllers.API
 				Success = permits.Count() > 0 ? true : false,
 				Data = permits.Count() > 0 ? permits.Select(x => new
 				{
+					x.Id,
 					CompanyName = x.Application.User.Company.Name,
 					LicenseNo = x.PermitNo,
 					IssuedDate = x.IssuedDate.ToString("MMM dd, yyyy HH:mm:ss"),
