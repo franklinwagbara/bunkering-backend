@@ -317,7 +317,7 @@ namespace Bunkering.Access.Services
 
 		public async Task<ApiResponse> GetRoles()
 		{
-			var roles = await _roleManager.Roles.Where(x => !x.Name.Equals("Company") && !x.Name.Equals("SuperAdmin")).ToListAsync();
+			var roles = await _roleManager.Roles.Where(x => !x.Name.Equals("SuperAdmin")).ToListAsync();
 
             return new ApiResponse
 			{
