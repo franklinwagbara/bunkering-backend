@@ -122,18 +122,20 @@ namespace Bunkering.Access.Services
 					Success = true,
 					Data = new
 					{
-						sch.ApprovedBy,
-						sch.ScheduledBy,
-						sch.IsApproved,
-						sch.ApprovalMessage,
-						InspectionDate = sch.AppointmentDate.ToString("MMM dd, yyyy HH:mm:ss"),
-						sch.ClientMessage,
-						sch.ContactName,
-						sch.IsAccepted,
-						sch.ScheduleMessage,
-						sch.ScheduleType,
-						ExpiryDate = sch.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
-					}
+                        sch.ApprovedBy,
+                        SupervisorReject = !sch.IsApproved && !string.IsNullOrEmpty(sch.ApprovalMessage),
+                        sch.ScheduledBy,
+                        sch.IsApproved,
+                        sch.ApprovalMessage,
+                        InspectionDate = sch.AppointmentDate.ToString("MMM dd, yyyy HH:mm:ss"),
+                        sch.ClientMessage,
+                        sch.ContactName,
+                        sch.IsAccepted,
+                        CompanyReject = !sch.IsAccepted && !string.IsNullOrEmpty(sch.ClientMessage),
+                        sch.ScheduleMessage,
+                        sch.ScheduleType,
+                        ExpiryDate = sch.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
+                    }
 				};
 			else
 				_response = new ApiResponse
@@ -166,6 +168,7 @@ namespace Bunkering.Access.Services
 					}
 
 					appointment.ApprovalMessage = model.ApprovalMessage;
+					appointment.ApprovedBy = user.Id;
 					if (model.Act.Equals(Enum.GetName(typeof(AppActions), AppActions.ApproveInspection)))
 						appointment.IsApproved = true;
 
@@ -215,18 +218,20 @@ namespace Bunkering.Access.Services
 					Success = true,
 					Data = schedules.Select(s => new
 					{
-						s.ApprovedBy,
-						s.ScheduledBy,
-						s.IsApproved,
-						s.ApprovalMessage,
-						InspectionDate = s.AppointmentDate.ToString("MMM dd, yyyy HH:mm:ss"),
-						s.ClientMessage,
-						s.ContactName,
-						s.IsAccepted,
-						s.ScheduleMessage,
-						s.ScheduleType,
-						ExpiryDate = s.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
-					})
+                        s.ApprovedBy,
+                        SupervisorReject = !s.IsApproved && !string.IsNullOrEmpty(s.ApprovalMessage),
+                        s.ScheduledBy,
+                        s.IsApproved,
+                        s.ApprovalMessage,
+                        InspectionDate = s.AppointmentDate.ToString("MMM dd, yyyy HH:mm:ss"),
+                        s.ClientMessage,
+                        s.ContactName,
+                        s.IsAccepted,
+                        CompanyReject = !s.IsAccepted && !string.IsNullOrEmpty(s.ClientMessage),
+                        s.ScheduleMessage,
+                        s.ScheduleType,
+                        ExpiryDate = s.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
+                    })
 				};
 			else
 				_response = new ApiResponse
