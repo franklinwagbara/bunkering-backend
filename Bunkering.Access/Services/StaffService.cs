@@ -43,9 +43,9 @@ namespace Bunkering.Access.Services
 			//	? (allApps.Where(x => x.FADStaffId.Equals(user.Id) && !x.FADApproved && x.Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.Processing))))
 			//	: (allApps.Where(x => x.CurrentDeskId.Equals(user.Id)));
 			var apps = allApps.Where(x => x.CurrentDeskId.Equals(user.Id));
-            var permits = await _userManager.IsInRoleAsync(user, "Company") ? await _unitOfWork.Permit.Find(x => x.Application.UserId.Equals(user.Id), "Application") : await _unitOfWork.Permit.GetAll("Application");
+			var permits = await _userManager.IsInRoleAsync(user, "Company") ? await _unitOfWork.Permit.Find(x => x.Application.UserId.Equals(user.Id), "Application") : await _unitOfWork.Permit.GetAll("Application");
 			var facilities = await _userManager.IsInRoleAsync(user, "Company") ? await _unitOfWork.Facility.Find(x => x.CompanyId.Equals(user.CompanyId), "VesselType") : await _unitOfWork.Facility.GetAll("VesselType");
-			var payments = await _userManager.IsInRoleAsync(user, "Company") ? await _unitOfWork.Payment.Find(x => x.Application.UserId.Equals(user.Id), "Application") : await _unitOfWork.Payment.GetAll("Application");
+			var payments = await _userManager.IsInRoleAsync(user, "Company") ? await _unitOfWork.Payment.Find(x => allApps.Any(a => a.Id.Equals(x.ApplicationId)), "Application") : await _unitOfWork.Payment.GetAll();
 
 			if (user != null)
 				_response = new ApiResponse

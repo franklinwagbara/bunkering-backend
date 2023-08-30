@@ -35,6 +35,7 @@ namespace Bunkering.Core.Data
 		public DbSet<WorkFlow> WorkFlows { get; set; }
 		public DbSet<FacilitySource> FacilitySources { get; set; }
 		public DbSet<VesselType> VesselTypes { get; set; }
+		public DbSet<vAppVessel> vAppVessel { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{

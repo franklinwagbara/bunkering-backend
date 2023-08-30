@@ -11,7 +11,6 @@ namespace Bunkering.Core.ViewModels
 	{
 		public DateTime? StartDate { get; set; }
 		public DateTime? ToDate { get; set; }
-		public IEnumerable<int> VesselType { get; set; }
 		[NotMapped]
 		public DateTime Min => StartDate != null ? StartDate.Value : DateTime.UtcNow.AddHours(1).AddDays(-30);
 		[NotMapped]

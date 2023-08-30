@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Bunkering.Controllers
 {
-
-	[Authorize]
+	//[Authorize]
 	[ApiController]
 	[Route("api/bunkering/[controller]")]
 	public class GeneralReportController : ResponseController

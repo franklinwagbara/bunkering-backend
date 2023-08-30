@@ -11,7 +11,7 @@ namespace Bunkering.Core.Data
 		public int? ExtraPaymentId { get; set; }
 		public string PaymentType { get; set; }
 		public DateTime TransactionDate { get; set; }
-		public DateTime PaymentDate { get; set; }
+		public DateTime? PaymentDate { get; set; }
 		public string TransactionId { get; set; }
 		public string RRR { get; set; }
 		public string Description { get; set; }
@@ -27,9 +27,11 @@ namespace Bunkering.Core.Data
 		public decimal LateRenewalPenalty { get; set; }
 		public decimal NonRenewalPenalty { get; set; }
 		public string Status { get; set; }
-		[ForeignKey("ApplicationId")]
-		public Application Application { get; set; }
 		[ForeignKey("ExtraPaymentId")]
 		public ExtraPayment ExtraPayment { get; set; }
+		//[NotMapped]
+
+		[ForeignKey(nameof(ApplicationId))]
+		public Application Application { get; set; }
 	}
 }

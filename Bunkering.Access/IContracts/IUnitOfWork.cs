@@ -9,6 +9,7 @@ namespace Bunkering.Access.IContracts
 		IApplicationType ApplicationType { get; }
 		IApplicationHistory ApplicationHistory { get; }
 		IAppointment Appointment { get; }
+		IvAppVessel vAppVessel { get; }
 		ICountry Country { get; }
 		IFacility Facility { get; }
 		IFacilityType FacilityType { get; }

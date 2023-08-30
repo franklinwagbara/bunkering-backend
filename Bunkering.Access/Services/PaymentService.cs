@@ -4,11 +4,14 @@ using Bunkering.Core.Data;
 using Bunkering.Core.Utils;
 using Bunkering.Core.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.IO;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Bunkering.Access.Services
 {
@@ -169,7 +172,7 @@ namespace Bunkering.Access.Services
 										//payment.Application.Status = Enum.GetName(typeof(AppStatus), 2);
 
 										await _unitOfWork.Payment.Update(payment);
-										await _unitOfWork.SaveChangesAsync(payment.Application.UserId);
+										await _unitOfWork.SaveChangesAsync(app.UserId);
 
 										_response = new ApiResponse
 										{
@@ -202,7 +205,7 @@ namespace Bunkering.Access.Services
 							};
 					}
 
-					_logger.LogRequest($"\"Getting payment for company application -:{payment.Application.Reference}{" by"}{_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email)} {" - "}{DateTime.Now}", false, directory);
+					_logger.LogRequest($"\"Getting payment for company application -:{app.Reference}{" by"}{_contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email)} {" - "}{DateTime.Now}", false, directory);
 				}
 			}
 			catch (Exception ex)
@@ -215,15 +218,20 @@ namespace Bunkering.Access.Services
 
 		public async Task<ApiResponse> PaymentReport(PaymentReportViewModel model)
 		{
-			var payment = await _unitOfWork.Payment.Find(x => x.TransactionDate >= model.Min && x.TransactionDate <= model.Max);
-			if (payment.Count() > 0)
+			var payment = await _unitOfWork.Payment.Find(a => a.TransactionDate >= model.Min && a.TransactionDate <= model.Max);
+			if (payment != null)
 			{
-				if (model.AppStatus != null)
-					payment = payment.Where(y => y.Status == model.AppStatus);
-
 				_response = new ApiResponse
 				{
-					Data = payment,
+					Data = payment.Select(x => new
+					{
+						x.Id,
+						x.TransactionId,
+						x.TransactionDate,
+						x.Amount,
+						x.ServiceCharge,
+						model.AppStatus
+					}),
 					Message = "Success",
 					StatusCode = HttpStatusCode.OK,
 					Success = true
@@ -241,7 +249,6 @@ namespace Bunkering.Access.Services
 
 				};
 			}
-
 			return _response;
 		}
 

@@ -95,6 +95,8 @@
     <Build Include="dbo\Tables\FacilityTypeDocuments.sql" />
     <Build Include="dbo\Tables\VesselTypes.sql" />
     <Build Include="dbo\Tables\FacilitySources.sql" />
+    <Build Include="dbo\Views\vFacilityPermit.sql" />
+    <Build Include="dbo\Views\vAppVessel.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Snapshots\Bunkering.Database_20230810_10-01-52.dacpac" />

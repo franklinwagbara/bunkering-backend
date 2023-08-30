@@ -180,6 +180,7 @@ namespace Bunkering.Access.Services
 		private async Task<List<Tank>> AppTanks(List<TankViewModel> tank, int facilityId)
 		{
 			var tanks = await _unitOfWork.Tank.Find(x => x.FacilityId == facilityId);
+
 			if (tanks.Count() > 0)
 			{
 				await _unitOfWork.Tank.RemoveRange(tanks.ToList());
@@ -1010,20 +1011,30 @@ namespace Bunkering.Access.Services
 
 		public async Task<ApiResponse> ApplicationReport(ApplicationReportViewModel model)
 		{
-			var appReport = await _unitOfWork.Application.Find(x => x.CreatedDate >= model.Min && x.SubmittedDate <= model.Max);
-			if (appReport != null)
+			var apps = await _unitOfWork.vAppVessel.Find(a => a.SubmittedDate >= model.Min && a.SubmittedDate <= model.Max);
+
+			if (!string.IsNullOrEmpty(model.Status))
+				apps = apps.Where(b => b.Status.ToLower().Equals(model.Status.ToLower())).ToList();
+
+			if (model.ApplicationTypeId != null && model.ApplicationTypeId > 0)
+				apps = apps.Where(b => b.ApplicationTypeId == model.ApplicationTypeId).ToList();
+
+			if (apps != null && apps.Count() > 0)
 			{
 				_response = new ApiResponse
 				{
 					Message = "Application Report Found",
 					StatusCode = HttpStatusCode.OK,
 					Success = true,
-					Data = appReport.Select(a => new
+					Data = apps.Select(a => new
 					{
+						a.Reference,
+						a.CompanyName,
+						a.AppTypeName,
+						a.VesselName,
+						a.NoOfTanks,
+						a.Capacity,
 						a.CreatedDate,
-						a.SubmittedDate,
-						a.ApplicationType,
-						a.Facility,
 						a.Status,
 						a.IsDeleted,
 
@@ -1033,15 +1044,16 @@ namespace Bunkering.Access.Services
 				return _response;
 			}
 			else
+			{
 				_response = new ApiResponse
 				{
 					Message = "Application Report Not Found",
 					StatusCode = HttpStatusCode.NotFound,
 					Success = false
 				};
+			}
 
 			return _response;
-
 		}
 	}
 }
