@@ -836,20 +836,22 @@ namespace Bunkering.Access.Services
 						{
 							var s = users.FirstOrDefault(x => x.Id.Equals(a.ScheduledBy));
 							var ap = users.FirstOrDefault(x => x.Id.Equals(a.ApprovedBy));
-							a.ScheduledBy = s.Email;
-							a.ApprovedBy = ap.Email;
+							a.ScheduledBy = s?.Email;
+							a.ApprovedBy = ap?.Email;
 						});
 						var sch = schedules.Select(s => new
 						{
 							s.ApprovedBy,
-							s.ScheduledBy,
+							SupervisorReject = !s.IsApproved && !string.IsNullOrEmpty(s.ApprovalMessage),
+                            s.ScheduledBy,
 							s.IsApproved,
 							s.ApprovalMessage,
 							InspectionDate = s.AppointmentDate.ToString("MMM dd, yyyy HH:mm:ss"),
 							s.ClientMessage,
 							s.ContactName,
 							s.IsAccepted,
-							s.ScheduleMessage,
+							CompanyReject = !s.IsAccepted && !string.IsNullOrEmpty(s.ClientMessage),
+                            s.ScheduleMessage,
 							s.ScheduleType,
 							ExpiryDate = s.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
 						});
