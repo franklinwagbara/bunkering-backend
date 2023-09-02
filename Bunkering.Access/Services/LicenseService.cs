@@ -31,29 +31,10 @@ namespace Bunkering.Access.Services
 
 		public async Task<ApiResponse> LicenseReport(LicenseReportViewModel model)
 		{
-			/*if (model == null)
-			{
-				_response = new ApiResponse
-				{
-					Message = "Invalid Entry",
-					StatusCode = HttpStatusCode.BadRequest,
-					Success = false
-				};
-			}
-			else if (model.StartDate == null && model.ToDate == null && model.VesselType == null)
-			{
-				_response = new ApiResponse
-				{
-					Message = "Entry is Null",
-					StatusCode = HttpStatusCode.BadRequest,
-					Success = false
-				};
+			var permitReport = await _unitOfWork.vFacilityPermit.Find(a => a.IssuedDate >= model.Min && a.IssuedDate <= model.Max);
 
-			}
-			*/
-			var permitReport = await _unitOfWork.Permit.Find(p => p.IssuedDate >= model.Min && p.ExpireDate <= model.Max, "Application.Facility.VesselType");
 
-			if (permitReport.Count() > 0)
+			if (permitReport != null)
 			{
 				_response = new ApiResponse
 				{
@@ -63,10 +44,12 @@ namespace Bunkering.Access.Services
 					Data = permitReport.Select(p => new
 					{
 						p.Id,
+						p.ApplicationId,
+						p.VesselName,
+						p.VesselType,
 						p.PermitNo,
 						p.IssuedDate,
 						p.ExpireDate,
-						VesselType = p.Application.Facility.VesselType.Name,
 
 					})
 				};

@@ -13,8 +13,8 @@ namespace Bunkering.Core.ViewModels
 		public DateTime? ToDate { get; set; }
 		public string? AppStatus { get; set; }
 		[NotMapped]
-		public DateTime Min => StartDate != null ? StartDate.Value : DateTime.UtcNow.AddHours(1).AddDays(-30);
+		public DateTime Min => StartDate == null ? DateTime.UtcNow.AddHours(1).AddDays(-30) : StartDate.Value;
 		[NotMapped]
-		public DateTime Max => ToDate != null ? ToDate.Value : DateTime.UtcNow.AddHours(1);
+		public DateTime Max => ToDate == null ? DateTime.UtcNow.AddHours(1) : ToDate.Value;
 	}
 }

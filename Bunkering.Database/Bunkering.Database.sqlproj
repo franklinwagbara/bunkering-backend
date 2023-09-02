@@ -97,8 +97,11 @@
     <Build Include="dbo\Tables\FacilitySources.sql" />
     <Build Include="dbo\Views\vFacilityPermit.sql" />
     <Build Include="dbo\Views\vAppVessel.sql" />
+    <Build Include="dbo\Views\vAppPayment.sql" />
+    <Build Include="dbo\Views\vAppFacility.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Snapshots\Bunkering.Database_20230810_10-01-52.dacpac" />
+    <None Include="Snapshots\Bunkering.Database_20230831_16-17-10.dacpac" />
   </ItemGroup>
 </Project>

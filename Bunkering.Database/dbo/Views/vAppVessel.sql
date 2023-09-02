@@ -1,14 +1,14 @@
 ﻿CREATE VIEW dbo.vAppVessel
 AS
 SELECT DISTINCT 
-                  dbo.Applications.Status, dbo.Facilities.Name, dbo.Applications.Reference, dbo.Applications.CreatedDate, dbo.Applications.SubmittedDate, dbo.Applications.ModifiedDate, dbo.Applications.IsDeleted, 
-                  dbo.ApplicationTypes.Name AS AppTypeName, dbo.AspNetUsers.Email, dbo.Companies.Name AS CompanyName, dbo.Facilities.IsLicensed, dbo.VesselTypes.Name AS VesselName,
+                  dbo.Applications.Status, dbo.Facilities.Name AS VesselName, dbo.Applications.Reference, dbo.Applications.CreatedDate, dbo.Applications.SubmittedDate, dbo.Applications.ModifiedDate, dbo.Applications.IsDeleted, 
+                  dbo.ApplicationTypes.Name AS AppTypeName, dbo.AspNetUsers.Email, dbo.Companies.Name AS CompanyName, dbo.Facilities.IsLicensed, dbo.VesselTypes.Name AS VesselTypes,
                       (SELECT COUNT(Id) AS Expr1
                        FROM      dbo.Tanks AS Tanks_2
                        WHERE   (FacilityId = dbo.Facilities.Id)) AS NoOfTanks,
                       (SELECT SUM(Capacity) AS Expr1
                        FROM      dbo.Tanks
-                       WHERE   (FacilityId = dbo.Facilities.Id)) AS Capacity, dbo.Applications.ApplicationTypeId
+                       WHERE   (FacilityId = dbo.Facilities.Id)) AS Capacity, dbo.Applications.ApplicationTypeId, dbo.Applications.Id
 FROM     dbo.Applications INNER JOIN
                   dbo.ApplicationTypes ON dbo.Applications.ApplicationTypeId = dbo.ApplicationTypes.Id INNER JOIN
                   dbo.Facilities ON dbo.Applications.FacilityId = dbo.Facilities.Id INNER JOIN

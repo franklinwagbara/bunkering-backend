@@ -1,8 +1,10 @@
 ﻿CREATE VIEW dbo.vFacilityPermit
 AS
-SELECT dbo.Permits.PermitNo, dbo.Facilities.Name AS VesselName, dbo.Permits.ExpireDate, dbo.Permits.IssuedDate
+SELECT dbo.Permits.PermitNo, dbo.Facilities.Name AS VesselName, dbo.Permits.ExpireDate, dbo.FacilityTypes.Name AS VesselType, dbo.Facilities.Id, dbo.Applications.Id AS ApplicationId, dbo.Permits.IssuedDate
 FROM     dbo.Facilities INNER JOIN
-                  dbo.Permits ON dbo.Facilities.Id = dbo.Permits.Id
+                  dbo.Permits ON dbo.Facilities.Id = dbo.Permits.Id INNER JOIN
+                  dbo.FacilityTypes ON dbo.Facilities.Id = dbo.FacilityTypes.Id INNER JOIN
+                  dbo.Applications ON dbo.Facilities.Id = dbo.Applications.FacilityId
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'vFacilityPermit';
 
@@ -13,7 +15,7 @@ Begin DesignProperties =
    Begin PaneConfigurations = 
       Begin PaneConfiguration = 0
          NumPanes = 4
-         Configuration = "(H (1[40] 4[20] 2[20] 3) )"
+         Configuration = "(H (1[58] 4[29] 2[10] 3) )"
       End
       Begin PaneConfiguration = 1
          NumPanes = 3
@@ -81,20 +83,40 @@ Begin DesignProperties =
       Begin Tables = 
          Begin Table = "Facilities"
             Begin Extent = 
+               Top = 55
+               Left = 314
+               Bottom = 378
+               Right = 508
+            End
+            DisplayFlags = 280
+            TopColumn = 3
+         End
+         Begin Table = "Permits"
+            Begin Extent = 
+               Top = 20
+               Left = 768
+               Bottom = 308
+               Right = 962
+            End
+            DisplayFlags = 280
+            TopColumn = 0
+         End
+         Begin Table = "FacilityTypes"
+            Begin Extent = 
                Top = 7
                Left = 48
-               Bottom = 330
+               Bottom = 148
                Right = 242
             End
             DisplayFlags = 280
             TopColumn = 0
          End
-         Begin Table = "Permits"
+         Begin Table = "Applications"
             Begin Extent = 
-               Top = 7
-               Left = 290
-               Bottom = 295
-               Right = 484
+               Top = 262
+               Left = 534
+               Bottom = 451
+               Right = 751
             End
             DisplayFlags = 280
             TopColumn = 0
@@ -111,14 +133,14 @@ Begin DesignProperties =
       Begin ColumnWidths = 11
          Column = 1440
          Alias = 900
-         Table = 1170
+         Table = 1176
          Output = 720
          Append = 1400
          NewValue = 1170
-         SortType = 1350
-         SortOrder = 1410
+         SortType = 1356
+         SortOrder = 1416
          GroupBy = 1350
-         Filter = 1350
+         Filter = 1356
          Or = 1350
          Or = 1350
          Or = 1350
@@ -126,4 +148,8 @@ Begin DesignProperties =
    End
 End
 ', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'vFacilityPermit';
+
+
+
+
 

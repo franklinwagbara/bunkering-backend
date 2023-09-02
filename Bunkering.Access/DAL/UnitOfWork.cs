@@ -12,8 +12,10 @@ namespace Bunkering.Access.DAL
 		public IApplicationHistory ApplicationHistory { get; private set; }
 		public IAppointment Appointment { get; private set; }
 		public IvAppVessel vAppVessel { get; private set; }
+		public IvAppPayment vAppPayment { get; private set; }
 		public ICountry Country { get; private set; }
 		public IFacility Facility { get; private set; }
+		public IvFacilityPermit vFacilityPermit { get; private set; }
 		public IFacilityType FacilityType { get; private set; }
 		public IFacilityTypeDocuments FacilityTypeDocuments { get; private set; }
 		public IInspection Inspection { get; private set; }
@@ -54,6 +56,8 @@ namespace Bunkering.Access.DAL
 			Workflow = Workflow != null ? Workflow : new WorkflowRepository(_context);
 			VesselType = VesselType != null ? VesselType : new VeseelTypeRepository(_context);
 			vAppVessel = vAppVessel != null ? vAppVessel : new vAppVesselRepository(_context);
+			vFacilityPermit = vFacilityPermit != null ? vFacilityPermit : new vFacilityPermitRepository(_context);
+			vAppPayment = vAppPayment != null ? vAppPayment : new vAppPaymentRepository(_context);
 		}
 
 		public int Save() => _context.SaveChanges();

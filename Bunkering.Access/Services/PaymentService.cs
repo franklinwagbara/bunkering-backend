@@ -218,23 +218,39 @@ namespace Bunkering.Access.Services
 
 		public async Task<ApiResponse> PaymentReport(PaymentReportViewModel model)
 		{
-			var payment = await _unitOfWork.Payment.Find(a => a.TransactionDate >= model.Min && a.TransactionDate <= model.Max);
+			var payment = await _unitOfWork.vAppPayment.Find(a => a.TransactionDate >= model.Min && a.TransactionDate <= model.Max);
+
+			if (!string.IsNullOrEmpty(model.AppStatus))
+				payment = payment.Where(b => b.PaymentStatus.ToLower().Equals(model.AppStatus.ToLower())).ToList();
+
 			if (payment != null)
 			{
 				_response = new ApiResponse
 				{
+
+					Message = "Success",
+					StatusCode = HttpStatusCode.OK,
+					Success = true,
 					Data = payment.Select(x => new
 					{
 						x.Id,
-						x.TransactionId,
+						x.ApplicationId,
+						x.AppType,
+						x.AppReference,
+						x.Description,
+						x.OrderId,
 						x.TransactionDate,
+						x.PaymentDate,
+						x.PaymentType,
+						x.Account,
+						x.RRR,
+						x.TxnMessage,
 						x.Amount,
 						x.ServiceCharge,
-						model.AppStatus
+						x.PaymentStatus,
+
+
 					}),
-					Message = "Success",
-					StatusCode = HttpStatusCode.OK,
-					Success = true
 				};
 
 				return _response;
@@ -249,6 +265,7 @@ namespace Bunkering.Access.Services
 
 				};
 			}
+
 			return _response;
 		}
 

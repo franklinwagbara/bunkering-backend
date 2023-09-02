@@ -8,10 +8,12 @@ namespace Bunkering.Access.IContracts
 		IAppFee AppFee { get; }
 		IApplicationType ApplicationType { get; }
 		IApplicationHistory ApplicationHistory { get; }
+		IvAppPayment vAppPayment { get; }
 		IAppointment Appointment { get; }
 		IvAppVessel vAppVessel { get; }
 		ICountry Country { get; }
 		IFacility Facility { get; }
+		IvFacilityPermit vFacilityPermit { get; }
 		IFacilityType FacilityType { get; }
 		IFacilityTypeDocuments FacilityTypeDocuments { get; }
 		IInspection Inspection { get; }
