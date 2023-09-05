@@ -31,7 +31,7 @@ namespace Bunkering.Core.Data
 		public ExtraPayment ExtraPayment { get; set; }
 		//[NotMapped]
 
-		[ForeignKey(nameof(ApplicationId))]
-		public Application Application { get; set; }
+		//[ForeignKey(nameof(ApplicationId))]
+		//public Application Application { get; set; }
 	}
 }

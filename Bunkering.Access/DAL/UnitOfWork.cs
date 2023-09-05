@@ -11,11 +11,8 @@ namespace Bunkering.Access.DAL
 		public IApplicationType ApplicationType { get; set; }
 		public IApplicationHistory ApplicationHistory { get; private set; }
 		public IAppointment Appointment { get; private set; }
-		public IvAppVessel vAppVessel { get; private set; }
-		public IvAppPayment vAppPayment { get; private set; }
 		public ICountry Country { get; private set; }
 		public IFacility Facility { get; private set; }
-		public IvFacilityPermit vFacilityPermit { get; private set; }
 		public IFacilityType FacilityType { get; private set; }
 		public IFacilityTypeDocuments FacilityTypeDocuments { get; private set; }
 		public IInspection Inspection { get; private set; }
@@ -30,6 +27,9 @@ namespace Bunkering.Access.DAL
 		public IValidatiionResponse ValidatiionResponse { get; set; }
 		public IWorkflow Workflow { get; private set; }
 		public IVesselType VesselType { get; set; }
+		public IvAppVessel vAppVessel { get; private set; }
+		public IvAppPayment vAppPayment { get; private set; }
+		public IvFacilityPermit vFacilityPermit { get; private set; }
 
 		public UnitOfWork(ApplicationContext context)
 		{

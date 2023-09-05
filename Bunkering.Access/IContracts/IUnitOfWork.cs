@@ -8,12 +8,9 @@ namespace Bunkering.Access.IContracts
 		IAppFee AppFee { get; }
 		IApplicationType ApplicationType { get; }
 		IApplicationHistory ApplicationHistory { get; }
-		IvAppPayment vAppPayment { get; }
 		IAppointment Appointment { get; }
-		IvAppVessel vAppVessel { get; }
 		ICountry Country { get; }
 		IFacility Facility { get; }
-		IvFacilityPermit vFacilityPermit { get; }
 		IFacilityType FacilityType { get; }
 		IFacilityTypeDocuments FacilityTypeDocuments { get; }
 		IInspection Inspection { get; }
@@ -28,6 +25,9 @@ namespace Bunkering.Access.IContracts
 		IValidatiionResponse ValidatiionResponse { get; }
 		IWorkflow Workflow { get; }
 		IVesselType VesselType { get; }
+		IvFacilityPermit vFacilityPermit { get; }
+		IvAppPayment vAppPayment { get; }
+		IvAppVessel vAppVessel { get; }
 		int Save();
 		Task<int> SaveChangesAsync(string userId);
 	}
