@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Bunkering.Core.Data
 {
@@ -39,6 +40,8 @@ namespace Bunkering.Core.Data
 		public DbSet<vAppPayment> vAppPayment { get; set; }
 		public DbSet<vFacilityPermit> vFacilityPermit { get; set; }
 
+		//public virtual DbContextOptionsBuilder EnableDetailedErrors(bool detailedErrorsEnabled = true) => detailedErrorsEnabled;
+		//public virtual DbContextOptionsBuilder EnableDetailedErrors(bool detailedErrorEnabled) => DbContextOptionsBuilder;
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
@@ -58,7 +61,6 @@ namespace Bunkering.Core.Data
 					.HasForeignKey(ur => ur.UserId)
 					.IsRequired();
 			});
-
 
 			//builder.Entity<Facility>().HasOne(x => x.State).WithMany().HasPrincipalKey(x => x.Code).HasForeignKey(x => x.StateCode);
 			//builder.Entity<Application>().HasOne(x => x.StorageSalesLicenseFees).WithMany().HasPrincipalKey(x => x.Category).HasForeignKey(x => x.StorageCapacity);
@@ -129,5 +131,9 @@ namespace Bunkering.Core.Data
 				}
 			}
 		}
+	}
+
+	public class ApplicationContextOptionsBuilder
+	{
 	}
 }

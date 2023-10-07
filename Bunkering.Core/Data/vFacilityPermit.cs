@@ -10,6 +10,7 @@ namespace Bunkering.Core.Data
 	{
 		public int Id { get; set; }
 		public int ApplicationId { get; set; }
+		public int PermitId { get; set; }
 		public string VesselName { get; set; }
 		public string VesselType { get; set; }
 		public string PermitNo { get; set; }

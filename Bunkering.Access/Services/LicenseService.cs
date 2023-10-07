@@ -51,7 +51,7 @@ namespace Bunkering.Access.Services
 						p.IssuedDate,
 						p.ExpireDate,
 
-					})
+					}),
 				};
 
 				return _response;

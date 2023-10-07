@@ -15,6 +15,7 @@ namespace Bunkering.Access.DAL
 		public IFacility Facility { get; private set; }
 		public IFacilityType FacilityType { get; private set; }
 		public IFacilityTypeDocuments FacilityTypeDocuments { get; private set; }
+		public IFieldOffice FieldOffice { get; private set; }
 		public IInspection Inspection { get; private set; }
 		public ILGA LGA { get; private set; }
 		public IMessage Message { get; private set; }
@@ -43,6 +44,7 @@ namespace Bunkering.Access.DAL
 			Facility = Facility != null ? Facility : new FacilityRepository(_context);
 			FacilityType = FacilityType != null ? FacilityType : new FacilityTypeRepository(_context);
 			FacilityTypeDocuments = FacilityTypeDocuments != null ? FacilityTypeDocuments : new FacilityTypeDocsRepository(_context);
+			FieldOffice = FieldOffice != null ? FieldOffice : new FieldOfficeRepository(_context);
 			Inspection = Inspection != null ? Inspection : new InspectionRepository(_context);
 			LGA = LGA != null ? LGA : new LGARepository(_context);
 			Message = Message != null ? Message : new MessageRepository(_context);

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
@@ -227,7 +228,6 @@ namespace Bunkering.Access.Services
 			{
 				_response = new ApiResponse
 				{
-
 					Message = "Success",
 					StatusCode = HttpStatusCode.OK,
 					Success = true,
@@ -250,7 +250,7 @@ namespace Bunkering.Access.Services
 						x.PaymentStatus,
 
 
-					}),
+					}).ToList(),
 				};
 
 				return _response;

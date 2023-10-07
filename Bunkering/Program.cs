@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Rotativa.AspNetCore;
+using System.Configuration;
 using System.Reflection;
 using System.Text;
 
@@ -27,6 +28,7 @@ builder.Services.Services();
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSetting"));
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("EmailSetting"));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.Configure<ErrorHandlingOptions>(builder.Configuration.GetSection("ErrorHandling"));
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(x =>
