@@ -8,7 +8,7 @@ namespace Bunkering.Core.Data
 		public int Id { get; set; }
 		public int ApplicationId { get; set; }
 		public string OrderId { get; set; }
-		public int ExtraPaymentId { get; set; }
+		public int? ExtraPaymentId { get; set; }
 		public string PaymentType { get; set; }
 		public DateTime TransactionDate { get; set; }
 		public DateTime PaymentDate { get; set; }

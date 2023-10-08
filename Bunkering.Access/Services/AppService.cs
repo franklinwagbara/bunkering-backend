@@ -843,7 +843,7 @@ namespace Bunkering.Access.Services
 						{
 							s.ApprovedBy,
 							SupervisorReject = !s.IsApproved && !string.IsNullOrEmpty(s.ApprovalMessage),
-                            s.ScheduledBy,
+							s.ScheduledBy,
 							s.IsApproved,
 							s.ApprovalMessage,
 							InspectionDate = s.AppointmentDate.ToString("MMM dd, yyyy HH:mm:ss"),
@@ -851,7 +851,7 @@ namespace Bunkering.Access.Services
 							s.ContactName,
 							s.IsAccepted,
 							CompanyReject = !s.IsAccepted && !string.IsNullOrEmpty(s.ClientMessage),
-                            s.ScheduleMessage,
+							s.ScheduleMessage,
 							s.ScheduleType,
 							ExpiryDate = s.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
 						});
