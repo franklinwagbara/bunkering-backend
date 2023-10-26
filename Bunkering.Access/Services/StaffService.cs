@@ -125,6 +125,8 @@ namespace Bunkering.Access.Services
 						IsActive = true,
 						FirstName = model.FirstName,
 						LastName = model.LastName,
+						LocationId = model.LocationId,
+						OfficeId = model.OfficeId,
 						CreatedBy = user.Email,
 						CreatedOn = DateTime.UtcNow.AddHours(1),
 

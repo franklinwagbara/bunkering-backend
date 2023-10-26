@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Net;
+using System.Runtime.CompilerServices;
 
 namespace Bunkering.Access.Services
 {
@@ -20,6 +21,7 @@ namespace Bunkering.Access.Services
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly WorkFlowService _flow;
 
+
 		public ScheduleService(
 			IUnitOfWork unitOfWork,
 			IHttpContextAccessor contextAccessor,
@@ -31,6 +33,7 @@ namespace Bunkering.Access.Services
 			_userManager = userManager;
 			User = _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
 			_flow = flow;
+
 		}
 
 		public async Task<ApiResponse> ScheduleInspection(ScheduleViewModel model)
@@ -41,6 +44,7 @@ namespace Bunkering.Access.Services
 				{
 					var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(model.ApplicationId), "Facility");
 					var user = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).FirstOrDefault(x => x.Email.Equals(User));
+
 					if (app != null)
 					{
 						var appointment = new Appointment
@@ -61,7 +65,7 @@ namespace Bunkering.Access.Services
 							appointment.ApprovedBy = user.Id;
 						}
 
-						var schFlow = await _flow.GetWorkFlow(Enum.GetName(typeof(AppActions), AppActions.ScheduleInspection), user.UserRoles.FirstOrDefault().RoleId, app.ApplicationTypeId, app.Facility.VesselTypeId);
+						var schFlow = await _flow.GetWorkFlow(Enum.GetName(typeof(AppActions), AppActions.ScheduleInspection), user, app.ApplicationTypeId, app.Facility.VesselTypeId);
 						if (schFlow != null)
 						{
 							var nextUser = await _flow.GetNextStaff(model.ApplicationId, Enum.GetName(typeof(AppActions), AppActions.ScheduleInspection), schFlow, user);
@@ -82,6 +86,7 @@ namespace Bunkering.Access.Services
 							StatusCode = HttpStatusCode.OK,
 							Success = true
 						};
+
 					}
 					else
 						_response = new ApiResponse
@@ -122,20 +127,20 @@ namespace Bunkering.Access.Services
 					Success = true,
 					Data = new
 					{
-                        sch.ApprovedBy,
-                        SupervisorReject = !sch.IsApproved && !string.IsNullOrEmpty(sch.ApprovalMessage),
-                        sch.ScheduledBy,
-                        sch.IsApproved,
-                        sch.ApprovalMessage,
-                        InspectionDate = sch.AppointmentDate.ToString("MMM dd, yyyy HH:mm:ss"),
-                        sch.ClientMessage,
-                        sch.ContactName,
-                        sch.IsAccepted,
-                        CompanyReject = !sch.IsAccepted && !string.IsNullOrEmpty(sch.ClientMessage),
-                        sch.ScheduleMessage,
-                        sch.ScheduleType,
-                        ExpiryDate = sch.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
-                    }
+						sch.ApprovedBy,
+						SupervisorReject = !sch.IsApproved && !string.IsNullOrEmpty(sch.ApprovalMessage),
+						sch.ScheduledBy,
+						sch.IsApproved,
+						sch.ApprovalMessage,
+						InspectionDate = sch.AppointmentDate.ToString("MMM dd, yyyy HH:mm:ss"),
+						sch.ClientMessage,
+						sch.ContactName,
+						sch.IsAccepted,
+						CompanyReject = !sch.IsAccepted && !string.IsNullOrEmpty(sch.ClientMessage),
+						sch.ScheduleMessage,
+						sch.ScheduleType,
+						ExpiryDate = sch.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
+					}
 				};
 			else
 				_response = new ApiResponse
@@ -157,8 +162,8 @@ namespace Bunkering.Access.Services
 				if (appointment != null)
 				{
 					var schFlow = model.Act.Equals(Enum.GetName(typeof(AppActions), AppActions.ApproveInspection))
-						? await _flow.GetWorkFlow(Enum.GetName(typeof(AppActions), AppActions.ApproveInspection), user.UserRoles.FirstOrDefault().RoleId, appointment.Application.Facility.VesselTypeId, appointment.Application.ApplicationTypeId)
-						: await _flow.GetWorkFlow(Enum.GetName(typeof(AppActions), AppActions.RejectInspection), user.UserRoles.FirstOrDefault().RoleId, appointment.Application.Facility.VesselTypeId, appointment.Application.ApplicationTypeId);
+						? await _flow.GetWorkFlow(Enum.GetName(typeof(AppActions), AppActions.ApproveInspection), user, appointment.Application.Facility.VesselTypeId, appointment.Application.ApplicationTypeId)
+						: await _flow.GetWorkFlow(Enum.GetName(typeof(AppActions), AppActions.RejectInspection), user, appointment.Application.Facility.VesselTypeId, appointment.Application.ApplicationTypeId);
 					if (schFlow != null)
 					{
 						var nextUser = model.Act.Equals(Enum.GetName(typeof(AppActions), AppActions.ApproveInspection))
@@ -218,20 +223,20 @@ namespace Bunkering.Access.Services
 					Success = true,
 					Data = schedules.Select(s => new
 					{
-                        s.ApprovedBy,
-                        SupervisorReject = !s.IsApproved && !string.IsNullOrEmpty(s.ApprovalMessage),
-                        s.ScheduledBy,
-                        s.IsApproved,
-                        s.ApprovalMessage,
-                        InspectionDate = s.AppointmentDate.ToString("MMM dd, yyyy HH:mm:ss"),
-                        s.ClientMessage,
-                        s.ContactName,
-                        s.IsAccepted,
-                        CompanyReject = !s.IsAccepted && !string.IsNullOrEmpty(s.ClientMessage),
-                        s.ScheduleMessage,
-                        s.ScheduleType,
-                        ExpiryDate = s.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
-                    })
+						s.ApprovedBy,
+						SupervisorReject = !s.IsApproved && !string.IsNullOrEmpty(s.ApprovalMessage),
+						s.ScheduledBy,
+						s.IsApproved,
+						s.ApprovalMessage,
+						InspectionDate = s.AppointmentDate.ToString("MMM dd, yyyy HH:mm:ss"),
+						s.ClientMessage,
+						s.ContactName,
+						s.IsAccepted,
+						CompanyReject = !s.IsAccepted && !string.IsNullOrEmpty(s.ClientMessage),
+						s.ScheduleMessage,
+						s.ScheduleType,
+						ExpiryDate = s.ExpiryDate.ToString("MMM dd, yyyy HH:mm:ss")
+					})
 				};
 			else
 				_response = new ApiResponse
@@ -252,7 +257,7 @@ namespace Bunkering.Access.Services
 				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id.Equals(model.ApplicationId), "User,Facility");
 				if (appointment != null)
 				{
-					var schFlow = await _flow.GetWorkFlow(Enum.GetName(typeof(AppActions), AppActions.AcceptInspection), user.UserRoles.FirstOrDefault().RoleId, app.ApplicationTypeId, app.Facility.VesselTypeId);
+					var schFlow = await _flow.GetWorkFlow(Enum.GetName(typeof(AppActions), AppActions.AcceptInspection), user, app.ApplicationTypeId, app.Facility.VesselTypeId);
 					if (schFlow != null)
 					{
 						var nextUser = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).FirstOrDefault(x => x.Id.Equals(appointment.ScheduledBy));

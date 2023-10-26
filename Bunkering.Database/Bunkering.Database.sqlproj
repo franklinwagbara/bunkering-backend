@@ -99,6 +99,10 @@
     <Build Include="dbo\Views\vAppVessel.sql" />
     <Build Include="dbo\Views\vAppPayment.sql" />
     <Build Include="dbo\Views\vAppFacility.sql" />
+    <Build Include="dbo\Tables\Office.sql" />
+    <Build Include="dbo\Tables\Location.sql" />
+    <Build Include="dbo\Views\vOffice.sql" />
+    <Build Include="dbo\Views\vAppUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Snapshots\Bunkering.Database_20230810_10-01-52.dacpac" />

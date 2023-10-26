@@ -11,6 +11,7 @@ using System.Text;
 using Bunkering.Access.IContracts;
 using Bunkering.Access;
 using Bunkering.Core.ViewModels;
+using Bunkering.Access.DAL;
 
 namespace Bunkering.Access.Services
 {
@@ -22,6 +23,9 @@ namespace Bunkering.Access.Services
 		private readonly MailSettings _mailSetting;
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly AppSetting _appSetting;
+		//private readonly Location _location;
+		//private readonly Office _office;
+
 		//private readonly string directory = "WorkFlow";
 		//private readonly GeneralLogger _generalLogger;
 
@@ -31,7 +35,10 @@ namespace Bunkering.Access.Services
 			IHostingEnvironment env,
 			IOptions<MailSettings> mailSettings,
 			IHttpContextAccessor httpContextAccessor,
-			IOptions<AppSetting> appSetting)
+			IOptions<AppSetting> appSetting
+			//Location location,
+			//Office office
+			)
 		{
 			_unitOfWork = unitOfWork;
 			_userManager = userManager;
@@ -39,6 +46,8 @@ namespace Bunkering.Access.Services
 			_mailSetting = mailSettings.Value;
 			_httpContextAccessor = httpContextAccessor;
 			_appSetting = appSetting.Value;
+			//_location = location;
+			//_office = office;
 		}
 
 		public async Task<(bool, string)> AppWorkFlow(int appid, string action, string comment, string currUserId = null, string delUserId = null)
@@ -50,28 +59,42 @@ namespace Bunkering.Access.Services
 			try
 			{
 				var app = await _unitOfWork.Application.FirstOrDefaultAsync(x => x.Id == appid, "User,Facility.VesselType,Payments");
+				//var loc = await _unitOfWork.Location.Find(x => x.Id);
+				//var off = await _unitOfWork.Office.Find(x => x.Id);
 				if (app != null)
 				{
 
 					currUserId = string.IsNullOrEmpty(currUserId) ? app.CurrentDeskId : currUserId;
 					var currentUser = _userManager.Users
 						.Include(x => x.Company)
-						.Include(ur => ur.UserRoles)
+						.Include(ol => ol.Office)
+						.Include(lo => lo.UserRoles)
 						.ThenInclude(r => r.Role)
+						.Include(lo => lo.Location)
 						.FirstOrDefault(x => x.Id.Equals(currUserId));
-					var currentuserRoles = currentUser.UserRoles.Where(x => !x.Role.Name.Equals("Staff")).FirstOrDefault().Role.Id;
+					var currentuserRoles = currentUser.UserRoles
+						.Where(x => !x.Role.Name.Equals("Staff")).FirstOrDefault().Role.Id;
 
 					if (currentUser != null)
 					{
-						wkflow = await GetWorkFlow(action, currentuserRoles, app.ApplicationTypeId, app.Facility.VesselTypeId);
+						wkflow = await GetWorkFlow(action, currentUser, app.ApplicationTypeId, app.Facility.VesselTypeId);
 						if (wkflow != null) //get next processing staff
 						{
-							if (action.ToLower().Equals("reject") && currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("fad"))
-								nextprocessingofficer = app.User;
-							else if (action.ToLower().Equals("approve") && currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("fad"))
-								nextprocessingofficer = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).FirstOrDefault(x => x.Id.Equals(app.CurrentDeskId));
-							else
-								nextprocessingofficer = await GetNextStaff(appid, action, wkflow, currentUser, delUserId);
+							//if (action.ToLower().Equals("reject")
+							//	&& currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("fad")
+							//	&& currentUser.Location.Id && currentUser.Office.Id)
+							//	nextprocessingofficer = app.User;
+							//else if (action.ToLower().Equals("approve")
+							//	&& currentUser.UserRoles.FirstOrDefault().Role.Name.ToLower().Equals("fad")
+							//	&& currentUser.Location.Id
+							//	&& currentUser.Office.Id)
+							//	nextprocessingofficer = _userManager.Users
+							//		.Include(lo => lo.Location)
+							//		.Include(ol => ol.Office)
+							//		.Include(ur => ur.UserRoles)
+							//		.ThenInclude(r => r.Role).FirstOrDefault(x => x.Id.Equals(app.CurrentDeskId));
+							//else
+							nextprocessingofficer = await GetNextStaff(appid, action, wkflow, currentUser, delUserId);
 						}
 						if (nextprocessingofficer != null)
 						{
@@ -151,9 +174,10 @@ namespace Bunkering.Access.Services
 			return (res, processingMsg);
 		}
 
-		public async Task<WorkFlow> GetWorkFlow(string action, string currentuserrole, int apptypeid, int VesselTypeId)
+		public async Task<WorkFlow> GetWorkFlow(string action, ApplicationUser currentuser, int apptypeid, int VesselTypeId)
 			=> await _unitOfWork.Workflow.FirstOrDefaultAsync(x => x.Action.ToLower().Trim().Equals(action.ToLower().Trim())
-					&& currentuserrole.Equals(x.TriggeredByRole) && x.ApplicationTypeId == apptypeid && x.VesselTypeId == VesselTypeId);
+					&& currentuser.UserRoles.Any(c => c.Role.Name.Equals(x.TriggeredByRole))
+			&& currentuser.LocationId == x.LocationId && currentuser.OfficeId == x.OfficeId && x.ApplicationTypeId == apptypeid && x.VesselTypeId == VesselTypeId);
 
 		public async Task<bool> SaveHistory(string action, int appid, WorkFlow flow, ApplicationUser user, ApplicationUser nextUser, string comment)
 		{
@@ -178,10 +202,11 @@ namespace Bunkering.Access.Services
 			if (!string.IsNullOrEmpty(delUserId))
 				return _userManager.Users.Include(x => x.Company)
 					.Include(ur => ur.UserRoles).ThenInclude(r => r.Role)
+					.Include(lo => lo.Location).Include(ol => ol.Office)
 					.FirstOrDefault(x => x.Id.Equals(delUserId) && x.IsActive);
 			else
 			{
-				if (action.Equals(Enum.GetName(typeof(AppActions), AppActions.Reject)) || action.Equals(Enum.GetName(typeof(AppActions), AppActions.Resubmit)) && wkflow != null)
+				if (action.Equals(Enum.GetName(typeof(AppActions), AppActions.Submit)) || action.Equals(Enum.GetName(typeof(AppActions), AppActions.Resubmit)) && wkflow != null)
 				{
 					var historylist = await _unitOfWork.ApplicationHistory.Find(x => x.ApplicationId == appid
 											&& currentUser.UserRoles.FirstOrDefault().Role.Id.Equals(x.TargetRole)
@@ -196,12 +221,12 @@ namespace Bunkering.Access.Services
 					var history = historylist.OrderByDescending(x => x.Id).FirstOrDefault();
 					if (history != null)
 					{
-						nextprocessingofficer = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role)
+						nextprocessingofficer = _userManager.Users.Include(ur => ur.UserRoles).ThenInclude(r => r.Role).Include(lo => lo.Location).Include(ol => ol.Office)
 													.FirstOrDefault(x => x.Id.Equals(history.TriggeredBy));
 						if (nextprocessingofficer != null && !nextprocessingofficer.IsActive)
 						{
 							var users = _userManager.Users
-											.Include(x => x.Company).Include(ur => ur.UserRoles).ThenInclude(r => r.Role)
+											.Include(x => x.Company).Include(ur => ur.UserRoles).ThenInclude(r => r.Role).Include(lo => lo.Location).Include(ol => ol.Office)
 											.Where(x => x.UserRoles.Where(y => y.Role.Id.Equals(wkflow.TargetRole)) != null
 											&& x.IsActive).ToList();
 							nextprocessingofficer = users.OrderBy(x => x.LastJobDate).FirstOrDefault();
@@ -214,10 +239,12 @@ namespace Bunkering.Access.Services
 						nextprocessingofficer = currentUser;
 					else
 					{
-						var users = _userManager.Users.Include(x => x.Company).Include(f => f.Company)
-									.Include(ur => ur.UserRoles).ThenInclude(r => r.Role)
-									.Where(x => x.UserRoles.Any(y => y.Role.Id.Equals(wkflow.TargetRole))
-									&& x.IsActive).ToList();
+						var users = _userManager.Users.Include(x => x.Company).Include(f => f.Company).Include(ur => ur.UserRoles)
+							.ThenInclude(r => r.Role)
+							.Include(lo => lo.Location)
+							.Include(ol => ol.Office)
+							.Where(x => x.UserRoles.Any(y => y.Role.Id.Equals(wkflow.TargetRole))
+							&& x.LocationId == wkflow.LocationId && x.OfficeId == wkflow.OfficeId && x.IsActive).ToList();
 						nextprocessingofficer = users.Count == 1 ? users.FirstOrDefault() : users.OrderBy(x => x.LastJobDate).FirstOrDefault();
 					}
 				}

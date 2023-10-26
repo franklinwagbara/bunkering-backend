@@ -11,6 +11,7 @@ namespace Bunkering.Core.ViewModels
 		public int Id { get; set; }
 		public string VesselType { get; set; }
 		public string ApplicationType { get; set; }
+		public string Location { get; set; }
 		public string TriggeredByRole { get; set; }
 		public string Action { get; set; }
 		public string TargetRole { get; set; }

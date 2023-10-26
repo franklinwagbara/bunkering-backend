@@ -263,6 +263,18 @@ namespace Bunkering.Access
 				_context.SaveChanges();
 			}
 		}
+		public async Task CreateLocations()
+		{
+			var _context = _serviceProvider.GetRequiredService<ApplicationContext>();
+			var location = new[] { "HQ", "FO", "ZO" };
+			if (!_context.Locations.Any())
+			{
+				foreach (var l in location)
+					_context.Locations.Add(new Location { Name = l });
+				_context.SaveChanges();
+			}
+
+		}
 	}
 }
 

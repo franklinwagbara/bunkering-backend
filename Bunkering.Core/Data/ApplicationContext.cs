@@ -23,8 +23,10 @@ namespace Bunkering.Core.Data
 		public DbSet<Facility> Facilities { get; set; }
 		public DbSet<FacilityType> FacilityTypes { get; set; }
 		public DbSet<FacilityTypeDocument> FacilityTypeDocuments { get; set; }
+		public DbSet<Office> Offices { get; set; }
 		public DbSet<Inspection> Inspections { get; set; }
 		public DbSet<LGA> LGAs { get; set; }
+		public DbSet<Location> Locations { get; set; }
 		public DbSet<Message> Messages { get; set; }
 		public DbSet<Payment> Payments { get; set; }
 		public DbSet<Permit> Permits { get; set; }
@@ -38,6 +40,7 @@ namespace Bunkering.Core.Data
 		public DbSet<VesselType> VesselTypes { get; set; }
 		public DbSet<vAppVessel> vAppVessel { get; set; }
 		public DbSet<vAppPayment> vAppPayment { get; set; }
+		public DbSet<vAppUser> vAppUsers { get; set; }
 		public DbSet<vFacilityPermit> vFacilityPermit { get; set; }
 
 		//public virtual DbContextOptionsBuilder EnableDetailedErrors(bool detailedErrorsEnabled = true) => detailedErrorsEnabled;

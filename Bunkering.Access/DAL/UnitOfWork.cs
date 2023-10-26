@@ -15,9 +15,10 @@ namespace Bunkering.Access.DAL
 		public IFacility Facility { get; private set; }
 		public IFacilityType FacilityType { get; private set; }
 		public IFacilityTypeDocuments FacilityTypeDocuments { get; private set; }
-		public IFieldOffice FieldOffice { get; private set; }
+		public IOffice Office { get; private set; }
 		public IInspection Inspection { get; private set; }
 		public ILGA LGA { get; private set; }
+		public ILocation Location { get; private set; }
 		public IMessage Message { get; private set; }
 		public IPayment Payment { get; private set; }
 		public IPermit Permit { get; private set; }
@@ -30,6 +31,7 @@ namespace Bunkering.Access.DAL
 		public IVesselType VesselType { get; set; }
 		public IvAppVessel vAppVessel { get; private set; }
 		public IvAppPayment vAppPayment { get; private set; }
+		public IvAppUser vAppUser { get; private set; }
 		public IvFacilityPermit vFacilityPermit { get; private set; }
 
 		public UnitOfWork(ApplicationContext context)
@@ -44,9 +46,10 @@ namespace Bunkering.Access.DAL
 			Facility = Facility != null ? Facility : new FacilityRepository(_context);
 			FacilityType = FacilityType != null ? FacilityType : new FacilityTypeRepository(_context);
 			FacilityTypeDocuments = FacilityTypeDocuments != null ? FacilityTypeDocuments : new FacilityTypeDocsRepository(_context);
-			FieldOffice = FieldOffice != null ? FieldOffice : new FieldOfficeRepository(_context);
+			Office = Office != null ? Office : new OfficeRepository(_context);
 			Inspection = Inspection != null ? Inspection : new InspectionRepository(_context);
 			LGA = LGA != null ? LGA : new LGARepository(_context);
+			Location = Location != null ? Location : new LocationRepository(_context);
 			Message = Message != null ? Message : new MessageRepository(_context);
 			Payment = Payment != null ? Payment : new PaymentRepository(_context);
 			Permit = Permit != null ? Permit : new PermitRepository(_context);
@@ -60,6 +63,7 @@ namespace Bunkering.Access.DAL
 			vAppVessel = vAppVessel != null ? vAppVessel : new vAppVesselRepository(_context);
 			vFacilityPermit = vFacilityPermit != null ? vFacilityPermit : new vFacilityPermitRepository(_context);
 			vAppPayment = vAppPayment != null ? vAppPayment : new vAppPaymentRepository(_context);
+			vAppUser = vAppUser != null ? vAppUser : new vAppUserRepository(_context);
 		}
 
 		public int Save() => _context.SaveChanges();

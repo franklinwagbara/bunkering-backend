@@ -15,7 +15,9 @@ namespace Bunkering.Access.IContracts
 		IFacilityTypeDocuments FacilityTypeDocuments { get; }
 		IInspection Inspection { get; }
 		ILGA LGA { get; }
+		ILocation Location { get; }
 		IMessage Message { get; }
+		IOffice Office { get; }
 		IPayment Payment { get; }
 		IPermit Permit { get; }
 		IProduct Product { get; }
@@ -28,6 +30,7 @@ namespace Bunkering.Access.IContracts
 		IvFacilityPermit vFacilityPermit { get; }
 		IvAppPayment vAppPayment { get; }
 		IvAppVessel vAppVessel { get; }
+		IvAppUser vAppUser { get; }
 		int Save();
 		Task<int> SaveChangesAsync(string userId);
 	}

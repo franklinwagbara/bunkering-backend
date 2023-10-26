@@ -1,21 +1,21 @@
 ﻿CREATE VIEW dbo.vAppFacility
 AS
 SELECT DISTINCT 
-                  dbo.Applications.Status, dbo.Facilities.Name, dbo.Applications.Reference, dbo.Applications.CreatedDate, dbo.Applications.SubmittedDate, dbo.Applications.ModifiedDate, dbo.Applications.IsDeleted, 
-                  dbo.ApplicationTypes.Name AS AppTypeName, dbo.AspNetUsers.Email, dbo.Companies.Name AS CompanyName, dbo.Facilities.IsLicensed, dbo.VesselTypes.Name AS VesselName,
-                      (SELECT COUNT(Id) AS Expr1
-                       FROM      dbo.Tanks AS Tanks_2
-                       WHERE   (FacilityId = dbo.Facilities.Id)) AS NoOfTanks,
-                      (SELECT SUM(Capacity) AS Expr1
-                       FROM      dbo.Tanks
-                       WHERE   (FacilityId = dbo.Facilities.Id)) AS Capacity
-FROM     dbo.Applications INNER JOIN
-                  dbo.ApplicationTypes ON dbo.Applications.ApplicationTypeId = dbo.ApplicationTypes.Id INNER JOIN
-                  dbo.Facilities ON dbo.Applications.FacilityId = dbo.Facilities.Id INNER JOIN
-                  dbo.AspNetUsers ON dbo.Applications.UserId = dbo.AspNetUsers.Id INNER JOIN
-                  dbo.Companies ON dbo.AspNetUsers.CompanyId = dbo.Companies.Id INNER JOIN
-                  dbo.VesselTypes ON dbo.Facilities.VesselTypeId = dbo.VesselTypes.Id INNER JOIN
-                  dbo.Tanks AS Tanks_1 ON dbo.Facilities.Id = Tanks_1.FacilityId
+                         dbo.Applications.Status, dbo.Facilities.Name, dbo.Applications.Reference, dbo.Applications.CreatedDate, dbo.Applications.SubmittedDate, dbo.Applications.ModifiedDate, dbo.Applications.IsDeleted, 
+                         dbo.ApplicationTypes.Name AS AppTypeName, dbo.AspNetUsers.Email, dbo.Companies.Name AS CompanyName, dbo.Facilities.IsLicensed, dbo.VesselTypes.Name AS VesselName,
+                             (SELECT        COUNT(Id) AS Expr1
+                               FROM            dbo.Tanks AS Tanks_2
+                               WHERE        (FacilityId = dbo.Facilities.Id)) AS NoOfTanks,
+                             (SELECT        SUM(Capacity) AS Expr1
+                               FROM            dbo.Tanks
+                               WHERE        (FacilityId = dbo.Facilities.Id)) AS Capacity
+FROM            dbo.Applications INNER JOIN
+                         dbo.ApplicationTypes ON dbo.Applications.ApplicationTypeId = dbo.ApplicationTypes.Id INNER JOIN
+                         dbo.Facilities ON dbo.Applications.FacilityId = dbo.Facilities.Id INNER JOIN
+                         dbo.AspNetUsers ON dbo.Applications.UserId = dbo.AspNetUsers.Id INNER JOIN
+                         dbo.Companies ON dbo.AspNetUsers.CompanyId = dbo.Companies.Id INNER JOIN
+                         dbo.VesselTypes ON dbo.Facilities.VesselTypeId = dbo.VesselTypes.Id INNER JOIN
+                         dbo.Tanks AS Tanks_1 ON dbo.Facilities.Id = Tanks_1.FacilityId
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 2, @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'vAppFacility';
 
@@ -36,14 +36,14 @@ EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane2', @value = N'         D
       Begin ColumnWidths = 11
          Column = 1440
          Alias = 900
-         Table = 1176
+         Table = 1170
          Output = 720
          Append = 1400
          NewValue = 1170
-         SortType = 1356
-         SortOrder = 1416
+         SortType = 1350
+         SortOrder = 1410
          GroupBy = 1350
-         Filter = 1356
+         Filter = 1350
          Or = 1350
          Or = 1350
          Or = 1350
@@ -55,13 +55,15 @@ End
 
 
 
+
+
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPane1', @value = N'[0E232FF0-B466-11cf-A24F-00AA00A3EFFF, 1.00]
 Begin DesignProperties = 
    Begin PaneConfigurations = 
       Begin PaneConfiguration = 0
          NumPanes = 4
-         Configuration = "(H (1[58] 4[33] 2[8] 3) )"
+         Configuration = "(H (1[85] 4[7] 2[8] 3) )"
       End
       Begin PaneConfiguration = 1
          NumPanes = 3
@@ -124,7 +126,7 @@ Begin DesignProperties =
    Begin DiagramPane = 
       Begin Origin = 
          Top = 0
-         Left = 0
+         Left = -33
       End
       Begin Tables = 
          Begin Table = "Applications"
@@ -161,11 +163,11 @@ Begin DesignProperties =
             Begin Extent = 
                Top = 23
                Left = 577
-               Bottom = 186
+               Bottom = 240
                Right = 837
             End
             DisplayFlags = 280
-            TopColumn = 12
+            TopColumn = 0
          End
          Begin Table = "Companies"
             Begin Extent = 
@@ -195,6 +197,8 @@ Begin DesignProperties =
                Right = 982
             End
    ', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'VIEW', @level1name = N'vAppFacility';
+
+
 
 
 
