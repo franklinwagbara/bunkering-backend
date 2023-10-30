@@ -23,6 +23,13 @@ namespace Bunkering.Core.Data
 		public DateTime CreatedOn { get; set; }
 		public DateTime? LastLogin { get; set; }
 		public bool IsDeleted { get; set; }
+		public int? LocationId { get; set; }
+		public int? OfficeId { get; set; }
 		public ICollection<ApplicationUserRole> UserRoles { get; set; }
+
+		[ForeignKey(nameof(LocationId))]
+		public Location? Location { get; set; }
+		[ForeignKey(nameof(OfficeId))]
+		public Office? Office { get; set; }
 	}
 }

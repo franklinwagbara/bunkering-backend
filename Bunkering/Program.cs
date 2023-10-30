@@ -170,5 +170,6 @@ using (var scope = scopedFactory.CreateScope())
 	await service.CreateAppTypes();
 	await service.CreateVesselType();
 	await service.CreateProducts();
+	await service.CreateLocations();
 }
 app.Run();

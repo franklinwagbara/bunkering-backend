@@ -19,13 +19,15 @@ namespace Bunkering.Access.Services
 	{
 		private readonly IUnitOfWork unitOfWork_;
 		private readonly RoleManager<ApplicationRole> _roleManager;
+		private readonly UserManager<ApplicationUser> _userManager;
 
 		ApiResponse response;
 
-		public LibraryService(IUnitOfWork unitOfWork, RoleManager<ApplicationRole> roleManager)
+		public LibraryService(IUnitOfWork unitOfWork, RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
 		{
 			unitOfWork_ = unitOfWork;
 			_roleManager = roleManager;
+			_userManager = userManager;
 		}
 
 		//method to get all states
@@ -319,7 +321,7 @@ namespace Bunkering.Access.Services
 		{
 			var roles = await _roleManager.Roles.Where(x => !x.Name.Equals("SuperAdmin")).ToListAsync();
 
-            return new ApiResponse
+			return new ApiResponse
 			{
 				Data = roles,
 				Message = "Roles",
@@ -341,6 +343,7 @@ namespace Bunkering.Access.Services
 			};
 
 		}
+
 		public async Task<ApiResponse> GetVesselType()
 		{
 			var vesselType = await unitOfWork_.VesselType.GetAll();
@@ -352,6 +355,52 @@ namespace Bunkering.Access.Services
 				StatusCode = HttpStatusCode.OK,
 				Success = true,
 			};
+			return response;
+		}
+
+		public async Task<ApiResponse> AllUsersFO()
+		{
+			try
+			{
+				var hQUsers = await _userManager.Users.Include(a => a.UserRoles).ThenInclude(r => r.Role)
+					.Include(l => l.Location).Where(l => l.Location != null && l.Location.Name.Equals("FO"))
+					.Include(o => o.Office).Where(o => o.Office != null).ToListAsync();
+
+
+				if (hQUsers != null)
+				{
+					var userData = hQUsers.Select(x => new
+					{
+						x.Id,
+						Name = $"{x.FirstName} {x.LastName}",
+						x.Email,
+						Location = x.Location.Name,
+						Office = x.Office.Name,
+						x.IsActive,
+					});
+
+					response = new ApiResponse
+					{
+						Data = userData,
+						Message = "Success",
+						StatusCode = HttpStatusCode.OK,
+						Success = true,
+					};
+				}
+				else
+				{
+					response = new ApiResponse
+					{
+						Message = "Unsuccessful",
+						StatusCode = HttpStatusCode.OK,
+						Success = false
+					};
+				}
+			}
+			catch (Exception ex)
+			{
+				response = new ApiResponse { Message = ex.Message };
+			}
 			return response;
 		}
 
