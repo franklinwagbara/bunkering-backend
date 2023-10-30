@@ -275,3 +275,4 @@ C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bun
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.pdb
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.genruntimeconfig.cache
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\ref\Bunkering.dll
+C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.MvcApplicationPartsAssemblyInfo.cs
