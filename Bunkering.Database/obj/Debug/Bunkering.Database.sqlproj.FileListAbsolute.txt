@@ -32,5 +32,9 @@ C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bun
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering.Database\bin\Debug\Bunkering.Database.dll
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering.Database\bin\Debug\Bunkering.Database.pdb
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering.Database\obj\Debug\Bunkering.Database.sqlproj.AssemblyReference.cache
+C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering.Database\obj\Debug\Model.xml
+C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering.Database\obj\Debug\refactor.xml
+C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering.Database\obj\Debug\postdeploy.sql
+C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering.Database\obj\Debug\predeploy.sql
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering.Database\obj\Debug\Bunkering.Database.dll
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering.Database\obj\Debug\Bunkering.Database.pdb
