@@ -40,7 +40,8 @@ namespace Bunkering.Controllers.API
 		[Produces("application/json")]
 		[HttpGet]
 		[Route("pay-online")]
-		public IActionResult PayOnline(string rrr) => Redirect($"{_appSetting.ElpsUrl}/Payment/Pay?rrr={rrr}");
+		public IActionResult PayOnline(string rrr) =>
+			Redirect($"{_appSetting.ElpsUrl}/Payment/Pay?rrr={rrr}");
 
 		[AllowAnonymous]
 		[ProducesResponseType(typeof(ApiResponse), 200)]

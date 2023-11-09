@@ -78,7 +78,7 @@ namespace Bunkering.Controllers.API
 		/// </summary>
 		/// <returns>Returns a model of tanks which can be mepty</returns>
 		/// <remarks>
-		/// 
+		/// x
 		/// Sample Request
 		/// POST: api/application/add-tank
 		/// 
@@ -162,7 +162,7 @@ namespace Bunkering.Controllers.API
 		[ProducesResponseType(typeof(ApiResponse), 405)]
 		[ProducesResponseType(typeof(ApiResponse), 500)]
 		[Route("add-documents")]
-		[HttpGet]
+		[HttpPost]
 		public async Task<IActionResult> AddDocuments(int id) => Response(await _appService.AddDocuments(id));
 
 		/// <summary>

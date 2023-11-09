@@ -12,10 +12,10 @@ namespace Bunkering.Core.Data
 		public int Id { get; set; }
 		public int ApplicationId { get; set; }
 		public string ScheduleType { get; set; }
+		public string NominatedStaffId { get; set; }
 		public DateTime ScheduleDate { get; set; }
 		public DateTime AppointmentDate { get; set; }
 		public string ScheduledBy { get; set; }
-		public string AppointedTo { get; set; }
 		public string ScheduleMessage { get; set; }
 		public bool IsApproved { get; set; }
 		public string? ApprovedBy { get; set; }

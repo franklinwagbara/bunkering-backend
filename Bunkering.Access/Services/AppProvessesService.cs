@@ -45,13 +45,15 @@ namespace Bunkering.Access.Services
 				var apptyeps = await _unitOfWork.ApplicationType.GetAll();
 				var vesselType = await _unitOfWork.VesselType.GetAll();
 				var location = await _unitOfWork.Location.GetAll();
+
 				processes.ForEach(r =>
 				{
 					var trole = roles.FirstOrDefault(x => x.Id.Equals(r.TriggeredByRole));
 					var rrole = roles.FirstOrDefault(x => x.Id.Equals(r.TargetRole));
 					var flow = _mapper.Map<WorkflowviewModel>(r);
 
-					flow.Location = location.FirstOrDefault(l => l.Id.Equals(r.LocationId))?.Name;
+					flow.FromLocation = location.FirstOrDefault(l => l.Id.Equals(r.FromLocationId))?.Name;
+					flow.ToLocation = location.FirstOrDefault(t => t.Id.Equals(r.ToLocationId))?.Name;
 					flow.TriggeredByRole = trole.Name;
 					flow.TargetRole = rrole.Name;
 					flow.ApplicationType = r.ApplicationTypeId != null ? apptyeps.FirstOrDefault(x => x.Id.Equals(r.ApplicationTypeId))?.Name : "N/A";
@@ -105,7 +107,8 @@ namespace Bunkering.Access.Services
 					flow.Action = model.Action;
 					flow.TriggeredByRole = model.TriggeredByRole;
 					flow.VesselTypeId = model.VesselTypeId;
-					flow.LocationId = model.LocationId;
+					flow.FromLocationId = model.FromLocationId;
+					flow.ToLocationId = model.ToLocationId;
 
 					await _unitOfWork.Workflow.Update(flow);
 					await _unitOfWork.SaveChangesAsync(user.Id);

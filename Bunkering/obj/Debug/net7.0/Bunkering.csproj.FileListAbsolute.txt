@@ -1,11 +1,3 @@
-C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.csproj.AssemblyReference.cache
-C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.AssemblyInfoInputs.cache
-C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.AssemblyInfo.cs
-C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.csproj.CoreCompileInputs.cache
-C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.RazorAssemblyInfo.cache
-C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.RazorAssemblyInfo.cs
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\bin\Debug\net7.0\appsettings.Development.json
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\bin\Debug\net7.0\appsettings.json
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\bin\Debug\net7.0\Bunkering.staticwebassets.runtime.json
@@ -259,6 +251,15 @@ C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bun
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\bin\Debug\net7.0\Bunkering.Core.dll
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\bin\Debug\net7.0\Bunkering.Access.pdb
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\bin\Debug\net7.0\Bunkering.Core.pdb
+C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.csproj.AssemblyReference.cache
+C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.AssemblyInfoInputs.cache
+C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.AssemblyInfo.cs
+C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.csproj.CoreCompileInputs.cache
+C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.RazorAssemblyInfo.cache
+C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.RazorAssemblyInfo.cs
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\staticwebassets\msbuild.Bunkering.Microsoft.AspNetCore.StaticWebAssets.props
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\staticwebassets\msbuild.build.Bunkering.props
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.Bunkering.props
@@ -275,4 +276,3 @@ C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bun
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.pdb
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.genruntimeconfig.cache
 C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\ref\Bunkering.dll
-C:\Users\anyan\Documents\Visual Studio 2022\Projects\BUNKERING\BunkeringBEnd\Bunkering\obj\Debug\net7.0\Bunkering.MvcApplicationPartsAssemblyInfo.cs

@@ -12,7 +12,7 @@ namespace Bunkering.Core.Data
 		public int Id { get; set; }
 		public int ApplicationId { get; set; }
 		public string ScheduledBy { get; set; }
-		public int NominatedStaffId { get; set; }
+		public int? NominatedStaffId { get; set; }
 		public string IndicationOfSImilarFacilityWithin2km { get; set; }
 		public string SiteDrainage { get; set; }
 		public string SietJettyTopographicSurvey { get; set; }

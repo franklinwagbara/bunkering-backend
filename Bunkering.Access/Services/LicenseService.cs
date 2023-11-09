@@ -32,26 +32,26 @@ namespace Bunkering.Access.Services
 		public async Task<ApiResponse> LicenseReport(LicenseReportViewModel model)
 		{
 			var permitReport = await _unitOfWork.vFacilityPermit.Find(a => a.IssuedDate >= model.Min && a.IssuedDate <= model.Max);
-
+			var permits = permitReport.OrderBy(a => new
+			{
+				a.Id,
+				a.ApplicationId,
+				a.VesselName,
+				a.VesselType,
+				a.PermitNo,
+				a.IssuedDate,
+				a.ExpireDate,
+			});
 
 			if (permitReport != null)
 			{
 				_response = new ApiResponse
 				{
+					Data = permits.ToList(),
 					Message = "Permit Report Found",
 					StatusCode = HttpStatusCode.OK,
 					Success = true,
-					Data = permitReport.Select(p => new
-					{
-						p.Id,
-						p.ApplicationId,
-						p.VesselName,
-						p.VesselType,
-						p.PermitNo,
-						p.IssuedDate,
-						p.ExpireDate,
 
-					}),
 				};
 
 				return _response;

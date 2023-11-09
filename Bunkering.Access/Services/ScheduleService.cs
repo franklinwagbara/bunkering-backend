@@ -82,7 +82,7 @@ namespace Bunkering.Access.Services
 						{
 							Message = await _userManager.IsInRoleAsync(user, "Supervisor")
 							? "Inspection schedule created successfully. awaiting company's acceptance"
-							: "Inspection schedule created successfully. awaiting Manageger's approval",
+							: "Inspection schedule created successfully. awaiting Supervisor's approval",
 							StatusCode = HttpStatusCode.OK,
 							Success = true
 						};
@@ -174,6 +174,7 @@ namespace Bunkering.Access.Services
 
 					appointment.ApprovalMessage = model.ApprovalMessage;
 					appointment.ApprovedBy = user.Id;
+
 					if (model.Act.Equals(Enum.GetName(typeof(AppActions), AppActions.ApproveInspection)))
 						appointment.IsApproved = true;
 
