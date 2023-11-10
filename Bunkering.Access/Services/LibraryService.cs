@@ -157,7 +157,7 @@ namespace Bunkering.Access.Services
 				Id = lg.Id,
 				Name = lg.Name,
 				StateId = lg.StateId
-			}).OrderBy(c => c.Name);
+			}).OrderBy(c => c.Name).ToList();
 
 			try
 			{

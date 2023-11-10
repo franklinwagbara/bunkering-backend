@@ -149,6 +149,7 @@ namespace Bunkering.Controllers.API
 							IndicationOfSImilarFacilityWithin2km = model.IndicationOfSImilarFacilityWithin2km,
 							InspectionDocument = model.InspectionDocument,
 							ScheduledBy = user.Id,
+							NominatedStaffId = user.LocationId,
 							SietJettyTopographicSurvey = model.SietJettyTopographicSurvey,
 							SiteDrainage = model.SiteDrainage,
 						});

@@ -805,7 +805,7 @@ namespace Bunkering.Access.Services
 						? "Payment confirmed" : x.Payments.FirstOrDefault().Status.Equals(Enum.GetName(typeof(AppStatus), AppStatus.PaymentRejected)) ? "Payment rejected" : "Payment pending",
 					RRR = x.Payments.FirstOrDefault()?.RRR,
 					CreatedDate = x.CreatedDate.ToString("MMMM dd, yyyy HH:mm:ss")
-				})
+				}).ToList(),
 			};
 		}
 
@@ -961,6 +961,8 @@ namespace Bunkering.Access.Services
 						{
 							_response.StatusCode = HttpStatusCode.OK;
 							_response.Success = true;
+							_response.Message = "Application has been pushed";
+							_response.Data = flow.Item1;
 						}
 						else
 						{
